@@ -1793,15 +1793,11 @@ const seedState = {
   currentSession: null
 };
 
-function loadState() {
-  const saved = JSON.parse(localStorage.getItem(appKey) || 'null');
-  if (!saved) {
-    localStorage.setItem(appKey, JSON.stringify(seedState));
-    return structuredClone(seedState);
-  }
+function mergeState(saved) {
+  saved = saved || {};
   return {
     ...structuredClone(seedState),
-    ...saved,
+    ...(saved || {}),
     users: saved.users || seedState.users,
     assignments: saved.assignments || seedState.assignments,
     progress: saved.progress || {},
@@ -1811,19 +1807,66 @@ function loadState() {
   };
 }
 
+function loadState() {
+  const saved = JSON.parse(localStorage.getItem(appKey) || 'null');
+  if (!saved) {
+    localStorage.setItem(appKey, JSON.stringify(seedState));
+    return structuredClone(seedState);
+  }
+  return mergeState(saved);
+}
+
 let state = loadState();
-if (state.users.some((user) => user.id === 'student-1')) {
+let remoteStateEnabled = false;
+let saveStateDebounce = null;
+
+function ensureSeedAssignments() {
+  let changed = false;
+  if (!state.users.some((user) => user.id === 'student-1')) return changed;
   state.assignments['student-1'] = state.assignments['student-1'] || [];
   courses.forEach((item) => {
     if (!state.assignments['student-1'].includes(item.id)) {
       state.assignments['student-1'].push(item.id);
+      changed = true;
     }
   });
-  saveState();
+  return changed;
 }
 
 function saveState() {
   localStorage.setItem(appKey, JSON.stringify(state));
+  if (!remoteStateEnabled) return;
+  clearTimeout(saveStateDebounce);
+  saveStateDebounce = setTimeout(() => {
+    fetch('/api/platform-state', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({state})
+    }).catch(() => {
+      remoteStateEnabled = false;
+    });
+  }, 250);
+}
+
+async function bootstrapApp() {
+  try {
+    const response = await fetch('/api/platform-state', {cache: 'no-store'});
+    if (response.ok) {
+      const payload = await response.json();
+      remoteStateEnabled = true;
+      if (payload.state) {
+        state = mergeState(payload.state);
+      } else {
+        state = mergeState(state);
+      }
+    }
+  } catch {
+    remoteStateEnabled = false;
+  }
+
+  const changed = ensureSeedAssignments();
+  if (remoteStateEnabled || changed) saveState();
+  render();
 }
 
 function getSessionUser() {
@@ -2995,4 +3038,11 @@ document.addEventListener('contextmenu', (event) => {
   if (document.body.classList.contains('test-mode')) event.preventDefault();
 });
 
-render();
+window.addEventListener('pagehide', () => {
+  if (!remoteStateEnabled || !navigator.sendBeacon) return;
+  const payload = new Blob([JSON.stringify({state})], {type: 'application/json'});
+  navigator.sendBeacon('/api/platform-state', payload);
+});
+
+document.querySelector('#app').innerHTML = '<main class="platform-main"><section class="empty-card">Loading NextSkills...</section></main>';
+bootstrapApp();
