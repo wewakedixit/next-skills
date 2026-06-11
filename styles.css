@@ -1041,3 +1041,441 @@ footer {
     gap: 8px;
   }
 }
+
+.platform-header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 14px clamp(18px, 4vw, 48px);
+  border-bottom: 1px solid var(--line);
+  background: rgba(251, 251, 247, 0.94);
+  backdrop-filter: blur(14px);
+}
+
+.platform-brand,
+.platform-nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.platform-brand {
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.platform-nav button {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.platform-nav button:hover {
+  color: var(--ink);
+}
+
+.platform-main {
+  min-height: calc(100vh - 64px);
+  padding: clamp(24px, 5vw, 58px);
+}
+
+.login-page {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 430px);
+  gap: clamp(28px, 6vw, 80px);
+  align-items: center;
+  min-height: calc(100vh - 150px);
+}
+
+.login-copy h1,
+.dashboard-hero h1,
+.admin-panel h1,
+.profile-page h1,
+.report-page h1,
+.test-top h1 {
+  margin: 0;
+  font-size: clamp(34px, 5vw, 64px);
+  line-height: 1.02;
+  letter-spacing: 0;
+}
+
+.login-copy p,
+.dashboard-hero p,
+.course-card p,
+.admin-panel p,
+.profile-page p,
+.report-page p {
+  color: #42504b;
+  font-size: 17px;
+}
+
+.login-card,
+.course-card,
+.empty-card,
+.admin-panel,
+.profile-page,
+.report-page,
+.test-screen {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 12px 28px rgba(20, 34, 29, 0.08);
+}
+
+.login-card {
+  display: grid;
+  gap: 16px;
+  padding: 28px;
+}
+
+.login-card h2,
+.admin-panel h2,
+.profile-page h2,
+.report-page h2 {
+  margin: 0 0 8px;
+}
+
+.login-card label,
+.stack-form label {
+  display: grid;
+  gap: 7px;
+  color: #35433e;
+  font-weight: 800;
+}
+
+.login-card input,
+.stack-form input {
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font: inherit;
+}
+
+.form-error {
+  min-height: 24px;
+  margin: 0;
+  color: var(--red);
+  font-weight: 800;
+}
+
+.demo-credentials {
+  display: grid;
+  gap: 8px;
+  max-width: 520px;
+  margin-top: 24px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #eef5f2;
+}
+
+.dashboard-hero {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 20px;
+  align-items: end;
+  margin-bottom: 24px;
+}
+
+.dashboard-stat {
+  min-width: 170px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.dashboard-stat strong,
+.dashboard-stat span {
+  display: block;
+}
+
+.dashboard-stat strong {
+  font-size: 34px;
+}
+
+.dashboard-stat span {
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.course-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.course-card,
+.empty-card {
+  display: grid;
+  gap: 14px;
+  padding: 24px;
+}
+
+.course-card h2 {
+  margin: 0;
+  font-size: 30px;
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: minmax(300px, 0.8fr) minmax(0, 1.2fr);
+  gap: 22px;
+  align-items: start;
+}
+
+.admin-panel {
+  padding: 24px;
+}
+
+.stack-form {
+  display: grid;
+  gap: 14px;
+  margin-top: 20px;
+}
+
+.student-list {
+  display: grid;
+  gap: 12px;
+}
+
+.student-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fbfcfb;
+}
+
+.student-row strong,
+.student-row span,
+.student-row small {
+  display: block;
+}
+
+.student-row span,
+.student-row small {
+  color: var(--muted);
+}
+
+.student-actions {
+  display: grid;
+  gap: 10px;
+  justify-items: end;
+}
+
+.student-actions label {
+  font-weight: 800;
+}
+
+.profile-page,
+.report-page {
+  display: grid;
+  gap: 18px;
+  padding: 28px;
+}
+
+.report-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.report-grid article {
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fbfcfb;
+}
+
+.report-grid article p {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.attempt-row {
+  display: grid;
+  gap: 5px;
+  margin: 10px 0;
+  padding: 13px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.attempt-row span,
+.attempt-row small {
+  color: var(--muted);
+}
+
+.platform-course {
+  display: grid;
+  grid-template-columns: 310px minmax(0, 1fr);
+  gap: 24px;
+  padding: 0;
+}
+
+.platform-course .lesson-menu {
+  top: 86px;
+}
+
+.platform-course .lesson-card h1 {
+  margin: 0;
+  font-size: clamp(32px, 4vw, 48px);
+  line-height: 1.05;
+}
+
+.test-mode {
+  user-select: none;
+}
+
+.test-screen {
+  position: relative;
+  padding: clamp(20px, 4vw, 34px);
+}
+
+.test-top {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 20px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.timer {
+  min-width: 112px;
+  padding: 14px 16px;
+  border-radius: 8px;
+  background: #13231e;
+  color: #fff;
+  font-size: 26px;
+  font-weight: 900;
+  text-align: center;
+}
+
+.security-note {
+  margin: 18px 0;
+  padding: 14px 16px;
+  border-left: 5px solid var(--yellow);
+  border-radius: 8px;
+  background: #fff8e5;
+  color: #5f4612;
+  font-weight: 800;
+}
+
+.test-form {
+  display: grid;
+  gap: 16px;
+}
+
+.test-form fieldset {
+  margin: 0;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fbfcfb;
+}
+
+.test-form legend {
+  padding: 0 8px;
+  font-weight: 900;
+}
+
+.test-form label {
+  display: block;
+  margin: 12px 0;
+  color: #3d4b46;
+  font-weight: 700;
+}
+
+.test-blackout {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: none;
+  place-items: center;
+  background: rgba(8, 14, 12, 0.92);
+  color: #fff;
+  text-align: center;
+}
+
+.test-blackout.visible {
+  display: grid;
+}
+
+.test-blackout strong,
+.test-blackout span {
+  display: block;
+}
+
+.test-blackout strong {
+  font-size: 42px;
+}
+
+.result-card {
+  margin-top: 18px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #eef5f2;
+}
+
+@media (max-width: 980px) {
+  .login-page,
+  .dashboard-hero,
+  .admin-grid,
+  .report-grid,
+  .platform-course,
+  .course-list {
+    grid-template-columns: 1fr;
+  }
+
+  .student-row,
+  .test-top {
+    grid-template-columns: 1fr;
+  }
+
+  .student-actions {
+    justify-items: start;
+  }
+
+  .platform-course .lesson-menu {
+    position: static;
+  }
+}
+
+@media (max-width: 720px) {
+  .platform-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .platform-nav {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 5px;
+  }
+
+  .platform-main {
+    padding: 18px;
+  }
+
+  .report-grid article p {
+    display: grid;
+  }
+}

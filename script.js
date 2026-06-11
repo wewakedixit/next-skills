@@ -1107,142 +1107,461 @@ const lessonVisuals = [
   }
 ];
 
+const app = document.querySelector('#app');
+const course = {
+  id: 'learn-google-search-console',
+  title: 'Learn Google Search Console',
+  subtitle: 'A practical Search Console course for non-technical users.',
+  lessons
+};
+
+const appKey = 'nextskills-platform-v1';
+const sessionKey = 'nextskills-session-v1';
+const testMinutes = 5;
+let route = {view: 'login'};
 let activeLesson = 0;
-let completedLessons = new Set(
-  JSON.parse(localStorage.getItem(storageKey) || '[]').filter((index) => Number.isInteger(index) && index >= 0 && index < lessons.length)
-);
-let quizState = {};
+let activeStudentId = null;
+let lessonTimer = null;
+let testTimer = null;
+let activeTest = null;
 
-const lessonContent = document.querySelector('#lesson-content');
-const tabs = [...document.querySelectorAll('.lesson-tab')];
-const counter = document.querySelector('#lesson-counter');
-const progressBar = document.querySelector('#progress-bar');
-const prevButton = document.querySelector('#prev-lesson');
-const nextButton = document.querySelector('#next-lesson');
-const completeButton = document.querySelector('#complete-lesson');
-const resetButton = document.querySelector('#reset-progress');
+const seedState = {
+  users: [
+    {
+      id: 'admin-1',
+      name: 'NextSkills Admin',
+      email: 'admin@nextskills.local',
+      password: 'admin123',
+      role: 'admin',
+      createdAt: new Date().toISOString()
+    },
+    {
+      id: 'student-1',
+      name: 'Demo Student',
+      email: 'student@nextskills.local',
+      password: 'student123',
+      role: 'student',
+      createdAt: new Date().toISOString()
+    }
+  ],
+  assignments: {
+    'student-1': [course.id]
+  },
+  progress: {},
+  attempts: [],
+  lessonTime: {},
+  currentSession: null
+};
 
-function saveProgress() {
-  localStorage.setItem(storageKey, JSON.stringify([...completedLessons].sort((a, b) => a - b)));
+function loadState() {
+  const saved = JSON.parse(localStorage.getItem(appKey) || 'null');
+  if (!saved) {
+    localStorage.setItem(appKey, JSON.stringify(seedState));
+    return structuredClone(seedState);
+  }
+  return {
+    ...structuredClone(seedState),
+    ...saved,
+    users: saved.users || seedState.users,
+    assignments: saved.assignments || seedState.assignments,
+    progress: saved.progress || {},
+    attempts: saved.attempts || [],
+    lessonTime: saved.lessonTime || {}
+  };
 }
 
-function isUnlocked(index) {
-  return index === 0 || completedLessons.has(index - 1);
+let state = loadState();
+
+function saveState() {
+  localStorage.setItem(appKey, JSON.stringify(state));
 }
 
-function listItems(items) {
-  return `<ul>${items.map((item) => `<li>${item}</li>`).join('')}</ul>`;
+function getSessionUser() {
+  const userId = localStorage.getItem(sessionKey);
+  return state.users.find((user) => user.id === userId) || null;
 }
 
-function renderTextBlocks(items) {
-  return items.map((item) => `<p>${item}</p>`).join('');
+function setSession(user) {
+  localStorage.setItem(sessionKey, user.id);
 }
 
-function renderGlossary(items) {
-  return `
-    <div class="lesson-term-grid">
-      ${items
-        .map(([term, definition]) => `<article><h5>${term}</h5><p>${definition}</p></article>`)
-        .join('')}
-    </div>
+function clearSession() {
+  localStorage.removeItem(sessionKey);
+}
+
+function userProgress(userId) {
+  if (!state.progress[userId]) {
+    state.progress[userId] = {};
+  }
+  if (!state.progress[userId][course.id]) {
+    state.progress[userId][course.id] = {completedLessons: []};
+  }
+  return state.progress[userId][course.id];
+}
+
+function userLessonTime(userId) {
+  if (!state.lessonTime[userId]) {
+    state.lessonTime[userId] = {};
+  }
+  if (!state.lessonTime[userId][course.id]) {
+    state.lessonTime[userId][course.id] = {};
+  }
+  return state.lessonTime[userId][course.id];
+}
+
+function isLessonUnlocked(userId, lessonIndex) {
+  const completed = userProgress(userId).completedLessons;
+  return lessonIndex === 0 || completed.includes(lessonIndex - 1);
+}
+
+function secondsToClock(totalSeconds = 0) {
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
+
+function shuffle(items) {
+  return [...items].sort(() => Math.random() - 0.5);
+}
+
+function ensureTenQuestions(lesson) {
+  const questions = lesson.quiz.map((item) => ({
+    question: item.question,
+    options: item.options,
+    answerText: item.options[item.answer]
+  }));
+  const glossaryDefinitions = lesson.glossary.map((item) => item[1]);
+
+  lesson.glossary.forEach(([term, definition], index) => {
+    if (questions.length >= 10) return;
+    const distractors = shuffle(glossaryDefinitions.filter((item) => item !== definition)).slice(0, 2);
+    questions.push({
+      question: `What does “${term}” mean in this lesson?`,
+      options: shuffle([definition, ...distractors]),
+      answerText: definition
+    });
+  });
+
+  lesson.outcomes.forEach((outcome) => {
+    if (questions.length >= 10) return;
+    const wrong = shuffle([
+      'Change Google rankings instantly without improving pages.',
+      'Ignore Search Console reports after setup.',
+      'Use paid ads instead of checking organic search data.'
+    ]).slice(0, 2);
+    questions.push({
+      question: 'Which statement is a real learning outcome from this lesson?',
+      options: shuffle([outcome, ...wrong]),
+      answerText: outcome
+    });
+  });
+
+  const conceptPrompts = [
+    ['What is the best beginner mindset for this lesson?', 'Use the report as clues for practical next actions.'],
+    ['What should you do before making big website changes?', 'Understand the data and identify the likely cause.'],
+    ['What should a non-technical user focus on?', 'Plain-English decisions, important pages, and useful improvements.'],
+    ['What is a good output after reviewing this lesson?', 'A short action list connected to real pages.']
+  ];
+
+  conceptPrompts.forEach(([question, answer]) => {
+    if (questions.length >= 10) return;
+    questions.push({
+      question,
+      options: shuffle([answer, 'Change everything immediately.', 'Only memorize technical words.']),
+      answerText: answer
+    });
+  });
+
+  return shuffle(questions).slice(0, 10).map((item) => {
+    const randomizedOptions = shuffle(item.options);
+    return {
+      question: item.question,
+      options: randomizedOptions,
+      answer: randomizedOptions.indexOf(item.answerText)
+    };
+  });
+}
+
+function renderShell(user, content) {
+  const nav = user
+    ? `
+      <nav class="platform-nav">
+        <button data-route="dashboard">Dashboard</button>
+        ${user.role === 'admin' ? '<button data-route="admin">Admin</button>' : ''}
+        <button data-route="profile">My profile</button>
+        <button data-action="logout">Logout</button>
+      </nav>
+    `
+    : '';
+
+  app.innerHTML = `
+    <header class="platform-header">
+      <a class="platform-brand" href="#" data-route="dashboard">
+        <span class="brand-mark">N</span>
+        <span>NextSkills</span>
+      </a>
+      ${nav}
+    </header>
+    <main class="platform-main">${content}</main>
   `;
+  bindGlobalActions();
 }
 
-function renderExamples(items) {
-  return `
-    <div class="lesson-example-grid">
-      ${items
-        .map(
-          (item) => `
-            <article class="lesson-example">
-              <h5>${item.title}</h5>
-              <p><strong>Problem:</strong> ${item.problem}</p>
-              <p><strong>Walkthrough:</strong> ${item.walkthrough}</p>
-              <p><strong>Takeaway:</strong> ${item.takeaway}</p>
-            </article>
-          `
-        )
-        .join('')}
-    </div>
-  `;
+function bindGlobalActions() {
+  document.querySelectorAll('[data-route]').forEach((button) => {
+    button.addEventListener('click', (event) => {
+      event.preventDefault();
+      const user = getSessionUser();
+      if (!user) return renderLogin();
+      stopLessonTimer();
+      route = {view: button.dataset.route};
+      render();
+    });
+  });
+  document.querySelector('[data-action="logout"]')?.addEventListener('click', () => {
+    stopLessonTimer();
+    clearSession();
+    route = {view: 'login'};
+    renderLogin();
+  });
+}
+
+function renderLogin() {
+  stopLessonTimer();
+  renderShell(null, `
+    <section class="login-page">
+      <div class="login-copy">
+        <p class="eyebrow">NextSkills learning platform</p>
+        <h1>Skill courses with controlled access.</h1>
+        <p>Admins add students and assign courses. Students log in, study assigned lessons, complete timed tests, and build progress records.</p>
+        <div class="demo-credentials">
+          <strong>Demo logins</strong>
+          <span>Admin: admin@nextskills.local / admin123</span>
+          <span>Student: student@nextskills.local / student123</span>
+        </div>
+      </div>
+      <form class="login-card" id="login-form">
+        <h2>Login</h2>
+        <label>Email<input name="email" type="email" required /></label>
+        <label>Password<input name="password" type="password" required /></label>
+        <button class="button primary" type="submit">Login</button>
+        <p id="login-error" class="form-error"></p>
+      </form>
+    </section>
+  `);
+  document.querySelector('#login-form').addEventListener('submit', (event) => {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const email = String(form.get('email')).trim().toLowerCase();
+    const password = String(form.get('password'));
+    const user = state.users.find((item) => item.email.toLowerCase() === email && item.password === password);
+    if (!user) {
+      document.querySelector('#login-error').textContent = 'Invalid email or password.';
+      return;
+    }
+    setSession(user);
+    route = {view: user.role === 'admin' ? 'admin' : 'dashboard'};
+    render();
+  });
+}
+
+function renderDashboard(user) {
+  const assigned = state.assignments[user.id] || [];
+  const completed = userProgress(user.id).completedLessons.length;
+  renderShell(user, `
+    <section class="dashboard-hero">
+      <div>
+        <p class="eyebrow">Student dashboard</p>
+        <h1>Welcome, ${escapeHtml(user.name)}</h1>
+        <p>Your assigned courses appear here. Complete each lesson test to unlock the next lesson.</p>
+      </div>
+      <div class="dashboard-stat"><strong>${completed}/${course.lessons.length}</strong><span>lessons completed</span></div>
+    </section>
+    <section class="course-list">
+      ${assigned.includes(course.id)
+        ? `
+          <article class="course-card">
+            <h2>${course.title}</h2>
+            <p>${course.subtitle}</p>
+            <div class="progress-track"><span style="width:${(completed / course.lessons.length) * 100}%"></span></div>
+            <button class="button primary" data-open-course>Open course</button>
+          </article>
+        `
+        : '<article class="empty-card">No course assigned yet. Please contact your admin.</article>'}
+    </section>
+  `);
+  document.querySelector('[data-open-course]')?.addEventListener('click', () => {
+    route = {view: 'course', lesson: 0};
+    render();
+  });
+}
+
+function renderAdmin(user) {
+  const students = state.users.filter((item) => item.role === 'student');
+  renderShell(user, `
+    <section class="admin-grid">
+      <div class="admin-panel">
+        <p class="eyebrow">Admin panel</p>
+        <h1>Users and course assignments</h1>
+        <form id="add-user-form" class="stack-form">
+          <label>Name<input name="name" required /></label>
+          <label>Email<input name="email" type="email" required /></label>
+          <label>Password<input name="password" required /></label>
+          <button class="button primary" type="submit">Add student</button>
+        </form>
+      </div>
+      <div class="admin-panel">
+        <h2>Students</h2>
+        <div class="student-list">
+          ${students.map((student) => {
+            const assigned = (state.assignments[student.id] || []).includes(course.id);
+            const completed = userProgress(student.id).completedLessons.length;
+            return `
+              <article class="student-row">
+                <div>
+                  <strong>${escapeHtml(student.name)}</strong>
+                  <span>${escapeHtml(student.email)}</span>
+                  <small>${completed}/${course.lessons.length} lessons complete</small>
+                </div>
+                <div class="student-actions">
+                  <label><input type="checkbox" data-assign="${student.id}" ${assigned ? 'checked' : ''}/> Assign course</label>
+                  <button class="button secondary" data-view-student="${student.id}">View report</button>
+                </div>
+              </article>
+            `;
+          }).join('')}
+        </div>
+      </div>
+    </section>
+  `);
+
+  document.querySelector('#add-user-form').addEventListener('submit', (event) => {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const email = String(form.get('email')).trim().toLowerCase();
+    if (state.users.some((item) => item.email.toLowerCase() === email)) {
+      alert('A user with this email already exists.');
+      return;
+    }
+    const newUser = {
+      id: `student-${Date.now()}`,
+      name: String(form.get('name')).trim(),
+      email,
+      password: String(form.get('password')),
+      role: 'student',
+      createdAt: new Date().toISOString()
+    };
+    state.users.push(newUser);
+    state.assignments[newUser.id] = [];
+    saveState();
+    renderAdmin(user);
+  });
+
+  document.querySelectorAll('[data-assign]').forEach((input) => {
+    input.addEventListener('change', () => {
+      const studentId = input.dataset.assign;
+      state.assignments[studentId] = state.assignments[studentId] || [];
+      if (input.checked && !state.assignments[studentId].includes(course.id)) {
+        state.assignments[studentId].push(course.id);
+      }
+      if (!input.checked) {
+        state.assignments[studentId] = state.assignments[studentId].filter((id) => id !== course.id);
+      }
+      saveState();
+    });
+  });
+
+  document.querySelectorAll('[data-view-student]').forEach((button) => {
+    button.addEventListener('click', () => {
+      activeStudentId = button.dataset.viewStudent;
+      route = {view: 'student-report'};
+      render();
+    });
+  });
+}
+
+function renderStudentReport(adminUser) {
+  const student = state.users.find((user) => user.id === activeStudentId);
+  if (!student) return renderAdmin(adminUser);
+  const attempts = state.attempts.filter((attempt) => attempt.userId === student.id);
+  const times = userLessonTime(student.id);
+  renderShell(adminUser, `
+    <section class="report-page">
+      <button class="button secondary" data-route="admin">Back to admin</button>
+      <p class="eyebrow">Student profile report</p>
+      <h1>${escapeHtml(student.name)}</h1>
+      <p>${escapeHtml(student.email)}</p>
+      <div class="report-grid">
+        <article>
+          <h2>Lesson time</h2>
+          ${course.lessons.map((lesson, index) => `
+            <p><strong>${index + 1}. ${lesson.title}</strong><span>${secondsToClock(times[index] || 0)}</span></p>
+          `).join('')}
+        </article>
+        <article>
+          <h2>Test attempts</h2>
+          ${attempts.length ? attempts.map((attempt) => `
+            <div class="attempt-row">
+              <strong>Lesson ${attempt.lessonIndex + 1}: ${attempt.passed ? 'Passed' : 'Retake needed'}</strong>
+              <span>${attempt.correct}/10 correct • ${attempt.wrong} wrong • ${secondsToClock(attempt.timeSpent)} • ${attempt.violations} violations</span>
+              <small>${new Date(attempt.createdAt).toLocaleString()}</small>
+            </div>
+          `).join('') : '<p>No attempts yet.</p>'}
+        </article>
+      </div>
+    </section>
+  `);
+}
+
+function renderProfile(user) {
+  const attempts = state.attempts.filter((attempt) => attempt.userId === user.id);
+  const completed = user.role === 'student' ? userProgress(user.id).completedLessons.length : 0;
+  renderShell(user, `
+    <section class="profile-page">
+      <p class="eyebrow">My profile</p>
+      <h1>${escapeHtml(user.name)}</h1>
+      <p>${escapeHtml(user.email)} • ${user.role}</p>
+      ${user.role === 'student' ? `<div class="dashboard-stat"><strong>${completed}/${course.lessons.length}</strong><span>lessons completed</span></div>` : ''}
+      <h2>Recent test activity</h2>
+      ${attempts.slice(-6).reverse().map((attempt) => `
+        <div class="attempt-row">
+          <strong>Lesson ${attempt.lessonIndex + 1}: ${attempt.passed ? 'Passed' : 'Retake needed'}</strong>
+          <span>${attempt.correct}/10 correct • ${secondsToClock(attempt.timeSpent)}</span>
+        </div>
+      `).join('') || '<p>No student test activity yet.</p>'}
+    </section>
+  `);
 }
 
 function renderLessonVisual(index) {
   const visual = lessonVisuals[index];
-  if (!visual) {
-    return '';
-  }
-
-  const metricCards = (visual.metrics || [])
-    .map(([label, value]) => `<div class="visual-metric"><strong>${label}</strong><span>${value}</span></div>`)
-    .join('');
-
-  const tableRows = (visual.rows || [])
-    .map(
-      (row, rowIndex) => `
-        <tr>
-          ${row.map((cell) => `<${rowIndex === 0 ? 'th' : 'td'}>${cell}</${rowIndex === 0 ? 'th' : 'td'}>`).join('')}
-        </tr>
-      `
-    )
-    .join('');
-
-  const flowSteps = (visual.steps || [])
-    .map((step, stepIndex) => `<li style="--step-index: ${stepIndex}"><span>${stepIndex + 1}</span>${step}</li>`)
-    .join('');
-
-  const chartBars = [42, 58, 46, 76, 68, 90, 74]
-    .map((height, index) => `<span style="height: ${height}%; --bar-index: ${index}"></span>`)
-    .join('');
-
+  if (!visual) return '';
+  const metricCards = (visual.metrics || []).map(([label, value]) => `<div class="visual-metric"><strong>${label}</strong><span>${value}</span></div>`).join('');
+  const tableRows = (visual.rows || []).map((row, rowIndex) => `<tr>${row.map((cell) => `<${rowIndex === 0 ? 'th' : 'td'}>${cell}</${rowIndex === 0 ? 'th' : 'td'}>`).join('')}</tr>`).join('');
+  const flowSteps = (visual.steps || []).map((step, stepIndex) => `<li style="--step-index: ${stepIndex}"><span>${stepIndex + 1}</span>${step}</li>`).join('');
+  const chartBars = [42, 58, 46, 76, 68, 90, 74].map((height, index) => `<span style="height:${height}%;--bar-index:${index}"></span>`).join('');
   const bodyByMode = {
-    dashboard: `
-      <div class="visual-sidebar"><span></span><span></span><span></span><span></span></div>
-      <div class="visual-main">
-        <div class="visual-metrics">${metricCards}</div>
-        <table>${tableRows}</table>
-      </div>
-    `,
-    flow: `
-      <ol class="visual-flow">${flowSteps}</ol>
-      <p class="visual-callout">${visual.callout}</p>
-    `,
-    chart: `
-      <div class="visual-metrics">${metricCards}</div>
-      <div class="visual-chart">${chartBars}</div>
-      <table>${tableRows}</table>
-    `,
-    status: `
-      <div class="visual-metrics">${metricCards}</div>
-      <div class="status-stack">
-        <div class="status-line good"><strong>Indexed</strong><span>Ready for Search</span></div>
-        <div class="status-line warning"><strong>Not indexed</strong><span>Needs judgment</span></div>
-        <div class="status-line danger"><strong>Important missing</strong><span>Inspect first</span></div>
-      </div>
-      <table>${tableRows}</table>
-    `,
-    sitemap: `
-      <div class="visual-metrics">${metricCards}</div>
-      <div class="sitemap-box">
-        <code>https://example.com/sitemap.xml</code>
-        <button type="button">Submit</button>
-      </div>
-      <table>${tableRows}</table>
-    `,
-    permissions: `
-      <div class="visual-metrics">${metricCards}</div>
-      <table>${tableRows}</table>
-    `
+    dashboard: `<div class="visual-sidebar"><span></span><span></span><span></span><span></span></div><div class="visual-main"><div class="visual-metrics">${metricCards}</div><table>${tableRows}</table></div>`,
+    flow: `<ol class="visual-flow">${flowSteps}</ol><p class="visual-callout">${visual.callout}</p>`,
+    chart: `<div class="visual-metrics">${metricCards}</div><div class="visual-chart">${chartBars}</div><table>${tableRows}</table>`,
+    status: `<div class="visual-metrics">${metricCards}</div><div class="status-stack"><div class="status-line good"><strong>Indexed</strong><span>Ready for Search</span></div><div class="status-line warning"><strong>Not indexed</strong><span>Needs judgment</span></div><div class="status-line danger"><strong>Important missing</strong><span>Inspect first</span></div></div><table>${tableRows}</table>`,
+    sitemap: `<div class="visual-metrics">${metricCards}</div><div class="sitemap-box"><code>https://example.com/sitemap.xml</code><button type="button">Submit</button></div><table>${tableRows}</table>`,
+    permissions: `<div class="visual-metrics">${metricCards}</div><table>${tableRows}</table>`
   };
-
   return `
     <section class="lesson-section">
       <h4>Visual walkthrough</h4>
       <figure class="visual-demo visual-${visual.mode}">
-        <figcaption>
-          <strong>${visual.title}</strong>
-          <span>${visual.caption}</span>
-        </figcaption>
+        <figcaption><strong>${visual.title}</strong><span>${visual.caption}</span></figcaption>
         <div class="visual-window">
           <div class="visual-window-bar" aria-hidden="true"><span></span><span></span><span></span></div>
           <div class="visual-body">${bodyByMode[visual.mode] || bodyByMode.dashboard}</div>
@@ -1252,216 +1571,250 @@ function renderLessonVisual(index) {
   `;
 }
 
-function renderQuiz(lesson, lessonIndex) {
-  return `
-    <div class="lesson-quiz" data-lesson-quiz="${lessonIndex}">
-      ${lesson.quiz
-        .map(
-          (question, questionIndex) => `
-            <fieldset class="quiz-question" data-question="${questionIndex}">
-              <legend>${questionIndex + 1}. ${question.question}</legend>
-              <div class="quiz-options">
-                ${question.options
-                  .map(
-                    (option, optionIndex) => `
-                      <button type="button" class="quiz-option" data-question="${questionIndex}" data-option="${optionIndex}">
-                        ${option}
-                      </button>
-                    `
-                  )
-                  .join('')}
-              </div>
-              <p class="quiz-feedback" data-feedback="${questionIndex}"></p>
-            </fieldset>
-          `
-        )
-        .join('')}
-      <p class="quiz-status" id="quiz-status">Answer all quiz questions correctly to unlock completion.</p>
-    </div>
-  `;
+function listItems(items) {
+  return `<ul>${items.map((item) => `<li>${item}</li>`).join('')}</ul>`;
 }
 
-function renderLocked(index) {
-  const previous = lessons[index - 1]?.title || 'the previous lesson';
-  lessonContent.innerHTML = `
-    <div class="locked-panel">
-      <p class="eyebrow">Locked lesson</p>
-      <h3>${lessons[index].title}</h3>
-      <p>This lesson is locked. Complete “${previous}” first, including its quiz, to unlock this module.</p>
-    </div>
-  `;
-}
-
-function renderLesson(index) {
-  activeLesson = Math.max(0, Math.min(index, lessons.length - 1));
-  const lesson = lessons[activeLesson];
-  const unlocked = isUnlocked(activeLesson);
-  const completed = completedLessons.has(activeLesson);
-  const progress = Math.round((completedLessons.size / lessons.length) * 100);
-
-  counter.textContent = `${completedLessons.size} of ${lessons.length} lessons complete`;
-  progressBar.style.width = `${progress}%`;
-
-  tabs.forEach((tab, tabIndex) => {
-    const tabUnlocked = isUnlocked(tabIndex);
-    const tabCompleted = completedLessons.has(tabIndex);
-    tab.classList.toggle('active', tabIndex === activeLesson);
-    tab.classList.toggle('locked', !tabUnlocked);
-    tab.classList.toggle('completed', tabCompleted);
-    tab.disabled = !tabUnlocked;
-    tab.textContent = `${tabCompleted ? '[Done] ' : tabUnlocked ? '' : '[Locked] '}${tab.dataset.title || tab.textContent.replace(/^\\[Done\\] |^\\[Locked\\] /, '')}`;
-  });
-
-  prevButton.disabled = activeLesson === 0;
-  nextButton.disabled = !isUnlocked(activeLesson + 1) && activeLesson < lessons.length - 1;
-  nextButton.textContent = activeLesson === lessons.length - 1 ? 'Course complete' : 'Next lesson';
-  completeButton.disabled = completed || !unlocked;
-  completeButton.textContent = completed ? 'Lesson completed' : 'Complete lesson';
-
-  if (!unlocked) {
-    renderLocked(activeLesson);
-    return;
+function renderLesson(user) {
+  const lessonIndex = route.lesson || 0;
+  activeLesson = lessonIndex;
+  const lesson = course.lessons[lessonIndex];
+  if (!isLessonUnlocked(user.id, lessonIndex)) {
+    route = {view: 'course', lesson: 0};
+    return renderLesson(user);
   }
-
-  quizState = {};
-  lessonContent.innerHTML = `
-    <div class="lesson-header">
-      <p class="eyebrow">Lesson ${activeLesson + 1} • ${lesson.duration}</p>
-      <h3>${lesson.title}</h3>
-      <p><strong>Goal:</strong> ${lesson.goal}</p>
-    </div>
-
-    <div class="lesson-meta">
-      <div><strong>0-10 min</strong><span>Concept and terminology</span></div>
-      <div><strong>10-25 min</strong><span>Why it matters</span></div>
-      <div><strong>25-40 min</strong><span>How and where to use it</span></div>
-      <div><strong>40-50 min</strong><span>Examples and practice</span></div>
-      <div><strong>50-60 min</strong><span>Quiz and completion</span></div>
-    </div>
-
-    <section class="lesson-section">
-      <h4>Learning outcomes</h4>
-      ${listItems(lesson.outcomes)}
+  startLessonTimer(user.id, lessonIndex);
+  const completed = userProgress(user.id).completedLessons;
+  renderShell(user, `
+    <section class="course-shell platform-course">
+      <aside class="lesson-menu">
+        ${course.lessons.map((item, index) => `
+          <button class="lesson-tab ${index === lessonIndex ? 'active' : ''}" data-lesson-nav="${index}" ${isLessonUnlocked(user.id, index) ? '' : 'disabled'}>
+            ${completed.includes(index) ? '[Done] ' : isLessonUnlocked(user.id, index) ? '' : '[Locked] '}${index + 1}. ${item.title}
+          </button>
+        `).join('')}
+      </aside>
+      <article class="lesson-card">
+        <div class="progress-wrap">
+          <span>${completed.length} of ${course.lessons.length} lessons complete</span>
+          <div class="progress-track"><span style="width:${(completed.length / course.lessons.length) * 100}%"></span></div>
+        </div>
+        <div class="lesson-header">
+          <p class="eyebrow">Lesson ${lessonIndex + 1} • ${lesson.duration}</p>
+          <h1>${lesson.title}</h1>
+          <p><strong>Goal:</strong> ${lesson.goal}</p>
+        </div>
+        <div class="lesson-meta">
+          <div><strong>0-10 min</strong><span>Concepts</span></div>
+          <div><strong>10-25 min</strong><span>Why it matters</span></div>
+          <div><strong>25-40 min</strong><span>How and where</span></div>
+          <div><strong>40-50 min</strong><span>Practice</span></div>
+          <div><strong>50-60 min</strong><span>Timed test</span></div>
+        </div>
+        <section class="lesson-section"><h4>Learning outcomes</h4>${listItems(lesson.outcomes)}</section>
+        ${renderLessonVisual(lessonIndex)}
+        <section class="lesson-section"><h4>What this means</h4>${lesson.sections.what.map((item) => `<p>${item}</p>`).join('')}</section>
+        <section class="lesson-section"><h4>Why this matters</h4>${lesson.sections.why.map((item) => `<p>${item}</p>`).join('')}</section>
+        <section class="lesson-section"><h4>Where you use it</h4>${lesson.sections.where.map((item) => `<p>${item}</p>`).join('')}</section>
+        <section class="lesson-section"><h4>How to do it</h4>${listItems(lesson.sections.how)}</section>
+        <section class="lesson-section"><h4>Terminology and glossary</h4><div class="lesson-term-grid">${lesson.glossary.map(([term, definition]) => `<article><h5>${term}</h5><p>${definition}</p></article>`).join('')}</div></section>
+        <section class="lesson-section"><h4>Examples</h4><div class="lesson-example-grid">${lesson.examples.map((example) => `<article class="lesson-example"><h5>${example.title}</h5><p><strong>Problem:</strong> ${example.problem}</p><p><strong>Walkthrough:</strong> ${example.walkthrough}</p><p><strong>Takeaway:</strong> ${example.takeaway}</p></article>`).join('')}</div></section>
+        <section class="lesson-section"><h4>Hands-on practice</h4><div class="practice">${listItems(lesson.practice)}</div></section>
+        <section class="lesson-section"><h4>Lesson test</h4><p>You have 5 minutes. Questions and options are randomized. You may get up to 3 answers wrong. If 4 or more are wrong, you must retake the test.</p><button class="button primary" data-start-test>Start 5-minute test</button></section>
+      </article>
     </section>
-
-    ${renderLessonVisual(activeLesson)}
-
-    <section class="lesson-section">
-      <h4>What this means</h4>
-      ${renderTextBlocks(lesson.sections.what)}
-    </section>
-
-    <section class="lesson-section">
-      <h4>Why this matters</h4>
-      ${renderTextBlocks(lesson.sections.why)}
-    </section>
-
-    <section class="lesson-section">
-      <h4>Where you use it in Search Console</h4>
-      ${renderTextBlocks(lesson.sections.where)}
-    </section>
-
-    <section class="lesson-section">
-      <h4>How to do it step by step</h4>
-      ${listItems(lesson.sections.how)}
-    </section>
-
-    <section class="lesson-section">
-      <h4>Terminology and glossary</h4>
-      ${renderGlossary(lesson.glossary)}
-    </section>
-
-    <section class="lesson-section">
-      <h4>Examples</h4>
-      ${renderExamples(lesson.examples)}
-    </section>
-
-    <section class="lesson-section">
-      <h4>Hands-on practice</h4>
-      <div class="practice">${listItems(lesson.practice)}</div>
-    </section>
-
-    <section class="lesson-section">
-      <h4>Common beginner mistakes</h4>
-      <div class="callout">${listItems(lesson.mistakes)}</div>
-    </section>
-
-    <section class="lesson-section">
-      <h4>Lesson quiz</h4>
-      ${renderQuiz(lesson, activeLesson)}
-    </section>
-  `;
-
-  bindQuiz();
-}
-
-function bindQuiz() {
-  const lesson = lessons[activeLesson];
-  document.querySelectorAll('.quiz-option').forEach((button) => {
+  `);
+  document.querySelectorAll('[data-lesson-nav]').forEach((button) => {
     button.addEventListener('click', () => {
-      const questionIndex = Number(button.dataset.question);
-      const optionIndex = Number(button.dataset.option);
-      const question = lesson.quiz[questionIndex];
-      const fieldset = button.closest('.quiz-question');
-      const feedback = fieldset.querySelector(`[data-feedback="${questionIndex}"]`);
-      const buttons = [...fieldset.querySelectorAll('.quiz-option')];
-      const correct = optionIndex === question.answer;
-
-      buttons.forEach((item) => {
-        item.classList.remove('correct', 'incorrect');
-      });
-      button.classList.add(correct ? 'correct' : 'incorrect');
-      if (!correct) {
-        buttons[question.answer].classList.add('correct');
-      }
-
-      quizState[questionIndex] = correct;
-      feedback.textContent = correct ? 'Correct.' : `Not quite. Correct answer: ${question.options[question.answer]}`;
-      updateQuizStatus();
+      route = {view: 'course', lesson: Number(button.dataset.lessonNav)};
+      render();
     });
   });
-  updateQuizStatus();
+  document.querySelector('[data-start-test]').addEventListener('click', () => startTest(user, lessonIndex));
 }
 
-function updateQuizStatus() {
-  const lesson = lessons[activeLesson];
-  const correctCount = lesson.quiz.filter((_, index) => quizState[index]).length;
-  const passed = correctCount === lesson.quiz.length;
-  const status = document.querySelector('#quiz-status');
-  const completed = completedLessons.has(activeLesson);
-  if (status) {
-    status.textContent = completed
-      ? 'Lesson completed. You can review this quiz anytime.'
-      : passed
-      ? 'Quiz passed. You can complete this lesson now.'
-      : `${correctCount} of ${lesson.quiz.length} correct. Answer all correctly to complete this lesson.`;
-  }
-  completeButton.disabled = completed || !passed;
+function startLessonTimer(userId, lessonIndex) {
+  stopLessonTimer();
+  lessonTimer = setInterval(() => {
+    const times = userLessonTime(userId);
+    times[lessonIndex] = (times[lessonIndex] || 0) + 1;
+    saveState();
+  }, 1000);
 }
 
-tabs.forEach((tab) => {
-  tab.dataset.title = tab.textContent;
-  tab.addEventListener('click', () => renderLesson(Number(tab.dataset.lesson)));
-});
-
-prevButton.addEventListener('click', () => renderLesson(activeLesson - 1));
-
-nextButton.addEventListener('click', () => {
-  if (activeLesson < lessons.length - 1 && isUnlocked(activeLesson + 1)) {
-    renderLesson(activeLesson + 1);
+function stopLessonTimer() {
+  if (lessonTimer) {
+    clearInterval(lessonTimer);
+    lessonTimer = null;
   }
+}
+
+function startTest(user, lessonIndex) {
+  stopLessonTimer();
+  const questions = ensureTenQuestions(course.lessons[lessonIndex]);
+  activeTest = {
+    userId: user.id,
+    lessonIndex,
+    questions,
+    answers: {},
+    startedAt: Date.now(),
+    remaining: testMinutes * 60,
+    violations: 0,
+    closed: false,
+    submitted: false
+  };
+  document.body.classList.add('test-mode');
+  renderTest(user);
+}
+
+function renderTest(user) {
+  renderShell(user, `
+    <section class="test-screen" oncopy="return false" oncut="return false" onpaste="return false" oncontextmenu="return false">
+      <div class="test-top">
+        <div><p class="eyebrow">Timed test</p><h1>${course.lessons[activeTest.lessonIndex].title}</h1></div>
+        <div class="timer" id="test-timer">${secondsToClock(activeTest.remaining)}</div>
+      </div>
+      <div class="security-note">
+        Test security: copy and right-click are blocked where the browser allows it. Switching tabs/windows gives one warning. A second switch closes the test and requires a retake. A normal website cannot reliably detect a photo taken from another mobile phone, but the test screen is blacked out when focus changes.
+      </div>
+      <form id="test-form" class="test-form">
+        ${activeTest.questions.map((question, questionIndex) => `
+          <fieldset>
+            <legend>${questionIndex + 1}. ${question.question}</legend>
+            ${question.options.map((option, optionIndex) => `
+              <label><input type="radio" name="q-${questionIndex}" value="${optionIndex}" /> ${option}</label>
+            `).join('')}
+          </fieldset>
+        `).join('')}
+        <button class="button primary" type="submit">Submit test</button>
+      </form>
+      <div id="test-result"></div>
+      <div id="test-blackout" class="test-blackout"><strong>Test paused</strong><span>Focus changed. Return to the test window.</span></div>
+    </section>
+  `);
+  installTestSecurity(user);
+  document.querySelector('#test-form').addEventListener('submit', (event) => {
+    event.preventDefault();
+    submitTest(user, false);
+  });
+  tickTest(user);
+}
+
+function installTestSecurity(user) {
+  document.addEventListener('keydown', blockCopyKeys, true);
+  document.addEventListener('visibilitychange', () => handleVisibilityViolation(user), {once: false});
+  window.addEventListener('blur', () => handleVisibilityViolation(user), {once: false});
+}
+
+function blockCopyKeys(event) {
+  const key = event.key.toLowerCase();
+  if ((event.ctrlKey || event.metaKey) && ['c', 'x', 'p', 's'].includes(key)) {
+    event.preventDefault();
+  }
+  if (key === 'printscreen') {
+    event.preventDefault();
+  }
+}
+
+function handleVisibilityViolation(user) {
+  if (!activeTest || activeTest.submitted || activeTest.closed) return;
+  activeTest.violations += 1;
+  const blackout = document.querySelector('#test-blackout');
+  blackout?.classList.add('visible');
+  setTimeout(() => blackout?.classList.remove('visible'), 1600);
+  if (activeTest.violations === 1) {
+    alert('Warning: do not change tabs or windows during the test. One more violation will close this attempt.');
+  } else {
+    activeTest.closed = true;
+    submitTest(user, true);
+  }
+}
+
+function tickTest(user) {
+  clearInterval(testTimer);
+  testTimer = setInterval(() => {
+    if (!activeTest || activeTest.submitted) return clearInterval(testTimer);
+    activeTest.remaining -= 1;
+    const timer = document.querySelector('#test-timer');
+    if (timer) timer.textContent = secondsToClock(Math.max(activeTest.remaining, 0));
+    if (activeTest.remaining <= 0) {
+      submitTest(user, true);
+    }
+  }, 1000);
+}
+
+function submitTest(user, forced) {
+  if (!activeTest || activeTest.submitted) return;
+  activeTest.submitted = true;
+  clearInterval(testTimer);
+  document.removeEventListener('keydown', blockCopyKeys, true);
+  document.body.classList.remove('test-mode');
+  const form = document.querySelector('#test-form');
+  const data = form ? new FormData(form) : new FormData();
+  let correct = 0;
+  activeTest.questions.forEach((question, index) => {
+    if (Number(data.get(`q-${index}`)) === question.answer) correct += 1;
+  });
+  const wrong = activeTest.questions.length - correct;
+  const passed = !forced && wrong <= 3;
+  const attempt = {
+    id: `attempt-${Date.now()}`,
+    userId: user.id,
+    courseId: course.id,
+    lessonIndex: activeTest.lessonIndex,
+    correct,
+    wrong,
+    passed,
+    forced,
+    violations: activeTest.violations,
+    timeSpent: testMinutes * 60 - Math.max(activeTest.remaining, 0),
+    createdAt: new Date().toISOString()
+  };
+  state.attempts.push(attempt);
+  if (passed) {
+    const progress = userProgress(user.id);
+    if (!progress.completedLessons.includes(activeTest.lessonIndex)) {
+      progress.completedLessons.push(activeTest.lessonIndex);
+      progress.completedLessons.sort((a, b) => a - b);
+    }
+  }
+  saveState();
+  document.querySelector('#test-form')?.remove();
+  document.querySelector('#test-result').innerHTML = `
+    <div class="result-card">
+      <h2>Test submitted</h2>
+      <p>Click the button below to view your result summary. Correct answers are not shown.</p>
+      <button class="button primary" data-view-result>View results</button>
+      <div id="result-summary"></div>
+    </div>
+  `;
+  document.querySelector('[data-view-result]').addEventListener('click', () => {
+    document.querySelector('#result-summary').innerHTML = `
+      <p><strong>${passed ? 'Passed' : 'Retake required'}</strong></p>
+      <p>${correct}/10 correct. ${wrong} wrong. ${attempt.violations} focus warning(s).</p>
+      <button class="button primary" data-return-course>${passed ? 'Continue course' : 'Retake lesson test'}</button>
+    `;
+    document.querySelector('[data-return-course]').addEventListener('click', () => {
+      activeTest = null;
+      route = {view: 'course', lesson: attempt.lessonIndex + (passed ? 1 : 0)};
+      if (route.lesson >= course.lessons.length) route.lesson = course.lessons.length - 1;
+      render();
+    });
+  });
+}
+
+function render() {
+  const user = getSessionUser();
+  if (!user) return renderLogin();
+  if (route.view === 'admin') return user.role === 'admin' ? renderAdmin(user) : renderDashboard(user);
+  if (route.view === 'student-report') return user.role === 'admin' ? renderStudentReport(user) : renderDashboard(user);
+  if (route.view === 'profile') return renderProfile(user);
+  if (route.view === 'course') return renderLesson(user);
+  return user.role === 'admin' ? renderAdmin(user) : renderDashboard(user);
+}
+
+document.addEventListener('contextmenu', (event) => {
+  if (document.body.classList.contains('test-mode')) event.preventDefault();
 });
 
-completeButton.addEventListener('click', () => {
-  completedLessons.add(activeLesson);
-  saveProgress();
-  renderLesson(activeLesson);
-});
-
-resetButton.addEventListener('click', () => {
-  completedLessons = new Set();
-  saveProgress();
-  renderLesson(0);
-});
-
-renderLesson(0);
+render();
