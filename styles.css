@@ -1239,6 +1239,12 @@ footer {
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
 }
 
+.course-icon img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+}
+
 .continue-card h2,
 .learning-course-card h3 {
   margin: 0;
@@ -1603,10 +1609,11 @@ footer {
   position: absolute;
   left: calc(var(--x) * 1%);
   bottom: calc(var(--h) * 1%);
-  width: 18px;
-  height: 18px;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
   background: #000;
+  transform: translate(-50%, 50%);
 }
 
 .chart-point::before {
@@ -1615,8 +1622,8 @@ footer {
 
 .chart-point span {
   position: absolute;
-  left: -22px;
-  top: -44px;
+  left: -24px;
+  top: -40px;
   min-width: 58px;
   padding: 8px 10px;
   border-radius: 8px;

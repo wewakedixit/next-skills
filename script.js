@@ -1941,6 +1941,11 @@ function courseProgressPercent(userId, targetCourse) {
   return Math.round((completed / targetCourse.lessons.length) * 100);
 }
 
+function courseLogo(item) {
+  const src = item.id === 'google-search-ads' ? '/google-ads-logo.svg' : '/search-console-logo.svg';
+  return `<div class="course-icon"><img src="${src}" alt="${escapeHtml(item.title)} logo" /></div>`;
+}
+
 function isCourseCompleted(userId, targetCourse) {
   return userProgress(userId, targetCourse.id).completedLessons.length === targetCourse.lessons.length;
 }
@@ -2275,7 +2280,7 @@ function renderDashboard(user) {
           </div>
           ${activeCourse ? `
             <section class="continue-card">
-              <div class="course-icon">${activeCourse.title.includes('Ads') ? 'Ads' : 'GSC'}</div>
+              ${courseLogo(activeCourse)}
               <div>
                 <h2>${activeCourse.title}</h2>
                 <p>${activeCompleted}/${activeCourse.lessons.length} lessons complete • ${secondsToClock(courseStudySeconds(user.id, activeCourse.id))} studied</p>
@@ -2307,7 +2312,7 @@ function renderDashboard(user) {
                 const completedCourse = isAssigned && isCourseCompleted(user.id, item);
                 return `
                   <article class="course-card learning-course-card">
-                    <div class="course-icon">${item.title.includes('Ads') ? 'Ads' : 'GSC'}</div>
+                    ${courseLogo(item)}
                     <div>
                       <h3>${item.title}</h3>
                       <p>${item.subtitle}</p>
@@ -2373,7 +2378,7 @@ function renderDashboard(user) {
               <option value="quarterly" ${dashboardStatsPeriod === 'quarterly' ? 'selected' : ''}>Quarterly</option>
             </select>
           </div>
-          <div class="stats-tabs"><span>Learning Hours</span><span>My Courses</span></div>
+          <div class="stats-tabs"><span>Learning Hours</span></div>
           <div class="learning-chart" style="--chart-count:${stats.values.length}">
             <svg class="chart-line" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
               <polyline points="${chartPolyline}"></polyline>
