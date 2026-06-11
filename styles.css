@@ -1048,24 +1048,25 @@ footer {
 
 .learning-dashboard {
   display: grid;
-  grid-template-columns: 112px minmax(0, 1.35fr) minmax(340px, 0.95fr);
-  gap: 34px;
-  max-width: 1620px;
-  margin: 0 auto;
-  padding: 28px;
-  border-radius: 28px;
+  grid-template-columns: 112px minmax(0, 1.38fr) minmax(360px, 0.92fr);
+  gap: 0;
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  border-radius: 0;
   background: #fff;
-  box-shadow: 0 30px 80px rgba(22, 32, 29, 0.12);
+  box-shadow: none;
 }
 
 .learner-rail {
-  min-height: calc(100vh - 150px);
+  min-height: 100vh;
   display: grid;
   justify-items: center;
   align-content: start;
   gap: 34px;
-  padding: 34px 18px;
-  border-radius: 24px;
+  padding: 34px 18px 28px;
+  border-radius: 0;
   background: #030303;
   color: #fff;
 }
@@ -1101,6 +1102,14 @@ footer {
   display: grid;
   align-content: start;
   gap: 24px;
+}
+
+.learning-main {
+  padding: clamp(24px, 3vw, 42px) clamp(24px, 3vw, 44px);
+}
+
+.learning-side {
+  padding: clamp(24px, 3vw, 42px) clamp(22px, 3vw, 42px);
 }
 
 .welcome-card {
@@ -1277,6 +1286,7 @@ footer {
 }
 
 .learning-course-card {
+  display: grid;
   grid-template-columns: 74px 1fr auto auto;
   align-items: center;
   gap: 20px;
@@ -1289,6 +1299,10 @@ footer {
 
 .learning-course-card h3 {
   font-size: 19px;
+}
+
+.learning-course-card > div:nth-child(2) {
+  min-width: 0;
 }
 
 .learning-course-card p {
@@ -1347,6 +1361,11 @@ footer {
   background: #000;
   color: #fff;
   font-weight: 950;
+}
+
+.learning-dashboard .button.primary {
+  color: #fff;
+  background: #000;
 }
 
 .summary-cards {
@@ -1540,8 +1559,8 @@ footer {
 
 .student-dashboard-main {
   min-height: 100vh;
-  padding: clamp(28px, 5vw, 64px);
-  background: #f4f4f7;
+  padding: 0;
+  background: #fff;
 }
 
 .login-page {
@@ -1681,6 +1700,17 @@ footer {
 .course-card h2 {
   margin: 0;
   font-size: 30px;
+}
+
+.course-list.learning-course-list {
+  grid-template-columns: 1fr;
+}
+
+.course-card.learning-course-card {
+  grid-template-columns: 74px minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 20px;
+  padding: 16px;
 }
 
 .admin-grid {
@@ -2160,7 +2190,7 @@ footer {
 
   .learning-dashboard {
     grid-template-columns: 1fr;
-    padding: 18px;
+    padding: 0;
   }
 
   .learner-rail {
@@ -2170,7 +2200,12 @@ footer {
     justify-content: start;
     overflow-x: auto;
     padding: 14px;
-    border-radius: 18px;
+    border-radius: 0;
+  }
+
+  .learning-main,
+  .learning-side {
+    padding: 24px;
   }
 
   .rail-logo,
@@ -2214,6 +2249,10 @@ footer {
     padding: 18px;
   }
 
+  .student-dashboard-main {
+    padding: 0;
+  }
+
   .report-grid article p {
     display: grid;
   }
@@ -2227,7 +2266,7 @@ footer {
 
   .learning-dashboard {
     border-radius: 0;
-    margin: -18px;
+    margin: 0;
   }
 
   .course-tabs,
