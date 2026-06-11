@@ -2080,9 +2080,9 @@ footer {
 }
 
 .profile-redesign {
-  gap: 34px;
+  gap: 46px;
   max-width: none;
-  padding: clamp(34px, 4vw, 58px);
+  padding: clamp(44px, 5vw, 76px);
   border: 0;
   border-radius: 0;
   background: #f8f7f6;
@@ -2105,10 +2105,10 @@ footer {
 
 .profile-progress-card {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 28px;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, auto);
+  gap: 42px;
   align-items: center;
-  padding: 26px 30px;
+  padding: 30px 36px;
   border: 1px solid #d6c7c4;
   border-radius: 8px;
   background: #fff;
@@ -2120,7 +2120,7 @@ footer {
 
 .profile-progress-track {
   height: 11px;
-  margin-top: 10px;
+  margin-top: 14px;
   overflow: hidden;
   border-radius: 999px;
   background: #e6e6e6;
@@ -2135,37 +2135,20 @@ footer {
 
 .profile-progress-meta {
   display: flex;
+  justify-content: flex-end;
   align-items: center;
   gap: 10px;
   white-space: nowrap;
 }
 
-.profile-initials {
-  display: inline-grid;
-  place-items: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: #000;
-  color: #fff;
-  font-size: 12px;
-  font-weight: 850;
-}
-
-.profile-initials.muted {
-  margin-left: 20px;
-  background: #ededed;
-  color: #000;
-}
-
 .profile-redesign-grid {
   grid-template-columns: minmax(0, 2.05fr) minmax(320px, 1fr);
-  gap: 30px;
+  gap: 42px;
   align-items: start;
 }
 
 .profile-redesign .profile-card {
-  padding: clamp(24px, 3vw, 34px);
+  padding: clamp(34px, 3.5vw, 48px);
   border: 1px solid #d6c7c4;
   border-radius: 8px;
   background: #fff;
@@ -2183,14 +2166,15 @@ footer {
 .profile-fields {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 24px 30px;
+  gap: 34px 42px;
 }
 
 .profile-redesign .stack-form label {
-  gap: 10px;
+  gap: 14px;
   color: #161616;
   font-size: 17px;
   font-weight: 650;
+  line-height: 1.35;
 }
 
 .profile-redesign .stack-form input {
@@ -2230,10 +2214,10 @@ footer {
 .profile-form-footer {
   display: flex;
   justify-content: space-between;
-  gap: 18px;
+  gap: 26px;
   align-items: center;
-  margin-top: 32px;
-  padding-top: 30px;
+  margin-top: 42px;
+  padding-top: 34px;
   border-top: 1px solid #d6c7c4;
 }
 
@@ -2245,7 +2229,7 @@ footer {
 }
 
 .profile-password-card {
-  gap: 24px;
+  gap: 32px;
 }
 
 .profile-password-card .button.primary {
@@ -2255,7 +2239,7 @@ footer {
 
 .profile-activity-section {
   display: grid;
-  gap: 22px;
+  gap: 28px;
 }
 
 .profile-section-row {
@@ -2279,9 +2263,9 @@ footer {
 .profile-empty-activity {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto auto;
-  gap: 18px;
+  gap: 26px;
   align-items: center;
-  padding: 24px 30px;
+  padding: 28px 36px;
   border: 1px solid #d6c7c4;
   border-radius: 8px;
   background: #fff;
@@ -3071,10 +3055,6 @@ footer {
   .profile-progress-meta {
     flex-wrap: wrap;
     white-space: normal;
-  }
-
-  .profile-initials.muted {
-    margin-left: 0;
   }
 
   .student-illustration {

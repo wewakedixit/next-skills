@@ -2704,7 +2704,6 @@ function renderProfile(user) {
   const completed = user.role === 'student' ? assignedCourses.reduce((sum, item) => sum + userProgress(user.id, item.id).completedLessons.length, 0) : 0;
   const totalLessons = assignedCourses.reduce((sum, item) => sum + item.lessons.length, 0) || 0;
   const progressPercent = totalLessons ? Math.round((completed / totalLessons) * 100) : 0;
-  const initials = user.name.split(' ').filter(Boolean).slice(0, 2).map((part) => part[0]).join('').toUpperCase() || 'NS';
   const recentAttempts = attempts.slice(-4).reverse();
   renderShell(user, `
     <section class="profile-page profile-redesign">
@@ -2721,8 +2720,6 @@ function renderProfile(user) {
           </div>
           <div class="profile-progress-meta">
             <strong>${completed}/${totalLessons} lessons completed</strong>
-            <span class="profile-initials muted">${initials.slice(0, 1)}</span>
-            <span class="profile-initials">${initials}</span>
           </div>
         </section>
       ` : ''}
