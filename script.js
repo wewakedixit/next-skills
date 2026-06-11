@@ -1377,6 +1377,10 @@ function renderLogin() {
 function renderDashboard(user) {
   const assigned = state.assignments[user.id] || [];
   const completed = userProgress(user.id).completedLessons.length;
+  const progressPercent = Math.round((completed / course.lessons.length) * 100);
+  const totalStudyTime = Object.values(userLessonTime(user.id)).reduce((sum, value) => sum + value, 0);
+  const latestAttempt = state.attempts.filter((attempt) => attempt.userId === user.id).at(-1);
+  const now = new Date();
   renderShell(user, `
     <section class="dashboard-hero">
       <div>
@@ -1385,6 +1389,14 @@ function renderDashboard(user) {
         <p>Your assigned courses appear here. Complete each lesson test to unlock the next lesson.</p>
       </div>
       <div class="dashboard-stat"><strong>${completed}/${course.lessons.length}</strong><span>lessons completed</span></div>
+    </section>
+    <section class="insight-grid">
+      <article><strong>${now.toLocaleDateString()}</strong><span>today's date</span></article>
+      <article><strong>${now.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}</strong><span>current time</span></article>
+      <article><strong>${progressPercent}%</strong><span>course progress</span></article>
+      <article><strong>${secondsToClock(totalStudyTime)}</strong><span>study time</span></article>
+      <article><strong>${latestAttempt ? (latestAttempt.passed ? 'Passed' : 'Retake') : 'No test'}</strong><span>latest attempt</span></article>
+      <article><strong>${latestAttempt ? `${latestAttempt.correct}/10` : '-'}</strong><span>latest score</span></article>
     </section>
     <section class="course-list">
       ${assigned.includes(course.id)
@@ -1398,10 +1410,90 @@ function renderDashboard(user) {
         `
         : '<article class="empty-card">No course assigned yet. Please contact your admin.</article>'}
     </section>
+    <section class="stress-card">
+      <div>
+        <p class="eyebrow">Stress relief</p>
+        <h2>X/O quick break</h2>
+        <p>Play a short round against the computer between study sessions.</p>
+      </div>
+      <div class="xo-game">
+        <div class="xo-board">
+          ${Array.from({length: 9}).map((_, index) => `<button type="button" data-xo-cell="${index}" aria-label="Cell ${index + 1}"></button>`).join('')}
+        </div>
+        <p id="xo-status">Your turn. You are X.</p>
+        <button class="button secondary" data-reset-xo>Reset game</button>
+      </div>
+    </section>
   `);
   document.querySelector('[data-open-course]')?.addEventListener('click', () => {
     route = {view: 'course', lesson: 0};
     render();
+  });
+  bindXoGame();
+}
+
+function bindXoGame() {
+  const cells = [...document.querySelectorAll('[data-xo-cell]')];
+  const status = document.querySelector('#xo-status');
+  let board = Array(9).fill('');
+  let gameOver = false;
+  const wins = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
+
+  const winner = () => wins.find(([a, b, c]) => board[a] && board[a] === board[b] && board[a] === board[c]);
+  const drawBoard = () => {
+    cells.forEach((cell, index) => {
+      cell.textContent = board[index];
+      cell.classList.toggle('filled', Boolean(board[index]));
+    });
+  };
+  const finishIfDone = () => {
+    const line = winner();
+    if (line) {
+      gameOver = true;
+      line.forEach((index) => cells[index].classList.add('win'));
+      status.textContent = `${board[line[0]] === 'X' ? 'You win' : 'Computer wins'}. Reset to play again.`;
+      return true;
+    }
+    if (board.every(Boolean)) {
+      gameOver = true;
+      status.textContent = 'Draw. Reset to play again.';
+      return true;
+    }
+    return false;
+  };
+  const computerMove = () => {
+    const empty = board.map((value, index) => (value ? null : index)).filter((value) => value !== null);
+    const choice = empty[Math.floor(Math.random() * empty.length)];
+    if (choice !== undefined) board[choice] = 'O';
+  };
+
+  cells.forEach((cell, index) => {
+    cell.addEventListener('click', () => {
+      if (gameOver || board[index]) return;
+      board[index] = 'X';
+      drawBoard();
+      if (finishIfDone()) return;
+      computerMove();
+      drawBoard();
+      if (!finishIfDone()) status.textContent = 'Your turn. You are X.';
+    });
+  });
+
+  document.querySelector('[data-reset-xo]')?.addEventListener('click', () => {
+    board = Array(9).fill('');
+    gameOver = false;
+    cells.forEach((cell) => cell.classList.remove('win'));
+    status.textContent = 'Your turn. You are X.';
+    drawBoard();
   });
 }
 
@@ -1412,6 +1504,7 @@ function renderAdmin(user) {
       <div class="admin-panel">
         <p class="eyebrow">Admin panel</p>
         <h1>Users and course assignments</h1>
+        <p>Add students, assign courses from the backend, and review each student’s lesson time and test attempts.</p>
         <form id="add-user-form" class="stack-form">
           <label>Name<input name="name" required /></label>
           <label>Email<input name="email" type="email" required /></label>
@@ -1420,6 +1513,23 @@ function renderAdmin(user) {
         </form>
       </div>
       <div class="admin-panel">
+        <h2>Course assignment backend</h2>
+        <div class="assignment-table">
+          <div class="assignment-head"><span>Student</span><span>Course</span><span>Status</span><span>Report</span></div>
+          ${students.map((student) => {
+            const assigned = (state.assignments[student.id] || []).includes(course.id);
+            return `
+              <div class="assignment-row">
+                <span>${escapeHtml(student.name)}</span>
+                <span>${course.title}</span>
+                <label class="switch-line"><input type="checkbox" data-assign="${student.id}" ${assigned ? 'checked' : ''}/> ${assigned ? 'Assigned' : 'Not assigned'}</label>
+                <button class="button secondary" data-view-student="${student.id}">Open profile</button>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      </div>
+      <div class="admin-panel admin-panel-wide">
         <h2>Students</h2>
         <div class="student-list">
           ${students.map((student) => {
@@ -1433,7 +1543,7 @@ function renderAdmin(user) {
                   <small>${completed}/${course.lessons.length} lessons complete</small>
                 </div>
                 <div class="student-actions">
-                  <label><input type="checkbox" data-assign="${student.id}" ${assigned ? 'checked' : ''}/> Assign course</label>
+                  <span class="status-pill ${assigned ? 'success' : ''}">${assigned ? 'Course assigned' : 'Not assigned'}</span>
                   <button class="button secondary" data-view-student="${student.id}">View report</button>
                 </div>
               </article>
@@ -1477,6 +1587,7 @@ function renderAdmin(user) {
         state.assignments[studentId] = state.assignments[studentId].filter((id) => id !== course.id);
       }
       saveState();
+      renderAdmin(user);
     });
   });
 
@@ -1494,12 +1605,24 @@ function renderStudentReport(adminUser) {
   if (!student) return renderAdmin(adminUser);
   const attempts = state.attempts.filter((attempt) => attempt.userId === student.id);
   const times = userLessonTime(student.id);
+  const completed = userProgress(student.id).completedLessons.length;
+  const totalTime = Object.values(times).reduce((sum, value) => sum + value, 0);
+  const latestAttempt = attempts.at(-1);
+  const assigned = (state.assignments[student.id] || []).includes(course.id);
   renderShell(adminUser, `
     <section class="report-page">
       <button class="button secondary" data-route="admin">Back to admin</button>
       <p class="eyebrow">Student profile report</p>
       <h1>${escapeHtml(student.name)}</h1>
       <p>${escapeHtml(student.email)}</p>
+      <div class="insight-grid">
+        <article><strong>${assigned ? 'Assigned' : 'Not assigned'}</strong><span>course status</span></article>
+        <article><strong>${completed}/${course.lessons.length}</strong><span>progress</span></article>
+        <article><strong>${secondsToClock(totalTime)}</strong><span>total lesson time</span></article>
+        <article><strong>${attempts.length}</strong><span>test attempts</span></article>
+        <article><strong>${latestAttempt ? `${latestAttempt.correct}/10` : '-'}</strong><span>latest score</span></article>
+        <article><strong>${latestAttempt ? (latestAttempt.passed ? 'Pass' : 'Retake') : '-'}</strong><span>latest result</span></article>
+      </div>
       <div class="report-grid">
         <article>
           <h2>Lesson time</h2>
@@ -1512,7 +1635,7 @@ function renderStudentReport(adminUser) {
           ${attempts.length ? attempts.map((attempt) => `
             <div class="attempt-row">
               <strong>Lesson ${attempt.lessonIndex + 1}: ${attempt.passed ? 'Passed' : 'Retake needed'}</strong>
-              <span>${attempt.correct}/10 correct • ${attempt.wrong} wrong • ${secondsToClock(attempt.timeSpent)} • ${attempt.violations} violations</span>
+              <span>Score: ${attempt.correct}/10 • Wrong: ${attempt.wrong} • Time: ${secondsToClock(attempt.timeSpent)} • Warnings: ${attempt.violations} • Status: ${attempt.passed ? 'Pass' : 'Retake'}</span>
               <small>${new Date(attempt.createdAt).toLocaleString()}</small>
             </div>
           `).join('') : '<p>No attempts yet.</p>'}
@@ -1660,6 +1783,7 @@ function startTest(user, lessonIndex) {
     startedAt: Date.now(),
     remaining: testMinutes * 60,
     violations: 0,
+    lastViolationAt: 0,
     closed: false,
     submitted: false
   };
@@ -1677,6 +1801,7 @@ function renderTest(user) {
       <div class="security-note">
         Test security: copy and right-click are blocked where the browser allows it. Switching tabs/windows gives one warning. A second switch closes the test and requires a retake. A normal website cannot reliably detect a photo taken from another mobile phone, but the test screen is blacked out when focus changes.
       </div>
+      <div id="focus-warning" class="focus-warning" hidden></div>
       <form id="test-form" class="test-form">
         ${activeTest.questions.map((question, questionIndex) => `
           <fieldset>
@@ -1718,13 +1843,25 @@ function blockCopyKeys(event) {
 
 function handleVisibilityViolation(user) {
   if (!activeTest || activeTest.submitted || activeTest.closed) return;
+  if (document.visibilityState && document.visibilityState !== 'hidden' && document.hasFocus()) return;
+  const now = Date.now();
+  if (now - activeTest.lastViolationAt < 1800) return;
+  activeTest.lastViolationAt = now;
   activeTest.violations += 1;
   const blackout = document.querySelector('#test-blackout');
+  const warning = document.querySelector('#focus-warning');
   blackout?.classList.add('visible');
   setTimeout(() => blackout?.classList.remove('visible'), 1600);
   if (activeTest.violations === 1) {
-    alert('Warning: do not change tabs or windows during the test. One more violation will close this attempt.');
+    if (warning) {
+      warning.hidden = false;
+      warning.textContent = 'Warning 1 of 2: stay on this test window. The next tab/window switch will close this attempt.';
+    }
   } else {
+    if (warning) {
+      warning.hidden = false;
+      warning.textContent = 'Second focus warning detected. This attempt is closed and must be retaken.';
+    }
     activeTest.closed = true;
     submitTest(user, true);
   }
@@ -1789,9 +1926,22 @@ function submitTest(user, forced) {
     </div>
   `;
   document.querySelector('[data-view-result]').addEventListener('click', () => {
+    const scorePercent = Math.round((correct / 10) * 100);
     document.querySelector('#result-summary').innerHTML = `
-      <p><strong>${passed ? 'Passed' : 'Retake required'}</strong></p>
-      <p>${correct}/10 correct. ${wrong} wrong. ${attempt.violations} focus warning(s).</p>
+      <div class="interactive-result ${passed ? 'passed' : 'failed'}">
+        <div class="score-ring" style="--score:${scorePercent}%"><strong>${correct}/10</strong><span>${scorePercent}%</span></div>
+        <div>
+          <h3>${passed ? 'Passed' : 'Retake required'}</h3>
+          <p>${passed ? 'Good work. You can continue to the next lesson.' : 'More than 3 answers were wrong, or the attempt was closed. Please retake the test.'}</p>
+        </div>
+      </div>
+      <div class="result-metrics">
+        <article><strong>${wrong}</strong><span>wrong answers</span></article>
+        <article><strong>${secondsToClock(attempt.timeSpent)}</strong><span>time spent</span></article>
+        <article><strong>${attempt.violations}</strong><span>focus warnings</span></article>
+        <article><strong>${forced ? 'Closed' : 'Submitted'}</strong><span>attempt type</span></article>
+      </div>
+      <p class="security-note">Correct answers are intentionally hidden. Review the lesson and retake if needed.</p>
       <button class="button primary" data-return-course>${passed ? 'Continue course' : 'Retake lesson test'}</button>
     `;
     document.querySelector('[data-return-course]').addEventListener('click', () => {

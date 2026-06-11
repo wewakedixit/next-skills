@@ -367,13 +367,17 @@ a {
 
 .lesson-tab {
   width: 100%;
-  padding: 13px 14px;
+  min-height: 42px;
+  padding: 9px 11px;
   border: 0;
-  border-radius: 7px;
+  border-bottom: 1px solid #edf1ef;
+  border-radius: 0;
   color: #34413c;
   background: transparent;
   font: inherit;
+  font-size: 13px;
   font-weight: 750;
+  line-height: 1.3;
   text-align: left;
   cursor: pointer;
 }
@@ -381,7 +385,7 @@ a {
 .lesson-tab:hover,
 .lesson-tab.active {
   color: var(--ink);
-  background: #e8f2ee;
+  background: #f1f7f4;
 }
 
 .lesson-tab.completed {
@@ -1210,7 +1214,7 @@ footer {
 
 .course-list {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
 }
 
@@ -1231,6 +1235,10 @@ footer {
   grid-template-columns: minmax(300px, 0.8fr) minmax(0, 1.2fr);
   gap: 22px;
   align-items: start;
+}
+
+.admin-panel-wide {
+  grid-column: 1 / -1;
 }
 
 .admin-panel {
@@ -1277,6 +1285,56 @@ footer {
 
 .student-actions label {
   font-weight: 800;
+}
+
+.assignment-table {
+  display: grid;
+  gap: 8px;
+}
+
+.assignment-head,
+.assignment-row {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr auto auto;
+  gap: 12px;
+  align-items: center;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.assignment-head {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.assignment-row {
+  border: 1px solid var(--line);
+  background: #fbfcfb;
+}
+
+.switch-line {
+  color: #34413c;
+  font-weight: 850;
+  white-space: nowrap;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: #f2f4f3;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.status-pill.success {
+  background: #e8f5ef;
+  color: #0d6f4c;
 }
 
 .profile-page,
@@ -1331,6 +1389,9 @@ footer {
 
 .platform-course .lesson-menu {
   top: 86px;
+  max-height: calc(100vh - 106px);
+  overflow: auto;
+  padding: 0;
 }
 
 .platform-course .lesson-card h1 {
@@ -1376,6 +1437,15 @@ footer {
   background: #fff8e5;
   color: #5f4612;
   font-weight: 800;
+}
+
+.focus-warning {
+  margin: 0 0 18px;
+  padding: 14px 16px;
+  border-radius: 8px;
+  background: #fff0ee;
+  color: #8c2d21;
+  font-weight: 900;
 }
 
 .test-form {
@@ -1435,19 +1505,200 @@ footer {
   background: #eef5f2;
 }
 
+.insight-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 12px;
+  margin: 20px 0 24px;
+}
+
+.insight-grid article {
+  min-height: 92px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.insight-grid strong,
+.insight-grid span {
+  display: block;
+}
+
+.insight-grid strong {
+  font-size: 22px;
+}
+
+.insight-grid span {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.stress-card {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 22px;
+  align-items: center;
+  margin-top: 22px;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 12px 28px rgba(20, 34, 29, 0.08);
+}
+
+.stress-card h2 {
+  margin: 0;
+  font-size: 30px;
+}
+
+.stress-card p {
+  color: #42504b;
+}
+
+.xo-game {
+  display: grid;
+  gap: 12px;
+  justify-items: center;
+}
+
+.xo-board {
+  display: grid;
+  grid-template-columns: repeat(3, 54px);
+  gap: 8px;
+}
+
+.xo-board button {
+  width: 54px;
+  height: 54px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f8faf8;
+  color: var(--green);
+  font-size: 26px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.xo-board button.filled {
+  background: #eef5f2;
+}
+
+.xo-board button.win {
+  background: #e8f5ef;
+  border-color: var(--green);
+}
+
+#xo-status {
+  margin: 0;
+  font-weight: 850;
+}
+
+.interactive-result {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 18px;
+  align-items: center;
+  margin: 18px 0;
+  padding: 18px;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.interactive-result.failed {
+  background: #fff8e5;
+}
+
+.score-ring {
+  width: 116px;
+  height: 116px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: conic-gradient(var(--green) var(--score), #e6ece9 0);
+  position: relative;
+}
+
+.score-ring::after {
+  content: "";
+  position: absolute;
+  inset: 11px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.score-ring strong,
+.score-ring span {
+  position: relative;
+  z-index: 1;
+  display: block;
+  text-align: center;
+}
+
+.score-ring strong {
+  font-size: 24px;
+}
+
+.score-ring span {
+  margin-top: 28px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.result-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin: 16px 0;
+}
+
+.result-metrics article {
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.result-metrics strong,
+.result-metrics span {
+  display: block;
+}
+
+.result-metrics strong {
+  font-size: 22px;
+}
+
+.result-metrics span {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+}
+
 @media (max-width: 980px) {
   .login-page,
   .dashboard-hero,
   .admin-grid,
   .report-grid,
   .platform-course,
-  .course-list {
+  .course-list,
+  .stress-card {
     grid-template-columns: 1fr;
   }
 
   .student-row,
-  .test-top {
+  .test-top,
+  .assignment-head,
+  .assignment-row,
+  .interactive-result {
     grid-template-columns: 1fr;
+  }
+
+  .insight-grid,
+  .result-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .student-actions {
@@ -1477,5 +1728,10 @@ footer {
 
   .report-grid article p {
     display: grid;
+  }
+
+  .insight-grid,
+  .result-metrics {
+    grid-template-columns: 1fr;
   }
 }
