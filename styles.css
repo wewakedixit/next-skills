@@ -1700,8 +1700,16 @@ footer {
 }
 
 .platform-brand {
+  min-width: 0;
   font-weight: 900;
   text-decoration: none;
+}
+
+.platform-logo {
+  display: block;
+  width: clamp(150px, 14vw, 220px);
+  height: auto;
+  object-fit: contain;
 }
 
 .platform-nav button {

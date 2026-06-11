@@ -2169,8 +2169,7 @@ function renderShell(user, content) {
   app.innerHTML = `
     <header class="platform-header ${user?.role === 'student' && route.view === 'dashboard' ? 'student-dashboard-header' : ''}">
       <a class="platform-brand" href="#" data-route="dashboard">
-        <span class="brand-mark">N</span>
-        <span>NextSkills</span>
+        <img class="platform-logo" src="/nextskills-logo.png" alt="NextSkills" />
       </a>
       ${nav}
     </header>
