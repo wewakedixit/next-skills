@@ -957,8 +957,160 @@ const lessons = [
   }
 ];
 
+const lessonVisuals = [
+  {
+    title: 'Training screenshot: the beginner Search Console map',
+    caption: 'Use this map to remember where the main beginner reports live. Start with Performance, then check Indexing, then inspect individual URLs when needed.',
+    mode: 'dashboard',
+    metrics: [
+      ['Performance', 'Clicks, impressions, CTR, position'],
+      ['Indexing', 'Pages Google can or cannot show'],
+      ['URL Inspection', 'One-page investigation'],
+      ['Sitemaps', 'Help Google discover URLs']
+    ],
+    rows: [
+      ['Question', 'Where to look'],
+      ['Are people finding us?', 'Performance'],
+      ['Is this page on Google?', 'URL Inspection'],
+      ['Can Google read important pages?', 'Page indexing']
+    ]
+  },
+  {
+    title: 'Animated walkthrough: choosing the right property',
+    caption: 'The safest beginner route is usually a Domain property because it includes the common website versions under one view.',
+    mode: 'flow',
+    steps: ['Enter domain', 'Add DNS record', 'Verify ownership', 'Start collecting data'],
+    callout: 'Example: example.com includes http, https, www, and subdomains.'
+  },
+  {
+    title: 'Training screenshot: Performance report reading order',
+    caption: 'Read the four numbers together. One number alone can mislead you.',
+    mode: 'chart',
+    metrics: [
+      ['Clicks', '1,248'],
+      ['Impressions', '54K'],
+      ['CTR', '2.3%'],
+      ['Position', '8.7']
+    ],
+    rows: [
+      ['Query', 'Clicks', 'Impressions', 'CTR'],
+      ['kids dentist near me', '42', '1,900', '2.2%'],
+      ['dental implants cost', '18', '2,800', '0.6%'],
+      ['root canal price', '31', '940', '3.3%']
+    ]
+  },
+  {
+    title: 'Mini GIF-style animation: query to content idea',
+    caption: 'A query is not just a keyword. It is a clue about the person’s question.',
+    mode: 'flow',
+    steps: ['Find query', 'Group intent', 'Update page', 'Review results'],
+    callout: 'Query: “dental implant cost” becomes sections about price factors, process, comfort, and consultation.'
+  },
+  {
+    title: 'Training screenshot: Page indexing priority view',
+    caption: 'Do not try to fix every URL first. Start with the pages that matter most to the business.',
+    mode: 'status',
+    metrics: [
+      ['Indexed', '126'],
+      ['Not indexed', '48'],
+      ['Needs review', '7'],
+      ['Important missing', '1']
+    ],
+    rows: [
+      ['URL type', 'Status', 'Action'],
+      ['Service page', 'Not indexed', 'Inspect now'],
+      ['Thank-you page', 'Not indexed', 'Usually okay'],
+      ['Old tag page', 'Duplicate', 'Low priority']
+    ]
+  },
+  {
+    title: 'Animated walkthrough: URL Inspection decision path',
+    caption: 'Inspect one page, test the live URL, then request indexing only when the page is ready.',
+    mode: 'flow',
+    steps: ['Paste full URL', 'Read status', 'Test live URL', 'Request indexing'],
+    callout: 'Request indexing is a crawl request, not a ranking guarantee.'
+  },
+  {
+    title: 'Training screenshot: Sitemap submission',
+    caption: 'A sitemap helps Google discover important URLs, but it does not force indexing.',
+    mode: 'sitemap',
+    metrics: [
+      ['Submitted', 'sitemap.xml'],
+      ['Status', 'Success'],
+      ['Discovered URLs', '183'],
+      ['Last read', 'Today']
+    ],
+    rows: [
+      ['Sitemap item', 'Meaning'],
+      ['Status success', 'Google could read it'],
+      ['Could not fetch', 'Google could not access it'],
+      ['Discovered URLs', 'URLs found in the file']
+    ]
+  },
+  {
+    title: 'Training screenshot: traffic drop diagnosis',
+    caption: 'A calm diagnosis starts by asking which metric changed and where the drop happened.',
+    mode: 'chart',
+    metrics: [
+      ['Clicks', '-32%'],
+      ['Impressions', '-4%'],
+      ['CTR', '-29%'],
+      ['Position', 'Stable']
+    ],
+    rows: [
+      ['Signal', 'Likely meaning'],
+      ['Impressions down', 'Visibility or demand changed'],
+      ['CTR down', 'Result may look less attractive'],
+      ['One page down', 'Inspect that page first']
+    ]
+  },
+  {
+    title: 'Training screenshot: safe access review',
+    caption: 'Give people the lowest access level that still lets them do their work.',
+    mode: 'permissions',
+    metrics: [
+      ['Owners', '2'],
+      ['Full users', '3'],
+      ['Restricted', '1'],
+      ['Review cycle', 'Quarterly']
+    ],
+    rows: [
+      ['Person', 'Role', 'Decision'],
+      ['Owner', 'Verified owner', 'Keep'],
+      ['Agency', 'Full user', 'Review monthly'],
+      ['Old developer', 'Owner', 'Remove token']
+    ]
+  },
+  {
+    title: 'Animated workflow: monthly Search Console review',
+    caption: 'A monthly review should end with a short action plan, not just screenshots.',
+    mode: 'flow',
+    steps: ['Review metrics', 'Find pages', 'Check indexing', 'Choose actions'],
+    callout: 'Best output: 3 focused improvements for the next 30 days.'
+  },
+  {
+    title: 'Training screenshot: final audit board',
+    caption: 'The capstone turns Search Console findings into a clear 30-day action plan with owners and due dates.',
+    mode: 'permissions',
+    metrics: [
+      ['Setup', 'Checked'],
+      ['Performance', 'Reviewed'],
+      ['Indexing', 'Prioritized'],
+      ['Actions', '5 tasks']
+    ],
+    rows: [
+      ['Action', 'Owner', 'Due'],
+      ['Rewrite service page title', 'Marketing', '7 days'],
+      ['Inspect missing URL', 'Developer', '3 days'],
+      ['Add FAQ from queries', 'Content', '14 days']
+    ]
+  }
+];
+
 let activeLesson = 0;
-let completedLessons = new Set(JSON.parse(localStorage.getItem(storageKey) || '[]'));
+let completedLessons = new Set(
+  JSON.parse(localStorage.getItem(storageKey) || '[]').filter((index) => Number.isInteger(index) && index >= 0 && index < lessons.length)
+);
 let quizState = {};
 
 const lessonContent = document.querySelector('#lesson-content');
@@ -1012,6 +1164,91 @@ function renderExamples(items) {
         )
         .join('')}
     </div>
+  `;
+}
+
+function renderLessonVisual(index) {
+  const visual = lessonVisuals[index];
+  if (!visual) {
+    return '';
+  }
+
+  const metricCards = (visual.metrics || [])
+    .map(([label, value]) => `<div class="visual-metric"><strong>${label}</strong><span>${value}</span></div>`)
+    .join('');
+
+  const tableRows = (visual.rows || [])
+    .map(
+      (row, rowIndex) => `
+        <tr>
+          ${row.map((cell) => `<${rowIndex === 0 ? 'th' : 'td'}>${cell}</${rowIndex === 0 ? 'th' : 'td'}>`).join('')}
+        </tr>
+      `
+    )
+    .join('');
+
+  const flowSteps = (visual.steps || [])
+    .map((step, stepIndex) => `<li style="--step-index: ${stepIndex}"><span>${stepIndex + 1}</span>${step}</li>`)
+    .join('');
+
+  const chartBars = [42, 58, 46, 76, 68, 90, 74]
+    .map((height, index) => `<span style="height: ${height}%; --bar-index: ${index}"></span>`)
+    .join('');
+
+  const bodyByMode = {
+    dashboard: `
+      <div class="visual-sidebar"><span></span><span></span><span></span><span></span></div>
+      <div class="visual-main">
+        <div class="visual-metrics">${metricCards}</div>
+        <table>${tableRows}</table>
+      </div>
+    `,
+    flow: `
+      <ol class="visual-flow">${flowSteps}</ol>
+      <p class="visual-callout">${visual.callout}</p>
+    `,
+    chart: `
+      <div class="visual-metrics">${metricCards}</div>
+      <div class="visual-chart">${chartBars}</div>
+      <table>${tableRows}</table>
+    `,
+    status: `
+      <div class="visual-metrics">${metricCards}</div>
+      <div class="status-stack">
+        <div class="status-line good"><strong>Indexed</strong><span>Ready for Search</span></div>
+        <div class="status-line warning"><strong>Not indexed</strong><span>Needs judgment</span></div>
+        <div class="status-line danger"><strong>Important missing</strong><span>Inspect first</span></div>
+      </div>
+      <table>${tableRows}</table>
+    `,
+    sitemap: `
+      <div class="visual-metrics">${metricCards}</div>
+      <div class="sitemap-box">
+        <code>https://example.com/sitemap.xml</code>
+        <button type="button">Submit</button>
+      </div>
+      <table>${tableRows}</table>
+    `,
+    permissions: `
+      <div class="visual-metrics">${metricCards}</div>
+      <table>${tableRows}</table>
+    `
+  };
+
+  return `
+    <section class="lesson-section">
+      <h4>Visual walkthrough</h4>
+      <figure class="visual-demo visual-${visual.mode}">
+        <figcaption>
+          <strong>${visual.title}</strong>
+          <span>${visual.caption}</span>
+        </figcaption>
+        <div class="visual-window">
+          <div class="visual-window-bar" aria-hidden="true"><span></span><span></span><span></span></div>
+          <div class="visual-body">${bodyByMode[visual.mode] || bodyByMode.dashboard}</div>
+        </div>
+      </figure>
+    </section>
   `;
 }
 
@@ -1106,6 +1343,8 @@ function renderLesson(index) {
       <h4>Learning outcomes</h4>
       ${listItems(lesson.outcomes)}
     </section>
+
+    ${renderLessonVisual(activeLesson)}
 
     <section class="lesson-section">
       <h4>What this means</h4>
