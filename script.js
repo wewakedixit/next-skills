@@ -1108,12 +1108,649 @@ const lessonVisuals = [
 ];
 
 const app = document.querySelector('#app');
-const course = {
-  id: 'learn-google-search-console',
-  title: 'Learn Google Search Console',
-  subtitle: 'A practical Search Console course for non-technical users.',
-  lessons
-};
+const googleSearchAdsLessons = [
+  {
+    title: 'Google Search Ads fundamentals',
+    duration: '60 minutes',
+    goal: 'Understand what Google Search Ads are, when to use them, and how they differ from SEO.',
+    outcomes: [
+      'Explain paid search in simple English.',
+      'Understand where search ads appear.',
+      'Know the difference between SEO clicks and ad clicks.',
+      'Identify the business goal before creating a campaign.'
+    ],
+    sections: {
+      what: [
+        'Google Search Ads are paid text ads that can appear on Google Search when people search for words related to your offer.',
+        'Unlike SEO, where you earn unpaid visibility over time, search ads let you pay to appear for selected searches.',
+        'A search ad campaign usually includes a goal, budget, keywords, ads, landing pages, and conversion tracking.'
+      ],
+      why: [
+        'Search Ads are useful when people already have intent. Someone searching “emergency dentist near me” is much closer to action than someone casually scrolling social media.',
+        'They can bring leads quickly, test new services, and support important business periods.',
+        'They can also waste money quickly if the keywords, landing page, tracking, and negatives are weak.'
+      ],
+      where: [
+        'Use Google Ads to create campaigns, ad groups, keywords, ads, assets, budgets, and conversion goals.',
+        'Use Google Analytics or website forms/call tracking to understand what happens after the click.',
+        'Use Search Terms, Ads, Keywords, and Recommendations reports to improve performance.'
+      ],
+      how: [
+        'Start with one clear business goal, such as calls, form leads, bookings, purchases, or quote requests.',
+        'Choose a campaign type focused on Search.',
+        'Create tightly themed ad groups around one intent cluster.',
+        'Write ads that match the searcher’s intent and point to the most relevant landing page.',
+        'Review search terms and add negative keywords regularly.'
+      ]
+    },
+    glossary: [
+      ['Paid search', 'Ads shown in search results when advertisers pay for clicks or conversion opportunities.'],
+      ['Campaign', 'The main container for budget, targeting, and settings.'],
+      ['Ad group', 'A smaller group inside a campaign that holds related keywords and ads.'],
+      ['Landing page', 'The page people visit after clicking an ad.'],
+      ['Conversion', 'A valuable action, such as a call, form submission, purchase, or booking.']
+    ],
+    examples: [
+      {
+        title: 'Local service lead campaign',
+        problem: 'A plumbing company wants calls for emergency repairs.',
+        walkthrough: 'They create a Search campaign for high-intent searches like “emergency plumber near me,” send traffic to an emergency plumbing page, and track calls.',
+        takeaway: 'Search Ads work best when search intent, ad copy, and landing page all match.'
+      },
+      {
+        title: 'Wrong goal problem',
+        problem: 'A business starts ads without deciding whether success means calls, forms, or sales.',
+        walkthrough: 'The campaign gets clicks but nobody knows if it worked. The owner sets conversion tracking before judging performance.',
+        takeaway: 'Clicks are not the goal. Business outcomes are the goal.'
+      }
+    ],
+    practice: [
+      'Write your campaign goal in one sentence.',
+      'List your top 3 services or products.',
+      'Write 5 searches a ready-to-buy customer might use.',
+      'Choose the best landing page for each search group.'
+    ],
+    mistakes: [
+      'Starting ads before defining conversions.',
+      'Sending every ad to the homepage.',
+      'Judging success only by clicks.',
+      'Using broad keywords without negative keywords.'
+    ],
+    quiz: [
+      {
+        question: 'What is the main purpose of Google Search Ads?',
+        options: ['Show paid ads to people searching for related terms.', 'Replace every website page.', 'Automatically improve SEO rankings.'],
+        answer: 0
+      },
+      {
+        question: 'What should you define before launching a campaign?',
+        options: ['The business goal and conversion action.', 'Only the logo color.', 'The number of blog posts.'],
+        answer: 0
+      },
+      {
+        question: 'Why does landing page relevance matter?',
+        options: ['It helps visitors find exactly what the ad promised.', 'It changes the weather.', 'It removes the need for tracking.'],
+        answer: 0
+      }
+    ]
+  },
+  {
+    title: 'Campaign structure and settings',
+    duration: '60 minutes',
+    goal: 'Learn how campaign, ad group, location, budget, and bidding settings work together.',
+    outcomes: [
+      'Understand the account structure.',
+      'Choose practical campaign settings for a beginner.',
+      'Separate services into useful ad groups.',
+      'Avoid common budget and location mistakes.'
+    ],
+    sections: {
+      what: [
+        'A Google Ads account contains campaigns. Campaigns contain ad groups. Ad groups contain keywords and ads.',
+        'Campaign settings control budget, locations, bidding, networks, schedule, and campaign goal.',
+        'Ad groups should be tightly themed so the ad text can match the keywords.'
+      ],
+      why: [
+        'Good structure makes performance easier to understand and improve.',
+        'If all services are mixed in one ad group, the ads become generic and the landing pages may not match well.',
+        'Settings like location and budget can waste money if they are too broad.'
+      ],
+      where: [
+        'Campaign settings live inside each campaign in Google Ads.',
+        'Ad groups, keywords, and ads live under the campaign.',
+        'Budget and bidding reports help you see whether spend is limited or inefficient.'
+      ],
+      how: [
+        'Create one campaign for one broad business goal or service category.',
+        'Create ad groups by intent, such as “emergency plumber,” “blocked drain,” or “water heater repair.”',
+        'Choose only locations you can serve.',
+        'Start with a budget you can evaluate for enough clicks and conversions.',
+        'Turn off settings you do not understand until you have a reason to use them.'
+      ]
+    },
+    glossary: [
+      ['Daily budget', 'The average amount you are willing to spend per day.'],
+      ['Bidding strategy', 'How Google decides what to bid in each auction.'],
+      ['Location targeting', 'The places where your ads are eligible to show.'],
+      ['Ad schedule', 'The days and times ads can run.'],
+      ['Network', 'Where ads can appear, such as Google Search and search partners.']
+    ],
+    examples: [
+      {
+        title: 'Clinic campaign structure',
+        problem: 'A clinic advertises dental implants, braces, and emergency dental care in one ad group.',
+        walkthrough: 'They split these into separate ad groups so each ad and landing page matches the service.',
+        takeaway: 'Better structure improves clarity and control.'
+      },
+      {
+        title: 'Location targeting waste',
+        problem: 'A local business accidentally targets the whole country.',
+        walkthrough: 'They narrow targeting to the cities they can serve and exclude areas outside their service zone.',
+        takeaway: 'Location settings can protect budget.'
+      }
+    ],
+    practice: [
+      'Create a campaign map with 1 campaign and 3 ad groups.',
+      'Write the location you want to target.',
+      'Choose a realistic daily budget.',
+      'Write one reason for your chosen ad schedule.'
+    ],
+    mistakes: [
+      'Putting unrelated services in one ad group.',
+      'Targeting locations the business cannot serve.',
+      'Changing bidding strategy too often.',
+      'Setting a budget without knowing the value of a lead.'
+    ],
+    quiz: [
+      {
+        question: 'What does a campaign contain?',
+        options: ['Ad groups, settings, and budget.', 'Only invoices.', 'Only website images.'],
+        answer: 0
+      },
+      {
+        question: 'Why use tightly themed ad groups?',
+        options: ['So keywords, ads, and landing pages match better.', 'So ads stop showing forever.', 'So no keywords are needed.'],
+        answer: 0
+      },
+      {
+        question: 'What can poor location targeting cause?',
+        options: ['Wasted spend in places you cannot serve.', 'Better tracking automatically.', 'Free clicks.'],
+        answer: 0
+      }
+    ]
+  },
+  {
+    title: 'Keywords and match types',
+    duration: '60 minutes',
+    goal: 'Understand how keywords trigger ads and how match types control reach.',
+    outcomes: [
+      'Explain broad, phrase, and exact match.',
+      'Choose keywords based on intent.',
+      'Group keywords into useful themes.',
+      'Know why search terms are different from keywords.'
+    ],
+    sections: {
+      what: [
+        'Keywords are words or phrases you add to tell Google which searches may trigger your ads.',
+        'Match types control how close the user’s search needs to be to your keyword.',
+        'Search terms are the actual searches people typed. Keywords are what you chose to target.'
+      ],
+      why: [
+        'The right keywords bring people who are more likely to convert.',
+        'Too-broad keywords can bring irrelevant clicks.',
+        'Too-narrow keywords can limit volume and learning.'
+      ],
+      where: [
+        'Keywords are managed inside each ad group.',
+        'Search terms are reviewed in the Search terms report.',
+        'Negative keywords can be added at campaign or ad group level.'
+      ],
+      how: [
+        'Start by writing the services people buy, not just broad topics.',
+        'Use phrase and exact match for tighter control.',
+        'Use broad match carefully, usually with strong conversion tracking and smart bidding.',
+        'Review the Search terms report to find wasted searches and new opportunities.',
+        'Add negative keywords for irrelevant searches.'
+      ]
+    },
+    glossary: [
+      ['Broad match', 'A flexible match type that can show ads for related searches.'],
+      ['Phrase match', 'A match type that keeps closer meaning to the keyword phrase.'],
+      ['Exact match', 'A tighter match type for searches with the same meaning or intent.'],
+      ['Search term', 'The actual query a user searched.'],
+      ['Negative keyword', 'A word or phrase that prevents ads from showing for unwanted searches.']
+    ],
+    examples: [
+      {
+        title: 'Emergency dentist keyword',
+        problem: 'A clinic wants emergency dental leads.',
+        walkthrough: 'They use phrase and exact terms like “emergency dentist near me” and [emergency dentist], then add negatives like jobs, salary, free course.',
+        takeaway: 'Intent matters more than volume.'
+      },
+      {
+        title: 'Broad match surprise',
+        problem: 'A broad keyword “dentist” brings searches for dentist jobs.',
+        walkthrough: 'The advertiser adds job-related negatives and narrows the ad group around service intent.',
+        takeaway: 'Search terms must be reviewed often.'
+      }
+    ],
+    practice: [
+      'Write 10 high-intent keywords.',
+      'Label each as broad, phrase, or exact.',
+      'Write 10 negative keywords.',
+      'Group keywords into 2 or 3 ad groups.'
+    ],
+    mistakes: [
+      'Using only broad keywords from day one.',
+      'Never checking search terms.',
+      'Choosing keywords that are informational instead of buying-focused.',
+      'Forgetting negative keywords.'
+    ],
+    quiz: [
+      {
+        question: 'What is a search term?',
+        options: ['The actual words a person searched.', 'The advertiser’s billing address.', 'The landing page title.'],
+        answer: 0
+      },
+      {
+        question: 'What do negative keywords do?',
+        options: ['Stop ads from showing for unwanted searches.', 'Increase every bid automatically.', 'Delete campaigns.'],
+        answer: 0
+      },
+      {
+        question: 'Which match type usually gives tighter control?',
+        options: ['Exact match', 'No match', 'Random match'],
+        answer: 0
+      }
+    ]
+  },
+  {
+    title: 'Search ad copy and assets',
+    duration: '60 minutes',
+    goal: 'Write search ads that match intent and use assets to improve usefulness.',
+    outcomes: [
+      'Understand responsive search ads.',
+      'Write headlines and descriptions.',
+      'Use benefits, proof, and calls to action.',
+      'Know common ad assets like sitelinks and callouts.'
+    ],
+    sections: {
+      what: [
+        'Search ads contain headlines, descriptions, display paths, and assets.',
+        'Responsive search ads let you provide multiple headlines and descriptions. Google combines them in different ways.',
+        'Assets add extra information such as sitelinks, callouts, calls, locations, and structured snippets.'
+      ],
+      why: [
+        'Good ad copy helps the right person click and the wrong person self-filter.',
+        'Ads should match the keyword and landing page so the whole journey feels consistent.',
+        'Assets can improve visibility and help users choose the right page or action.'
+      ],
+      where: [
+        'Create ads inside each ad group.',
+        'Add assets at account, campaign, or ad group level depending on relevance.',
+        'Review ad strength and asset performance inside Google Ads.'
+      ],
+      how: [
+        'Include the main service or keyword idea in some headlines.',
+        'Write benefits, trust signals, and clear calls to action.',
+        'Avoid repeating the same idea in every headline.',
+        'Use sitelinks for important pages such as pricing, booking, services, or contact.',
+        'Use callouts for short trust points like “Same-Day Appointments” or “Free Quote.”'
+      ]
+    },
+    glossary: [
+      ['Responsive search ad', 'An ad format where Google combines multiple headlines and descriptions.'],
+      ['Headline', 'The main clickable text in a search ad.'],
+      ['Description', 'Supporting text below the headline.'],
+      ['Sitelink', 'An asset linking to another useful page.'],
+      ['Callout', 'A short text asset highlighting a feature or benefit.']
+    ],
+    examples: [
+      {
+        title: 'Weak versus strong ad',
+        problem: 'A weak ad says “Best Services Available.”',
+        walkthrough: 'A stronger ad says “Emergency Dentist Near You,” “Same-Day Appointments,” and “Call To Book Today.”',
+        takeaway: 'Specific and relevant beats generic.'
+      },
+      {
+        title: 'Sitelink use',
+        problem: 'Users need pricing, locations, and booking information.',
+        walkthrough: 'The advertiser adds sitelinks for Pricing, Book Appointment, Services, and Contact.',
+        takeaway: 'Assets help users move faster.'
+      }
+    ],
+    practice: [
+      'Write 10 headlines for one ad group.',
+      'Write 4 descriptions.',
+      'Create 4 sitelinks.',
+      'Create 6 callouts.',
+      'Check that every line matches the landing page.'
+    ],
+    mistakes: [
+      'Writing vague headlines.',
+      'Repeating the same phrase too many times.',
+      'Sending ads to an unrelated page.',
+      'Ignoring assets.'
+    ],
+    quiz: [
+      {
+        question: 'What is a responsive search ad?',
+        options: ['An ad using multiple headlines and descriptions that Google can combine.', 'A banner only shown on websites.', 'A report about invoices.'],
+        answer: 0
+      },
+      {
+        question: 'What should ad copy match?',
+        options: ['Keyword intent and landing page content.', 'Only the business owner’s favorite word.', 'Nothing.'],
+        answer: 0
+      },
+      {
+        question: 'What is a sitelink?',
+        options: ['An ad asset linking to a useful page.', 'A negative keyword.', 'A billing method.'],
+        answer: 0
+      }
+    ]
+  },
+  {
+    title: 'Landing pages and Quality Score',
+    duration: '60 minutes',
+    goal: 'Understand why the page after the click affects lead quality, cost, and conversion rate.',
+    outcomes: [
+      'Explain landing page relevance.',
+      'Understand Quality Score components in simple language.',
+      'Know what makes a useful ad landing page.',
+      'Create a landing page improvement checklist.'
+    ],
+    sections: {
+      what: [
+        'A landing page is the page someone reaches after clicking your ad.',
+        'Quality Score is a diagnostic metric that reflects expected CTR, ad relevance, and landing page experience.',
+        'A relevant landing page answers the searcher’s need quickly and makes the next action easy.'
+      ],
+      why: [
+        'Even strong ads can fail if the landing page is confusing, slow, or unrelated.',
+        'Better relevance can improve user experience and may help ad efficiency.',
+        'A page should continue the promise made in the ad.'
+      ],
+      where: [
+        'Landing page URLs are set inside ads or keyword final URLs.',
+        'Quality Score can be viewed in keyword columns.',
+        'Conversion data shows whether the page turns clicks into actions.'
+      ],
+      how: [
+        'Use a landing page that matches the ad group topic.',
+        'Put the main service and location clearly near the top.',
+        'Add proof, benefits, FAQs, and a strong call to action.',
+        'Make forms and phone buttons easy to use.',
+        'Check mobile speed and readability.'
+      ]
+    },
+    glossary: [
+      ['Quality Score', 'A diagnostic score based on expected CTR, ad relevance, and landing page experience.'],
+      ['Expected CTR', 'Google’s estimate of how likely the ad is to get clicked.'],
+      ['Ad relevance', 'How closely the ad matches the search intent.'],
+      ['Landing page experience', 'How useful and relevant the page is after the click.'],
+      ['Final URL', 'The real landing page URL used by the ad.']
+    ],
+    examples: [
+      {
+        title: 'Homepage problem',
+        problem: 'An ad for dental implants sends users to the homepage.',
+        walkthrough: 'Users must hunt for implant information. The advertiser switches to a dental implants page with pricing factors, process, FAQs, and booking CTA.',
+        takeaway: 'Specific landing pages usually convert better.'
+      },
+      {
+        title: 'Mobile form friction',
+        problem: 'A page has a long form that is hard to fill on a phone.',
+        walkthrough: 'The business shortens the form and adds click-to-call.',
+        takeaway: 'Mobile experience matters for paid search.'
+      }
+    ],
+    practice: [
+      'Review one landing page on mobile.',
+      'Check if the headline matches the ad intent.',
+      'Write 3 missing FAQs.',
+      'Check whether the CTA is visible without scrolling too much.',
+      'List 3 page improvements.'
+    ],
+    mistakes: [
+      'Using the homepage for every ad.',
+      'Hiding the contact form or phone number.',
+      'Making claims in ads that the page does not support.',
+      'Ignoring mobile users.'
+    ],
+    quiz: [
+      {
+        question: 'What is landing page relevance?',
+        options: ['How well the page matches the ad and search intent.', 'The color of the browser tab.', 'The number of admin users.'],
+        answer: 0
+      },
+      {
+        question: 'What are Quality Score components?',
+        options: ['Expected CTR, ad relevance, and landing page experience.', 'Weather, logo, and font size.', 'Only budget.'],
+        answer: 0
+      },
+      {
+        question: 'Why avoid sending every ad to the homepage?',
+        options: ['It may be less relevant than a specific service page.', 'Google does not allow homepages.', 'It always costs double.'],
+        answer: 0
+      }
+    ]
+  },
+  {
+    title: 'Conversions, budgets, and bidding',
+    duration: '60 minutes',
+    goal: 'Learn how to measure valuable actions and make budget decisions with less guesswork.',
+    outcomes: [
+      'Define useful conversions.',
+      'Understand cost per conversion.',
+      'Know basic bidding strategy choices.',
+      'Read budget performance more calmly.'
+    ],
+    sections: {
+      what: [
+        'A conversion is a valuable action, such as a lead form, call, purchase, signup, or booking.',
+        'Budget controls average daily spend. Bidding tells Google how to compete in auctions.',
+        'Cost per conversion shows how much you paid for each recorded valuable action.'
+      ],
+      why: [
+        'Without conversion tracking, you only know clicks and spend, not business results.',
+        'Smart bidding depends on good conversion data.',
+        'Budget decisions should be connected to lead value and sales value.'
+      ],
+      where: [
+        'Conversions are configured in Google Ads or imported from analytics tools.',
+        'Budget and bidding are set at campaign level.',
+        'Conversion columns can be added to campaign, ad group, keyword, and ad reports.'
+      ],
+      how: [
+        'Choose primary conversions that match business value.',
+        'Avoid counting weak actions as primary conversions.',
+        'Start with bidding that matches available data and your comfort level.',
+        'Review cost per conversion, conversion rate, and search terms before increasing budget.',
+        'Do not judge a campaign before it has enough data.'
+      ]
+    },
+    glossary: [
+      ['Conversion rate', 'The percentage of clicks that become conversions.'],
+      ['Cost per conversion', 'Ad spend divided by conversions.'],
+      ['Smart bidding', 'Automated bidding that uses signals to optimize for goals.'],
+      ['Primary conversion', 'A main action used for campaign optimization.'],
+      ['ROAS', 'Return on ad spend. Revenue divided by ad cost.']
+    ],
+    examples: [
+      {
+        title: 'Lead value decision',
+        problem: 'A business pays $40 per lead but does not know if that is good.',
+        walkthrough: 'They calculate how many leads become customers and average profit per customer. Then they decide if $40 is acceptable.',
+        takeaway: 'Cost per lead only makes sense with business value.'
+      },
+      {
+        title: 'Bad conversion setup',
+        problem: 'A campaign counts page views as conversions.',
+        walkthrough: 'The account looks successful but leads are weak. The business switches primary conversion to form submissions and calls.',
+        takeaway: 'Track meaningful actions.'
+      }
+    ],
+    practice: [
+      'List your top 3 conversion actions.',
+      'Mark which should be primary.',
+      'Estimate the value of one lead or sale.',
+      'Write the maximum cost per conversion you can accept.',
+      'Choose which reports you will check weekly.'
+    ],
+    mistakes: [
+      'Running ads without conversion tracking.',
+      'Counting weak actions as main goals.',
+      'Raising budget before reviewing search terms and conversions.',
+      'Changing bidding strategy too frequently.'
+    ],
+    quiz: [
+      {
+        question: 'What is a conversion?',
+        options: ['A valuable action like a call, form, purchase, or booking.', 'Any page color change.', 'A keyword match type.'],
+        answer: 0
+      },
+      {
+        question: 'Why is conversion tracking important?',
+        options: ['It connects ad spend to business results.', 'It removes the need for ads.', 'It blocks all competitors.'],
+        answer: 0
+      },
+      {
+        question: 'What does cost per conversion mean?',
+        options: ['Spend divided by conversions.', 'Clicks divided by impressions.', 'The website hosting bill.'],
+        answer: 0
+      }
+    ]
+  },
+  {
+    title: 'Optimization routine and reporting',
+    duration: '60 minutes',
+    goal: 'Build a simple weekly routine to improve campaigns without making random changes.',
+    outcomes: [
+      'Review search terms and negatives.',
+      'Judge keywords, ads, and landing pages.',
+      'Create a weekly optimization checklist.',
+      'Write a plain-English report.'
+    ],
+    sections: {
+      what: [
+        'Optimization means improving campaign performance over time based on data.',
+        'Good optimization is focused. You review the biggest spend areas, strongest intent, and weakest leaks.',
+        'A weekly routine prevents panic changes and helps learning.'
+      ],
+      why: [
+        'Search behavior changes, competitors change, and campaigns collect new data.',
+        'Small regular improvements are safer than random large changes.',
+        'Reports should explain what changed, what it means, and what action comes next.'
+      ],
+      where: [
+        'Use Search terms, Keywords, Ads, Assets, Landing pages, and Conversions reports.',
+        'Use campaign and ad group views to compare performance.',
+        'Use notes or a spreadsheet for action tracking.'
+      ],
+      how: [
+        'Check spend and conversions by campaign.',
+        'Review search terms and add negatives.',
+        'Pause or adjust weak keywords only after enough data.',
+        'Improve ads with low CTR or weak relevance.',
+        'Review landing pages with clicks but few conversions.',
+        'Write next actions and review them next week.'
+      ]
+    },
+    glossary: [
+      ['Optimization', 'Improving campaigns using data and planned actions.'],
+      ['Search terms report', 'A report showing actual searches that triggered ads.'],
+      ['CTR', 'Click-through rate. Clicks divided by impressions.'],
+      ['Conversion rate', 'Conversions divided by clicks.'],
+      ['Wasted spend', 'Money spent on clicks unlikely to become valuable actions.']
+    ],
+    examples: [
+      {
+        title: 'Weekly negative keyword update',
+        problem: 'Search terms include “free dental course” and “dentist jobs.”',
+        walkthrough: 'The advertiser adds free, course, jobs, hiring, and salary as negatives where appropriate.',
+        takeaway: 'Negatives protect budget.'
+      },
+      {
+        title: 'Landing page leak',
+        problem: 'A keyword has many clicks but almost no conversions.',
+        walkthrough: 'The advertiser checks the landing page and finds the form is hard to use on mobile.',
+        takeaway: 'Optimization is not only inside Google Ads.'
+      }
+    ],
+    practice: [
+      'Create a weekly optimization checklist.',
+      'Review top spending search terms.',
+      'Add 5 negative keywords.',
+      'Choose one ad to improve.',
+      'Write a 5-line campaign report.'
+    ],
+    mistakes: [
+      'Changing everything at once.',
+      'Ignoring search terms.',
+      'Only looking at clicks, not conversions.',
+      'Reporting numbers without explaining next steps.'
+    ],
+    quiz: [
+      {
+        question: 'What is optimization?',
+        options: ['Improving campaigns using data and planned actions.', 'Deleting all ads weekly.', 'Only increasing budget.'],
+        answer: 0
+      },
+      {
+        question: 'Which report helps find irrelevant searches?',
+        options: ['Search terms report', 'Invoice report', 'Profile report'],
+        answer: 0
+      },
+      {
+        question: 'What should a plain-English report include?',
+        options: ['What changed, what it means, and next actions.', 'Only screenshots.', 'Only technical abbreviations.'],
+        answer: 0
+      }
+    ]
+  }
+];
+
+const googleAdsVisuals = lessonVisuals.slice(0, googleSearchAdsLessons.length).map((visual, index) => ({
+  ...visual,
+  title: [
+    'Training screenshot: Search Ads account map',
+    'Training screenshot: campaign structure',
+    'Mini animation: keyword to search term',
+    'Training screenshot: responsive search ad builder',
+    'Training screenshot: landing page relevance',
+    'Training screenshot: conversion and bidding dashboard',
+    'Animated workflow: weekly optimization'
+  ][index],
+  caption: [
+    'See how goal, campaign, ad group, keyword, ad, landing page, and conversion connect.',
+    'A clean campaign structure makes reporting and optimization much easier.',
+    'Keywords are what you target; search terms are what people actually type.',
+    'Ads work better when headlines, descriptions, assets, and landing pages match search intent.',
+    'The click is only the beginning. The landing page must complete the promise.',
+    'Budget and bidding decisions need conversion data, not only clicks.',
+    'Optimization is a calm weekly routine, not random daily changes.'
+  ][index]
+}));
+
+const courses = [
+  {
+    id: 'learn-google-search-console',
+    title: 'Learn Google Search Console',
+    subtitle: 'A practical Search Console course for non-technical users.',
+    lessons,
+    visuals: lessonVisuals
+  },
+  {
+    id: 'google-search-ads',
+    title: 'Google Search Ads',
+    subtitle: 'Learn search campaign structure, keywords, ads, landing pages, conversions, and optimization.',
+    lessons: googleSearchAdsLessons,
+    visuals: googleAdsVisuals
+  }
+];
+
+let course = courses[0];
 
 const appKey = 'nextskills-platform-v1';
 const sessionKey = 'nextskills-session-v1';
@@ -1145,7 +1782,7 @@ const seedState = {
     }
   ],
   assignments: {
-    'student-1': [course.id]
+    'student-1': [courses[0].id, courses[1].id]
   },
   progress: {},
   attempts: [],
@@ -1171,6 +1808,15 @@ function loadState() {
 }
 
 let state = loadState();
+if (state.users.some((user) => user.id === 'student-1')) {
+  state.assignments['student-1'] = state.assignments['student-1'] || [];
+  courses.forEach((item) => {
+    if (!state.assignments['student-1'].includes(item.id)) {
+      state.assignments['student-1'].push(item.id);
+    }
+  });
+  saveState();
+}
 
 function saveState() {
   localStorage.setItem(appKey, JSON.stringify(state));
@@ -1189,24 +1835,34 @@ function clearSession() {
   localStorage.removeItem(sessionKey);
 }
 
-function userProgress(userId) {
+function getCourse(courseId) {
+  return courses.find((item) => item.id === courseId) || courses[0];
+}
+
+function setActiveCourse(courseId) {
+  course = getCourse(courseId || route.courseId || course.id);
+  route.courseId = course.id;
+  return course;
+}
+
+function userProgress(userId, courseId = course.id) {
   if (!state.progress[userId]) {
     state.progress[userId] = {};
   }
-  if (!state.progress[userId][course.id]) {
-    state.progress[userId][course.id] = {completedLessons: []};
+  if (!state.progress[userId][courseId]) {
+    state.progress[userId][courseId] = {completedLessons: []};
   }
-  return state.progress[userId][course.id];
+  return state.progress[userId][courseId];
 }
 
-function userLessonTime(userId) {
+function userLessonTime(userId, courseId = course.id) {
   if (!state.lessonTime[userId]) {
     state.lessonTime[userId] = {};
   }
-  if (!state.lessonTime[userId][course.id]) {
-    state.lessonTime[userId][course.id] = {};
+  if (!state.lessonTime[userId][courseId]) {
+    state.lessonTime[userId][courseId] = {};
   }
-  return state.lessonTime[userId][course.id];
+  return state.lessonTime[userId][courseId];
 }
 
 function isLessonUnlocked(userId, lessonIndex) {
@@ -1376,9 +2032,11 @@ function renderLogin() {
 
 function renderDashboard(user) {
   const assigned = state.assignments[user.id] || [];
-  const completed = userProgress(user.id).completedLessons.length;
-  const progressPercent = Math.round((completed / course.lessons.length) * 100);
-  const totalStudyTime = Object.values(userLessonTime(user.id)).reduce((sum, value) => sum + value, 0);
+  const assignedCourses = courses.filter((item) => assigned.includes(item.id));
+  const completed = assignedCourses.reduce((sum, item) => sum + userProgress(user.id, item.id).completedLessons.length, 0);
+  const totalLessons = assignedCourses.reduce((sum, item) => sum + item.lessons.length, 0) || 1;
+  const progressPercent = Math.round((completed / totalLessons) * 100);
+  const totalStudyTime = assignedCourses.reduce((sum, item) => sum + Object.values(userLessonTime(user.id, item.id)).reduce((innerSum, value) => innerSum + value, 0), 0);
   const latestAttempt = state.attempts.filter((attempt) => attempt.userId === user.id).at(-1);
   const now = new Date();
   renderShell(user, `
@@ -1388,7 +2046,7 @@ function renderDashboard(user) {
         <h1>Welcome, ${escapeHtml(user.name)}</h1>
         <p>Your assigned courses appear here. Complete each lesson test to unlock the next lesson.</p>
       </div>
-      <div class="dashboard-stat"><strong>${completed}/${course.lessons.length}</strong><span>lessons completed</span></div>
+      <div class="dashboard-stat"><strong>${completed}/${totalLessons}</strong><span>lessons completed</span></div>
     </section>
     <section class="insight-grid">
       <article><strong>${now.toLocaleDateString()}</strong><span>today's date</span></article>
@@ -1399,15 +2057,25 @@ function renderDashboard(user) {
       <article><strong>${latestAttempt ? `${latestAttempt.correct}/10` : '-'}</strong><span>latest score</span></article>
     </section>
     <section class="course-list">
-      ${assigned.includes(course.id)
-        ? `
+      ${assignedCourses.length
+        ? assignedCourses.map((item) => {
+          const itemCompleted = userProgress(user.id, item.id).completedLessons.length;
+          const itemTime = Object.values(userLessonTime(user.id, item.id)).reduce((sum, value) => sum + value, 0);
+          const itemAttempts = state.attempts.filter((attempt) => attempt.userId === user.id && attempt.courseId === item.id);
+          return `
           <article class="course-card">
-            <h2>${course.title}</h2>
-            <p>${course.subtitle}</p>
-            <div class="progress-track"><span style="width:${(completed / course.lessons.length) * 100}%"></span></div>
-            <button class="button primary" data-open-course>Open course</button>
+            <span class="status-pill success">${item.lessons.length} lessons</span>
+            <h2>${item.title}</h2>
+            <p>${item.subtitle}</p>
+            <div class="course-card-stats">
+              <span>${itemCompleted}/${item.lessons.length} complete</span>
+              <span>${secondsToClock(itemTime)} study</span>
+              <span>${itemAttempts.length} attempts</span>
+            </div>
+            <div class="progress-track"><span style="width:${(itemCompleted / item.lessons.length) * 100}%"></span></div>
+            <button class="button primary" data-open-course="${item.id}">Open course</button>
           </article>
-        `
+        `;}).join('')
         : '<article class="empty-card">No course assigned yet. Please contact your admin.</article>'}
     </section>
     <section class="stress-card">
@@ -1425,10 +2093,10 @@ function renderDashboard(user) {
       </div>
     </section>
   `);
-  document.querySelector('[data-open-course]')?.addEventListener('click', () => {
-    route = {view: 'course', lesson: 0};
+  document.querySelectorAll('[data-open-course]').forEach((button) => button.addEventListener('click', () => {
+    route = {view: 'course', courseId: button.dataset.openCourse, lesson: 0};
     render();
-  });
+  }));
   bindXoGame();
 }
 
@@ -1516,34 +2184,35 @@ function renderAdmin(user) {
         <h2>Course assignment backend</h2>
         <div class="assignment-table">
           <div class="assignment-head"><span>Student</span><span>Course</span><span>Status</span><span>Report</span></div>
-          ${students.map((student) => {
-            const assigned = (state.assignments[student.id] || []).includes(course.id);
+          ${students.flatMap((student) => courses.map((item) => {
+            const assigned = (state.assignments[student.id] || []).includes(item.id);
             return `
               <div class="assignment-row">
                 <span>${escapeHtml(student.name)}</span>
-                <span>${course.title}</span>
-                <label class="switch-line"><input type="checkbox" data-assign="${student.id}" ${assigned ? 'checked' : ''}/> ${assigned ? 'Assigned' : 'Not assigned'}</label>
+                <span>${item.title}</span>
+                <label class="switch-line"><input type="checkbox" data-assign="${student.id}" data-assign-course="${item.id}" ${assigned ? 'checked' : ''}/> ${assigned ? 'Assigned' : 'Not assigned'}</label>
                 <button class="button secondary" data-view-student="${student.id}">Open profile</button>
               </div>
             `;
-          }).join('')}
+          })).join('')}
         </div>
       </div>
       <div class="admin-panel admin-panel-wide">
         <h2>Students</h2>
         <div class="student-list">
           ${students.map((student) => {
-            const assigned = (state.assignments[student.id] || []).includes(course.id);
-            const completed = userProgress(student.id).completedLessons.length;
+            const assignedCount = (state.assignments[student.id] || []).length;
+            const assignedLessons = courses.filter((item) => (state.assignments[student.id] || []).includes(item.id)).reduce((sum, item) => sum + item.lessons.length, 0);
+            const completed = courses.reduce((sum, item) => sum + userProgress(student.id, item.id).completedLessons.length, 0);
             return `
               <article class="student-row">
                 <div>
                   <strong>${escapeHtml(student.name)}</strong>
                   <span>${escapeHtml(student.email)}</span>
-                  <small>${completed}/${course.lessons.length} lessons complete</small>
+                  <small>${completed}/${assignedLessons || 0} assigned lessons complete</small>
                 </div>
                 <div class="student-actions">
-                  <span class="status-pill ${assigned ? 'success' : ''}">${assigned ? 'Course assigned' : 'Not assigned'}</span>
+                  <span class="status-pill ${assignedCount ? 'success' : ''}">${assignedCount} course${assignedCount === 1 ? '' : 's'} assigned</span>
                   <button class="button secondary" data-view-student="${student.id}">View report</button>
                 </div>
               </article>
@@ -1579,12 +2248,13 @@ function renderAdmin(user) {
   document.querySelectorAll('[data-assign]').forEach((input) => {
     input.addEventListener('change', () => {
       const studentId = input.dataset.assign;
+      const targetCourseId = input.dataset.assignCourse;
       state.assignments[studentId] = state.assignments[studentId] || [];
-      if (input.checked && !state.assignments[studentId].includes(course.id)) {
-        state.assignments[studentId].push(course.id);
+      if (input.checked && !state.assignments[studentId].includes(targetCourseId)) {
+        state.assignments[studentId].push(targetCourseId);
       }
       if (!input.checked) {
-        state.assignments[studentId] = state.assignments[studentId].filter((id) => id !== course.id);
+        state.assignments[studentId] = state.assignments[studentId].filter((id) => id !== targetCourseId);
       }
       saveState();
       renderAdmin(user);
@@ -1604,11 +2274,12 @@ function renderStudentReport(adminUser) {
   const student = state.users.find((user) => user.id === activeStudentId);
   if (!student) return renderAdmin(adminUser);
   const attempts = state.attempts.filter((attempt) => attempt.userId === student.id);
-  const times = userLessonTime(student.id);
-  const completed = userProgress(student.id).completedLessons.length;
-  const totalTime = Object.values(times).reduce((sum, value) => sum + value, 0);
+  const assignedCourses = courses.filter((item) => (state.assignments[student.id] || []).includes(item.id));
+  const completed = assignedCourses.reduce((sum, item) => sum + userProgress(student.id, item.id).completedLessons.length, 0);
+  const totalAssignedLessons = assignedCourses.reduce((sum, item) => sum + item.lessons.length, 0) || 0;
+  const totalTime = assignedCourses.reduce((sum, item) => sum + Object.values(userLessonTime(student.id, item.id)).reduce((innerSum, value) => innerSum + value, 0), 0);
   const latestAttempt = attempts.at(-1);
-  const assigned = (state.assignments[student.id] || []).includes(course.id);
+  const assigned = assignedCourses.length > 0;
   renderShell(adminUser, `
     <section class="report-page">
       <button class="button secondary" data-route="admin">Back to admin</button>
@@ -1617,7 +2288,7 @@ function renderStudentReport(adminUser) {
       <p>${escapeHtml(student.email)}</p>
       <div class="insight-grid">
         <article><strong>${assigned ? 'Assigned' : 'Not assigned'}</strong><span>course status</span></article>
-        <article><strong>${completed}/${course.lessons.length}</strong><span>progress</span></article>
+        <article><strong>${completed}/${totalAssignedLessons}</strong><span>progress</span></article>
         <article><strong>${secondsToClock(totalTime)}</strong><span>total lesson time</span></article>
         <article><strong>${attempts.length}</strong><span>test attempts</span></article>
         <article><strong>${latestAttempt ? `${latestAttempt.correct}/10` : '-'}</strong><span>latest score</span></article>
@@ -1626,15 +2297,21 @@ function renderStudentReport(adminUser) {
       <div class="report-grid">
         <article>
           <h2>Lesson time</h2>
-          ${course.lessons.map((lesson, index) => `
-            <p><strong>${index + 1}. ${lesson.title}</strong><span>${secondsToClock(times[index] || 0)}</span></p>
-          `).join('')}
+          ${assignedCourses.map((item) => {
+            const times = userLessonTime(student.id, item.id);
+            return `
+              <h3>${item.title}</h3>
+              ${item.lessons.map((lesson, index) => `
+                <p><strong>${index + 1}. ${lesson.title}</strong><span>${secondsToClock(times[index] || 0)}</span></p>
+              `).join('')}
+            `;
+          }).join('') || '<p>No assigned courses.</p>'}
         </article>
         <article>
           <h2>Test attempts</h2>
           ${attempts.length ? attempts.map((attempt) => `
             <div class="attempt-row">
-              <strong>Lesson ${attempt.lessonIndex + 1}: ${attempt.passed ? 'Passed' : 'Retake needed'}</strong>
+              <strong>${getCourse(attempt.courseId).title} • Lesson ${attempt.lessonIndex + 1}: ${attempt.passed ? 'Passed' : 'Retake needed'}</strong>
               <span>Score: ${attempt.correct}/10 • Wrong: ${attempt.wrong} • Time: ${secondsToClock(attempt.timeSpent)} • Warnings: ${attempt.violations} • Status: ${attempt.passed ? 'Pass' : 'Retake'}</span>
               <small>${new Date(attempt.createdAt).toLocaleString()}</small>
             </div>
@@ -1647,17 +2324,19 @@ function renderStudentReport(adminUser) {
 
 function renderProfile(user) {
   const attempts = state.attempts.filter((attempt) => attempt.userId === user.id);
-  const completed = user.role === 'student' ? userProgress(user.id).completedLessons.length : 0;
+  const assignedCourses = courses.filter((item) => (state.assignments[user.id] || []).includes(item.id));
+  const completed = user.role === 'student' ? assignedCourses.reduce((sum, item) => sum + userProgress(user.id, item.id).completedLessons.length, 0) : 0;
+  const totalLessons = assignedCourses.reduce((sum, item) => sum + item.lessons.length, 0) || 0;
   renderShell(user, `
     <section class="profile-page">
       <p class="eyebrow">My profile</p>
       <h1>${escapeHtml(user.name)}</h1>
       <p>${escapeHtml(user.email)} • ${user.role}</p>
-      ${user.role === 'student' ? `<div class="dashboard-stat"><strong>${completed}/${course.lessons.length}</strong><span>lessons completed</span></div>` : ''}
+      ${user.role === 'student' ? `<div class="dashboard-stat"><strong>${completed}/${totalLessons}</strong><span>lessons completed</span></div>` : ''}
       <h2>Recent test activity</h2>
       ${attempts.slice(-6).reverse().map((attempt) => `
         <div class="attempt-row">
-          <strong>Lesson ${attempt.lessonIndex + 1}: ${attempt.passed ? 'Passed' : 'Retake needed'}</strong>
+          <strong>${getCourse(attempt.courseId).title} • Lesson ${attempt.lessonIndex + 1}: ${attempt.passed ? 'Passed' : 'Retake needed'}</strong>
           <span>${attempt.correct}/10 correct • ${secondsToClock(attempt.timeSpent)}</span>
         </div>
       `).join('') || '<p>No student test activity yet.</p>'}
@@ -1666,7 +2345,7 @@ function renderProfile(user) {
 }
 
 function renderLessonVisual(index) {
-  const visual = lessonVisuals[index];
+  const visual = course.visuals[index];
   if (!visual) return '';
   const metricCards = (visual.metrics || []).map(([label, value]) => `<div class="visual-metric"><strong>${label}</strong><span>${value}</span></div>`).join('');
   const tableRows = (visual.rows || []).map((row, rowIndex) => `<tr>${row.map((cell) => `<${rowIndex === 0 ? 'th' : 'td'}>${cell}</${rowIndex === 0 ? 'th' : 'td'}>`).join('')}</tr>`).join('');
@@ -1699,7 +2378,9 @@ function listItems(items) {
 }
 
 function renderLesson(user) {
-  const lessonIndex = route.lesson || 0;
+  setActiveCourse(route.courseId);
+  const lessonIndex = Math.max(0, Math.min(route.lesson || 0, course.lessons.length - 1));
+  route.lesson = lessonIndex;
   activeLesson = lessonIndex;
   const lesson = course.lessons[lessonIndex];
   if (!isLessonUnlocked(user.id, lessonIndex)) {
@@ -1749,7 +2430,7 @@ function renderLesson(user) {
   `);
   document.querySelectorAll('[data-lesson-nav]').forEach((button) => {
     button.addEventListener('click', () => {
-      route = {view: 'course', lesson: Number(button.dataset.lessonNav)};
+      route = {view: 'course', courseId: course.id, lesson: Number(button.dataset.lessonNav)};
       render();
     });
   });
@@ -1946,7 +2627,7 @@ function submitTest(user, forced) {
     `;
     document.querySelector('[data-return-course]').addEventListener('click', () => {
       activeTest = null;
-      route = {view: 'course', lesson: attempt.lessonIndex + (passed ? 1 : 0)};
+      route = {view: 'course', courseId: attempt.courseId, lesson: attempt.lessonIndex + (passed ? 1 : 0)};
       if (route.lesson >= course.lessons.length) route.lesson = course.lessons.length - 1;
       render();
     });
