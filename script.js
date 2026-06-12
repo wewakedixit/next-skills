@@ -2248,13 +2248,13 @@ function renderShell(user, content) {
     : '';
 
   app.innerHTML = `
-    <header class="platform-header ${user?.role === 'student' && route.view === 'dashboard' ? 'student-dashboard-header' : ''} ${user?.role === 'admin' && route.view === 'admin' ? 'admin-dashboard-header' : ''}">
+    <header class="platform-header ${user?.role === 'student' && route.view === 'dashboard' ? 'student-dashboard-header' : ''} ${user?.role === 'admin' && (route.view === 'admin' || route.view === 'student-report') ? 'admin-dashboard-header' : ''}">
       <a class="platform-brand" href="#" data-route="dashboard">
         <img class="platform-logo" src="/nextskills-logo.png" alt="NextSkills" />
       </a>
       ${nav}
     </header>
-    <main class="platform-main ${user?.role === 'student' && route.view === 'dashboard' ? 'student-dashboard-main' : ''} ${user?.role === 'admin' && route.view === 'admin' ? 'admin-dashboard-main' : ''}">${content}</main>
+    <main class="platform-main ${user?.role === 'student' && route.view === 'dashboard' ? 'student-dashboard-main' : ''} ${user?.role === 'admin' && (route.view === 'admin' || route.view === 'student-report') ? 'admin-dashboard-main' : ''}">${content}</main>
   `;
   bindGlobalActions();
 }
@@ -2268,10 +2268,12 @@ function bindGlobalActions() {
       navigate({view: button.dataset.route});
     });
   });
-  document.querySelector('[data-action="logout"]')?.addEventListener('click', () => {
-    stopLessonTimer();
-    clearSession();
-    navigate({view: 'login'}, {replace: true});
+  document.querySelectorAll('[data-action="logout"]').forEach((button) => {
+    button.addEventListener('click', () => {
+      stopLessonTimer();
+      clearSession();
+      navigate({view: 'login'}, {replace: true});
+    });
   });
 }
 
@@ -2591,19 +2593,7 @@ function renderAdmin(user) {
   const pendingRequests = (state.unlockRequests || []).filter((request) => request.status === 'pending');
   const selectedStudent = students.find((student) => student.id === activeStudentId) || students[0] || null;
   if (selectedStudent) activeStudentId = selectedStudent.id;
-  const selectedAssigned = selectedStudent ? courses.filter((item) => (state.assignments[selectedStudent.id] || []).includes(item.id)) : [];
-  const selectedAttempts = selectedStudent ? state.attempts.filter((attempt) => attempt.userId === selectedStudent.id) : [];
-  const selectedCompleted = selectedStudent ? selectedAssigned.reduce((sum, item) => sum + userProgress(selectedStudent.id, item.id).completedLessons.length, 0) : 0;
-  const selectedLessons = selectedAssigned.reduce((sum, item) => sum + item.lessons.length, 0) || 0;
-  const selectedProgress = selectedLessons ? Math.round((selectedCompleted / selectedLessons) * 100) : 0;
-  const selectedTime = selectedStudent ? selectedAssigned.reduce((sum, item) => sum + courseStudySeconds(selectedStudent.id, item.id), 0) : 0;
-  const selectedLatest = selectedAttempts.at(-1);
-  const assignedCourseCount = students.reduce((sum, student) => sum + (state.assignments[student.id] || []).length, 0);
   const activeStudents = students.filter((student) => courses.some((item) => userProgress(student.id, item.id).completedLessons.length > 0)).length;
-  const passedTests = state.attempts.filter((attempt) => attempt.passed).length;
-  const failedTests = state.attempts.filter((attempt) => !attempt.passed).length;
-  const averageScore = state.attempts.length ? Math.round((state.attempts.reduce((sum, attempt) => sum + attempt.correct, 0) / (state.attempts.length * 10)) * 100) : 0;
-  const totalLearningSeconds = students.reduce((sum, student) => sum + courses.reduce((inner, item) => inner + courseStudySeconds(student.id, item.id), 0), 0);
   const rows = students.filter((student) => {
     const assignedTitles = courses.filter((item) => (state.assignments[student.id] || []).includes(item.id)).map((item) => item.title).join(' ');
     const haystack = `${student.name} ${student.email} ${assignedTitles}`.toLowerCase();
@@ -2613,28 +2603,25 @@ function renderAdmin(user) {
     const matchesFilter = adminStatusFilter === 'all' || (adminStatusFilter === 'active' && isActive) || (adminStatusFilter === 'inactive' && !isActive) || (adminStatusFilter === 'pending' && hasPending);
     return matchesSearch && matchesFilter;
   });
-  const chartRows = courses.map((item) => {
-    const assignedStudents = students.filter((student) => (state.assignments[student.id] || []).includes(item.id));
-    const completedLessons = assignedStudents.reduce((sum, student) => sum + userProgress(student.id, item.id).completedLessons.length, 0);
-    const totalLessons = Math.max(assignedStudents.length * item.lessons.length, 1);
-    const progress = Math.round((completedLessons / totalLessons) * 100);
-    return {item, progress};
-  });
 
   renderShell(user, `
     <section class="admin-dashboard">
       <div class="admin-topbar">
-        <a class="admin-brand" href="#" data-route="admin"><img src="/nextskills-logo.png" alt="NextSkills" /></a>
+        <a class="admin-brand admin-wordmark" href="#" data-route="admin">NextSkills</a>
         <nav class="admin-nav-links" aria-label="Admin navigation">
           <a href="#admin-overview">Dashboard</a>
           <a href="#admin-students">Students</a>
-          <a href="#admin-courses">Courses</a>
           <a href="#admin-requests">Requests</a>
-          <a href="#admin-reports">Reports</a>
         </nav>
         <div class="admin-top-actions">
-          <button class="notification admin-bell" aria-label="Requests"><span>🔔</span>${pendingRequests.length ? `<strong>${pendingRequests.length}</strong>` : ''}</button>
-          <button class="avatar" aria-label="Admin profile">${escapeHtml((user.name[0] || 'A').toUpperCase())}</button>
+          <button class="notification admin-bell" aria-label="Requests">
+            <svg class="bell-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+              <path d="M10 21h4"></path>
+            </svg>
+            ${pendingRequests.length ? `<strong>${pendingRequests.length}</strong>` : ''}
+          </button>
+          <button class="avatar" aria-label="Admin profile">AD</button>
         </div>
       </div>
 
@@ -2644,13 +2631,12 @@ function renderAdmin(user) {
           <h1>Admin Dashboard</h1>
           <p>Manage students, course access, progress, and learning activity from one place.</p>
         </div>
-        <div class="admin-hero-mark"><span>NS</span></div>
       </section>
 
       <section class="admin-stat-grid" aria-label="Admin quick stats">
         <article><strong>${students.length}</strong><span>Total Students</span></article>
         <article><strong>${activeStudents}</strong><span>Active Students</span></article>
-        <article><strong>${assignedCourseCount}</strong><span>Courses Assigned</span></article>
+        <article><strong>${courses.length}</strong><span>Total Active Courses</span></article>
         <article><strong>${pendingRequests.length}</strong><span>Pending Unlock Requests</span></article>
       </section>
 
@@ -2676,7 +2662,7 @@ function renderAdmin(user) {
             <button class="button primary" type="submit">Add student</button>
           </form>
           <div class="admin-student-table">
-            <div class="admin-table-head"><span>Student name</span><span>Email</span><span>Assigned courses</span><span>Progress</span><span>Latest score</span><span>Status</span><span>Action</span></div>
+            <div class="admin-table-head"><span>Name</span><span>Email</span><span>Status</span><span>Action</span></div>
             ${rows.map((student) => {
               const assigned = courses.filter((item) => (state.assignments[student.id] || []).includes(item.id));
               const completed = assigned.reduce((sum, item) => sum + userProgress(student.id, item.id).completedLessons.length, 0);
@@ -2689,98 +2675,33 @@ function renderAdmin(user) {
                 <article class="admin-table-row ${selectedStudent?.id === student.id ? 'selected' : ''}">
                   <strong>${escapeHtml(student.name)}</strong>
                   <span>${escapeHtml(student.email)}</span>
-                  <span>${assigned.length ? assigned.map((item) => item.title).join(', ') : 'Not assigned'}</span>
-                  <span><b>${progress}%</b><i><em style="width:${progress}%"></em></i></span>
-                  <span>${latest ? `${latest.correct}/10` : '-'}</span>
                   <span><mark class="${hasPending ? 'pending' : isActive ? 'active' : ''}">${hasPending ? 'Pending' : isActive ? 'Active' : 'Inactive'}</mark></span>
-                  <button class="button secondary" data-select-student="${student.id}">View Profile</button>
+                  <button class="button secondary" data-view-student="${student.id}">View Profile</button>
                 </article>
               `;
             }).join('') || '<article class="admin-empty">No students match this filter.</article>'}
           </div>
         </div>
-
-        <aside class="admin-card admin-profile-preview">
-          ${selectedStudent ? `
-            <div class="admin-profile-top">
-              <div class="admin-avatar-large">${escapeHtml(selectedStudent.name.split(' ').map((part) => part[0]).slice(0, 2).join('').toUpperCase())}</div>
-              <div><h2>${escapeHtml(selectedStudent.name)}</h2><p>${escapeHtml(selectedStudent.email)}</p><span>${selectedStudent.bio || 'Learning digital skills with NextSkills.'}</span></div>
-            </div>
-            <div class="admin-profile-stats">
-              <article><strong>${new Date(selectedStudent.createdAt).toLocaleDateString()}</strong><span>Joined date</span></article>
-              <article><strong>${selectedAssigned.length}</strong><span>Assigned courses</span></article>
-              <article><strong>${selectedProgress}%</strong><span>Overall progress</span></article>
-              <article><strong>${secondsToClock(selectedTime)}</strong><span>Learning hours</span></article>
-              <article><strong>${selectedAttempts.length}</strong><span>Test attempts</span></article>
-              <article><strong>${selectedLatest ? `${selectedLatest.correct}/10` : '-'}</strong><span>Latest score</span></article>
-            </div>
-            <div class="admin-profile-actions">
-              <button class="button primary" data-jump-assign>Assign Course</button>
-              <button class="button secondary" data-reset-password="${selectedStudent.id}">Reset Password</button>
-              <button class="button secondary" data-view-student="${selectedStudent.id}">View Test Stats</button>
-              <button class="button danger" data-remove-access="${selectedStudent.id}">Remove Access</button>
-            </div>
-          ` : '<p>No student selected yet.</p>'}
-        </aside>
       </section>
 
-      <section id="admin-courses" class="admin-grid-two">
-        <div class="admin-card">
-          <div class="admin-section-head"><div><h2>Assign Courses</h2><p>Choose courses for the selected student.</p></div><span class="status-pill success">${selectedStudent ? escapeHtml(selectedStudent.name) : 'No student'}</span></div>
-          ${selectedStudent ? `
-            <div class="admin-course-assign-list">
-              ${courses.map((item) => {
-                const assigned = (state.assignments[selectedStudent.id] || []).includes(item.id);
-                return `
-                  <label>
-                    <input type="checkbox" data-assign="${selectedStudent.id}" data-assign-course="${item.id}" ${assigned ? 'checked' : ''}/>
-                    ${courseLogo(item)}
-                    <span><strong>${item.title}</strong><small>${item.subtitle} • ${item.lessons.length} lessons</small></span>
-                    <em>${assigned ? 'Assigned' : 'Available'}</em>
-                  </label>
-                `;
-              }).join('')}
-            </div>
-            <button class="button primary" data-save-assignments>Assign Selected Courses</button>
-          ` : '<p>Select a student first.</p>'}
-        </div>
-
-        <div id="admin-requests" class="admin-card">
-          <div class="admin-section-head"><div><h2>Course Unlock Requests</h2><p>Approve or reject student access requests.</p></div></div>
-          <div class="admin-request-list">
-            ${pendingRequests.length ? pendingRequests.map((request) => {
-              const requestStudent = state.users.find((item) => item.id === request.userId);
-              const requestCourse = getCourse(request.courseId);
-              return `
-                <article>
-                  <div><strong>${escapeHtml(requestStudent?.name || 'Unknown student')}</strong><span>${requestCourse.title}</span><small>${new Date(request.createdAt).toLocaleString()}</small></div>
-                  <mark>Pending</mark>
-                  <button class="button primary" data-approve-request="${request.id}">Approve</button>
-                  <button class="button secondary" data-reject-request="${request.id}">Reject</button>
-                  <button class="button secondary" data-select-student="${request.userId}">View Profile</button>
-                </article>
-              `;
-            }).join('') : '<article class="admin-empty">No pending unlock requests.</article>'}
-          </div>
+      <section id="admin-requests" class="admin-card">
+        <div class="admin-section-head"><div><h2>Course Unlock Requests</h2><p>Approve or reject student access requests.</p></div></div>
+        <div class="admin-request-list">
+          ${pendingRequests.length ? pendingRequests.map((request) => {
+            const requestStudent = state.users.find((item) => item.id === request.userId);
+            const requestCourse = getCourse(request.courseId);
+            return `
+              <article>
+                <strong>${escapeHtml(requestStudent?.name || 'Unknown student')}</strong>
+                <span>${requestCourse.title}</span>
+                <button class="button primary" data-approve-request="${request.id}" aria-label="Approve request">Approve</button>
+                <button class="button secondary" data-reject-request="${request.id}" aria-label="Reject request">Reject</button>
+              </article>
+            `;
+          }).join('') : '<article class="admin-empty">No pending unlock requests.</article>'}
         </div>
       </section>
 
-      <section id="admin-reports" class="admin-card admin-analytics-card">
-        <div class="admin-section-head"><div><h2>Course Progress & Test Stats</h2><p>Quick view of progress, tests, score quality, and learning time.</p></div></div>
-        <div class="admin-report-grid">
-          <div class="admin-chart-card">
-            <h3>Progress by course</h3>
-            ${chartRows.map(({item, progress}) => `<div class="admin-bar-row"><span>${item.title}</span><strong>${progress}%</strong><i><em style="width:${progress}%"></em></i></div>`).join('')}
-          </div>
-          <div class="admin-mini-report">
-            <article><strong>${state.attempts.length}</strong><span>Test attempts</span></article>
-            <article><strong>${passedTests}</strong><span>Passed tests</span></article>
-            <article><strong>${failedTests}</strong><span>Failed tests</span></article>
-            <article><strong>${averageScore}%</strong><span>Average score</span></article>
-            <article><strong>${secondsToClock(totalLearningSeconds)}</strong><span>Time spent learning</span></article>
-          </div>
-        </div>
-      </section>
     </section>
   `);
 
@@ -2811,22 +2732,6 @@ function renderAdmin(user) {
     saveState();
     renderAdmin(user);
   });
-  document.querySelectorAll('[data-select-student]').forEach((button) => button.addEventListener('click', () => {
-    activeStudentId = button.dataset.selectStudent;
-    renderAdmin(user);
-  }));
-  document.querySelectorAll('[data-assign]').forEach((input) => {
-    input.addEventListener('change', () => {
-      const studentId = input.dataset.assign;
-      const targetCourseId = input.dataset.assignCourse;
-      state.assignments[studentId] = state.assignments[studentId] || [];
-      if (input.checked && !state.assignments[studentId].includes(targetCourseId)) state.assignments[studentId].push(targetCourseId);
-      if (!input.checked) state.assignments[studentId] = state.assignments[studentId].filter((id) => id !== targetCourseId);
-      saveState();
-      renderAdmin(user);
-    });
-  });
-  document.querySelector('[data-save-assignments]')?.addEventListener('click', () => alert('Selected course access has been saved.'));
   document.querySelectorAll('[data-approve-request]').forEach((button) => button.addEventListener('click', () => {
     const request = (state.unlockRequests || []).find((item) => item.id === button.dataset.approveRequest);
     if (!request) return;
@@ -2847,14 +2752,6 @@ function renderAdmin(user) {
     activeStudentId = button.dataset.viewStudent;
     navigate({view: 'student-report', studentId: activeStudentId});
   }));
-  document.querySelector('[data-jump-assign]')?.addEventListener('click', () => document.querySelector('#admin-courses')?.scrollIntoView({behavior: 'smooth'}));
-  document.querySelectorAll('[data-reset-password]').forEach((button) => button.addEventListener('click', () => alert('Temporary reset password: Learn123')));
-  document.querySelectorAll('[data-remove-access]').forEach((button) => button.addEventListener('click', () => {
-    if (!confirm('Remove all course access for this student?')) return;
-    state.assignments[button.dataset.removeAccess] = [];
-    saveState();
-    renderAdmin(user);
-  }));
 }
 
 function renderStudentReport(adminUser) {
@@ -2865,49 +2762,115 @@ function renderStudentReport(adminUser) {
   const assignedCourses = courses.filter((item) => (state.assignments[student.id] || []).includes(item.id));
   const completed = assignedCourses.reduce((sum, item) => sum + userProgress(student.id, item.id).completedLessons.length, 0);
   const totalAssignedLessons = assignedCourses.reduce((sum, item) => sum + item.lessons.length, 0) || 0;
-  const totalTime = assignedCourses.reduce((sum, item) => sum + Object.values(userLessonTime(student.id, item.id)).reduce((innerSum, value) => innerSum + value, 0), 0);
+  const progress = totalAssignedLessons ? Math.round((completed / totalAssignedLessons) * 100) : 0;
+  const totalTime = assignedCourses.reduce((sum, item) => sum + courseStudySeconds(student.id, item.id), 0);
   const latestAttempt = attempts.at(-1);
-  const assigned = assignedCourses.length > 0;
+  const passedTests = attempts.filter((attempt) => attempt.passed).length;
+  const failedTests = attempts.filter((attempt) => !attempt.passed).length;
+  const averageScore = attempts.length ? Math.round((attempts.reduce((sum, attempt) => sum + attempt.correct, 0) / (attempts.length * 10)) * 100) : 0;
+  const status = (state.unlockRequests || []).some((request) => request.userId === student.id && request.status === 'pending') ? 'Pending Request' : progress > 0 ? 'Active' : 'Inactive';
+  const bioItems = [
+    ['Phone', student.phone || 'Not added'],
+    ['College / University', student.college || 'Not added'],
+    ['LinkedIn', student.linkedin || 'Not added'],
+    ['Instagram', student.instagram || 'Not added'],
+    ['Website', student.website || 'Not added']
+  ];
+
   renderShell(adminUser, `
-    <section class="report-page">
-      <button class="button secondary" data-route="admin">Back to admin</button>
-      <p class="eyebrow">Student profile report</p>
-      <h1>${escapeHtml(student.name)}</h1>
-      <p>${escapeHtml(student.email)}</p>
-      <div class="insight-grid">
-        <article><strong>${assigned ? 'Assigned' : 'Not assigned'}</strong><span>course status</span></article>
-        <article><strong>${completed}/${totalAssignedLessons}</strong><span>progress</span></article>
-        <article><strong>${secondsToClock(totalTime)}</strong><span>total lesson time</span></article>
-        <article><strong>${attempts.length}</strong><span>test attempts</span></article>
-        <article><strong>${latestAttempt ? `${latestAttempt.correct}/10` : '-'}</strong><span>latest score</span></article>
-        <article><strong>${latestAttempt ? (latestAttempt.passed ? 'Pass' : 'Retake') : '-'}</strong><span>latest result</span></article>
+    <section class="admin-dashboard admin-student-detail-page">
+      <div class="admin-topbar">
+        <a class="admin-brand admin-wordmark" href="#" data-route="admin">NextSkills</a>
+        <nav class="admin-nav-links" aria-label="Admin navigation">
+          <button class="button secondary" data-route="admin">Back to Admin Dashboard</button>
+        </nav>
+        <div class="admin-top-actions"><button class="avatar" aria-label="Admin profile">AD</button></div>
       </div>
-      <div class="report-grid">
-        <article>
-          <h2>Lesson time</h2>
-          ${assignedCourses.map((item) => {
-            const times = userLessonTime(student.id, item.id);
-            return `
-              <h3>${item.title}</h3>
-              ${item.lessons.map((lesson, index) => `
-                <p><strong>${index + 1}. ${lesson.title}</strong><span>${secondsToClock(times[index] || 0)}</span></p>
-              `).join('')}
-            `;
-          }).join('') || '<p>No assigned courses.</p>'}
-        </article>
-        <article>
-          <h2>Test attempts</h2>
-          ${attempts.length ? attempts.map((attempt) => `
-            <div class="attempt-row">
-              <strong>${getCourse(attempt.courseId).title} • Lesson ${attempt.lessonIndex + 1}: ${attempt.passed ? 'Passed' : 'Retake needed'}</strong>
-              <span>Score: ${attempt.correct}/10 • Wrong: ${attempt.wrong} • Time: ${secondsToClock(attempt.timeSpent)} • Warnings: ${attempt.violations} • Status: ${attempt.passed ? 'Pass' : 'Retake'}</span>
+
+      <section class="admin-card student-detail-hero">
+        <div class="admin-profile-top">
+          <div class="admin-avatar-large">${escapeHtml(student.name.split(' ').map((part) => part[0]).slice(0, 2).join('').toUpperCase())}</div>
+          <div>
+            <p class="eyebrow">Student profile</p>
+            <h1>${escapeHtml(student.name)}</h1>
+            <p>${escapeHtml(student.email)}</p>
+            <span>${student.bio || 'Student bio and submitted profile details are shown below.'}</span>
+          </div>
+        </div>
+        <mark class="student-detail-status ${status === 'Active' ? 'active' : status === 'Pending Request' ? 'pending' : ''}">${status}</mark>
+      </section>
+
+      <section class="admin-stat-grid">
+        <article><strong>${progress}%</strong><span>Overall Progress</span></article>
+        <article><strong>${secondsToClock(totalTime)}</strong><span>Learning Hours</span></article>
+        <article><strong>${attempts.length}</strong><span>Test Attempts</span></article>
+        <article><strong>${latestAttempt ? `${latestAttempt.correct}/10` : '-'}</strong><span>Latest Score</span></article>
+      </section>
+
+      <section class="admin-grid-two student-detail-grid">
+        <div class="admin-card">
+          <div class="admin-section-head"><div><h2>Complete Bio</h2><p>Details submitted by the student from My Profile.</p></div></div>
+          <div class="student-bio-grid">
+            ${bioItems.map(([label, value]) => `<article><span>${label}</span><strong>${escapeHtml(value)}</strong></article>`).join('')}
+            <article><span>Joined date</span><strong>${new Date(student.createdAt).toLocaleDateString()}</strong></article>
+          </div>
+        </div>
+
+        <div class="admin-card">
+          <div class="admin-section-head"><div><h2>Assign Courses</h2><p>Select courses from the dropdown list and save access.</p></div></div>
+          <label class="student-course-select-label">Courses
+            <select id="student-course-multiselect" multiple size="${Math.min(courses.length, 5)}">
+              ${courses.map((item) => `<option value="${item.id}" ${(state.assignments[student.id] || []).includes(item.id) ? 'selected' : ''}>${item.title} (${item.lessons.length} lessons)</option>`).join('')}
+            </select>
+          </label>
+          <button class="button primary" data-save-student-courses>Assign Selected Courses</button>
+        </div>
+      </section>
+
+      <section class="admin-grid-two student-detail-grid">
+        <div class="admin-card">
+          <div class="admin-section-head"><div><h2>Course Completion Status</h2><p>Assigned course progress overview.</p></div></div>
+          <div class="admin-chart-card">
+            ${assignedCourses.length ? assignedCourses.map((item) => {
+              const itemProgress = courseProgressPercent(student.id, item);
+              return `<div class="admin-bar-row"><span>${item.title}</span><strong>${itemProgress}%</strong><i><em style="width:${itemProgress}%"></em></i></div>`;
+            }).join('') : '<article class="admin-empty">No courses assigned.</article>'}
+          </div>
+        </div>
+
+        <div class="admin-card">
+          <div class="admin-section-head"><div><h2>Course Progress & Test Stats</h2><p>Assessment and activity summary for this student.</p></div></div>
+          <div class="admin-mini-report">
+            <article><strong>${passedTests}</strong><span>Passed tests</span></article>
+            <article><strong>${failedTests}</strong><span>Failed tests</span></article>
+            <article><strong>${averageScore}%</strong><span>Average score</span></article>
+            <article><strong>${completed}/${totalAssignedLessons}</strong><span>Lessons complete</span></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="admin-card">
+        <div class="admin-section-head"><div><h2>Test Attempt History</h2><p>Scores, time spent, warnings, and pass/retake status.</p></div></div>
+        <div class="student-attempt-list">
+          ${attempts.length ? attempts.slice().reverse().map((attempt) => `
+            <article>
+              <strong>${getCourse(attempt.courseId).title} • Lesson ${attempt.lessonIndex + 1}</strong>
+              <span>Score ${attempt.correct}/10 • Wrong ${attempt.wrong} • ${secondsToClock(attempt.timeSpent)} • ${attempt.violations} warning${attempt.violations === 1 ? '' : 's'} • ${attempt.passed ? 'Pass' : 'Retake'}</span>
               <small>${new Date(attempt.createdAt).toLocaleString()}</small>
-            </div>
-          `).join('') : '<p>No attempts yet.</p>'}
-        </article>
-      </div>
+            </article>
+          `).join('') : '<article class="admin-empty">No attempts yet.</article>'}
+        </div>
+      </section>
     </section>
   `);
+
+  document.querySelector('[data-save-student-courses]')?.addEventListener('click', () => {
+    const select = document.querySelector('#student-course-multiselect');
+    if (!select) return;
+    state.assignments[student.id] = Array.from(select.selectedOptions).map((option) => option.value);
+    saveState();
+    renderStudentReport(adminUser);
+  });
 }
 
 function renderProfile(user) {
