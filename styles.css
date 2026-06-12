@@ -2350,18 +2350,22 @@ footer {
 
 .course-player {
   display: grid;
-  grid-template-columns: 300px minmax(0, 1fr) 390px;
-  gap: 34px;
+  grid-template-columns: 240px minmax(0, 1fr) 330px;
+  gap: 24px;
   min-height: calc(100vh - 86px);
-  padding: 32px 28px;
+  padding: 28px 24px;
   background: #f7f7f8;
 }
 
 .course-rail {
+  position: sticky;
+  top: 96px;
   display: grid;
   align-content: start;
-  gap: 42px;
-  padding: 34px 24px;
+  gap: 28px;
+  max-height: calc(100vh - 118px);
+  overflow: auto;
+  padding: 24px 18px;
   border-right: 1px solid #dedee3;
 }
 
@@ -2369,49 +2373,54 @@ footer {
   display: grid;
   justify-items: center;
   gap: 8px;
-  padding: 24px;
+  padding: 18px;
   border-radius: 12px;
   background: #fff;
 }
 
 .course-rail-card .course-icon {
-  width: 90px;
-  height: 90px;
+  width: 70px;
+  height: 70px;
   background: #ececee;
+}
+
+.course-rail-card .course-icon img {
+  width: 42px;
+  height: 42px;
 }
 
 .course-rail-card h2 {
   margin: 8px 0 0;
   color: #000;
-  font-size: 22px;
-  line-height: 1.05;
+  font-size: 17px;
+  line-height: 1.18;
   text-align: center;
 }
 
 .course-rail-card p {
   margin: 0;
   color: #555;
-  font-size: 16px;
+  font-size: 13px;
   text-align: center;
 }
 
 .course-rail-nav {
   display: grid;
-  gap: 14px;
+  gap: 10px;
 }
 
 .course-rail-nav button {
   display: flex;
   align-items: center;
-  gap: 16px;
-  min-height: 56px;
-  padding: 0 20px;
+  gap: 12px;
+  min-height: 46px;
+  padding: 0 14px;
   border: 0;
   border-radius: 8px;
   background: transparent;
   color: #62666d;
   font: inherit;
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 800;
   cursor: pointer;
 }
@@ -2422,53 +2431,54 @@ footer {
 }
 
 .course-rail-nav span {
-  width: 28px;
-  font-size: 24px;
+  width: 22px;
+  font-size: 19px;
   text-align: center;
 }
 
 .course-player-main {
   display: grid;
   align-content: start;
-  gap: 28px;
+  gap: 22px;
   padding-top: 10px;
 }
 
 .course-player-header {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) 150px;
   gap: 22px;
-  align-items: center;
+  align-items: start;
 }
 
 .course-player-header h1 {
   margin: 0;
   color: #000;
-  font-size: clamp(28px, 3vw, 36px);
-  line-height: 1.1;
+  font-size: clamp(24px, 2.2vw, 30px);
+  line-height: 1.16;
 }
 
 .course-player-header p {
   margin: 8px 0 0;
   color: #62666d;
-  font-size: 20px;
+  font-size: 16px;
+  line-height: 1.35;
 }
 
 .course-player-actions {
-  display: flex;
-  gap: 14px;
-  align-items: center;
+  display: grid;
+  gap: 10px;
+  align-items: stretch;
 }
 
 .course-player-actions .button,
 .course-detail-body .button {
-  min-width: 170px;
-  min-height: 54px;
+  min-width: 0;
+  min-height: 46px;
   border-radius: 8px;
-  border-width: 3px;
+  border-width: 2px;
   color: #000;
   background: #fff;
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 900;
 }
 
@@ -2503,14 +2513,14 @@ footer {
 }
 
 .course-detail-tabs button {
-  min-height: 70px;
-  padding: 0 34px;
+  min-height: 60px;
+  padding: 0 28px;
   border: 0;
   border-bottom: 3px solid transparent;
   background: transparent;
   color: #62666d;
   font: inherit;
-  font-size: 19px;
+  font-size: 16px;
   font-weight: 850;
 }
 
@@ -2520,7 +2530,7 @@ footer {
 }
 
 .course-detail-body {
-  padding: 34px 34px 40px;
+  padding: 30px 34px 38px;
 }
 
 .course-detail-body .lesson-intro {
@@ -2531,21 +2541,21 @@ footer {
 .course-detail-body .lesson-intro > p {
   margin: 0 0 28px;
   color: #5c6067;
-  font-size: 22px;
-  line-height: 1.55;
+  font-size: 19px;
+  line-height: 1.6;
 }
 
 .course-detail-body h4 {
   margin: 0 0 12px;
   color: #000;
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .course-detail-body li,
 .course-detail-body p {
   color: #5c6067;
-  font-size: 18px;
-  line-height: 1.55;
+  font-size: 16px;
+  line-height: 1.62;
 }
 
 .lesson-resources {
@@ -2557,7 +2567,7 @@ footer {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
-  margin-top: 28px;
+  margin-top: 22px;
 }
 
 .lesson-resources article {
@@ -2565,8 +2575,8 @@ footer {
   justify-content: space-between;
   gap: 14px;
   align-items: center;
-  min-height: 78px;
-  padding: 0 24px;
+  min-height: 66px;
+  padding: 0 18px;
   border: 1px solid #dedee3;
   border-radius: 8px;
   background: #f7f7f8;
@@ -2575,7 +2585,7 @@ footer {
 .lesson-resources strong,
 .lesson-resources span {
   color: #202124;
-  font-size: 17px;
+  font-size: 15px;
   font-weight: 850;
 }
 
@@ -2594,8 +2604,11 @@ footer {
 }
 
 .course-content-panel {
+  position: sticky;
+  top: 96px;
   align-self: start;
   overflow: hidden;
+  max-height: calc(100vh - 118px);
   border: 1px solid #e2e2e6;
   border-radius: 12px;
   background: #fff;
@@ -2604,16 +2617,16 @@ footer {
 .course-content-head {
   display: flex;
   justify-content: space-between;
-  gap: 18px;
+  gap: 12px;
   align-items: center;
-  padding: 34px;
+  padding: 24px 22px;
   border-bottom: 1px solid #e2e2e6;
 }
 
 .course-content-head h2 {
   margin: 0;
   color: #000;
-  font-size: 30px;
+  font-size: 22px;
 }
 
 .course-content-head span {
@@ -2621,21 +2634,24 @@ footer {
   border-radius: 6px;
   background: #e4e5e8;
   color: #3d4045;
+  font-size: 13px;
   font-weight: 850;
   white-space: nowrap;
 }
 
 .course-content-list {
   display: grid;
+  max-height: calc(100vh - 205px);
+  overflow: auto;
 }
 
 .course-content-item {
   display: grid;
-  grid-template-columns: 48px minmax(0, 1fr) auto;
-  gap: 16px;
+  grid-template-columns: 38px minmax(0, 1fr) auto;
+  gap: 12px;
   align-items: center;
-  min-height: 112px;
-  padding: 22px 34px;
+  min-height: 88px;
+  padding: 16px 20px;
   border: 0;
   border-bottom: 1px solid #eeeeef;
   background: #fff;
@@ -2647,7 +2663,7 @@ footer {
 .course-content-item.active {
   border-left: 5px solid #000;
   background: #eeeeef;
-  padding-left: 29px;
+  padding-left: 15px;
 }
 
 .course-content-item:disabled {
@@ -2658,12 +2674,12 @@ footer {
 .course-content-index {
   display: grid;
   place-items: center;
-  width: 44px;
-  height: 44px;
+  width: 34px;
+  height: 34px;
   border: 2px solid #9fa3a8;
   border-radius: 50%;
   color: #555b61;
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 900;
 }
 
@@ -2680,8 +2696,8 @@ footer {
 
 .course-content-item strong {
   color: #33363a;
-  font-size: 18px;
-  line-height: 1.25;
+  font-size: 14px;
+  line-height: 1.28;
 }
 
 .course-content-item.active strong {
@@ -2691,14 +2707,14 @@ footer {
 .course-content-item small {
   margin-top: 4px;
   color: #81858b;
-  font-size: 15px;
+  font-size: 12px;
   font-weight: 700;
 }
 
 .course-content-item em {
   color: #777c83;
   font-style: normal;
-  font-size: 16px;
+  font-size: 12px;
 }
 
 .test-mode {
@@ -2994,8 +3010,19 @@ footer {
   }
 
   .course-rail {
+    position: static;
+    max-height: none;
     border-right: 0;
     border-bottom: 1px solid #dedee3;
+  }
+
+  .course-content-panel {
+    position: static;
+    max-height: none;
+  }
+
+  .course-content-list {
+    max-height: none;
   }
 
   .course-player-header,
@@ -3004,7 +3031,7 @@ footer {
   }
 
   .course-player-actions {
-    flex-wrap: wrap;
+    max-width: 280px;
   }
 
   .student-row,
@@ -3124,6 +3151,10 @@ footer {
 
   .course-rail {
     padding: 0 0 22px;
+  }
+
+  .course-player-actions {
+    max-width: none;
   }
 
   .course-rail-nav button,
