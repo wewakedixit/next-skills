@@ -1764,6 +1764,8 @@ let activeTest = null;
 let dashboardCourseTab = 'all';
 let dashboardStatsPeriod = 'weekly';
 let courseDetailTab = 'description';
+let adminStudentSearch = '';
+let adminStatusFilter = 'all';
 
 function routeFromPath() {
   const segments = window.location.pathname.split('/').filter(Boolean).map(decodeURIComponent);
@@ -1838,6 +1840,7 @@ const seedState = {
   attempts: [],
   lessonTime: {},
   lessonNotes: {},
+  unlockRequests: [],
   notificationReads: {},
   currentSession: null
 };
@@ -1853,6 +1856,7 @@ function mergeState(saved) {
     attempts: saved.attempts || [],
     lessonTime: saved.lessonTime || {},
     lessonNotes: saved.lessonNotes || {},
+    unlockRequests: saved.unlockRequests || [],
     notificationReads: saved.notificationReads || {}
   };
 }
@@ -2244,13 +2248,13 @@ function renderShell(user, content) {
     : '';
 
   app.innerHTML = `
-    <header class="platform-header ${user?.role === 'student' && route.view === 'dashboard' ? 'student-dashboard-header' : ''}">
+    <header class="platform-header ${user?.role === 'student' && route.view === 'dashboard' ? 'student-dashboard-header' : ''} ${user?.role === 'admin' && route.view === 'admin' ? 'admin-dashboard-header' : ''}">
       <a class="platform-brand" href="#" data-route="dashboard">
         <img class="platform-logo" src="/nextskills-logo.png" alt="NextSkills" />
       </a>
       ${nav}
     </header>
-    <main class="platform-main ${user?.role === 'student' && route.view === 'dashboard' ? 'student-dashboard-main' : ''}">${content}</main>
+    <main class="platform-main ${user?.role === 'student' && route.view === 'dashboard' ? 'student-dashboard-main' : ''} ${user?.role === 'admin' && route.view === 'admin' ? 'admin-dashboard-main' : ''}">${content}</main>
   `;
   bindGlobalActions();
 }
@@ -2498,6 +2502,18 @@ function renderDashboard(user) {
   }));
   document.querySelectorAll('[data-request-course]').forEach((button) => button.addEventListener('click', () => {
     const requestedCourse = getCourse(button.dataset.requestCourse);
+    state.unlockRequests = state.unlockRequests || [];
+    const exists = state.unlockRequests.some((request) => request.userId === user.id && request.courseId === requestedCourse.id && request.status === 'pending');
+    if (!exists) {
+      state.unlockRequests.push({
+        id: `request-${Date.now()}`,
+        userId: user.id,
+        courseId: requestedCourse.id,
+        status: 'pending',
+        createdAt: new Date().toISOString()
+      });
+      saveState();
+    }
     alert(`Request sent for ${requestedCourse.title}. Your admin can assign it from the backend.`);
   }));
   document.querySelectorAll('[data-certificate-course]').forEach((button) => button.addEventListener('click', () => {
@@ -2572,63 +2588,215 @@ function bindXoGame() {
 
 function renderAdmin(user) {
   const students = state.users.filter((item) => item.role === 'student');
+  const pendingRequests = (state.unlockRequests || []).filter((request) => request.status === 'pending');
+  const selectedStudent = students.find((student) => student.id === activeStudentId) || students[0] || null;
+  if (selectedStudent) activeStudentId = selectedStudent.id;
+  const selectedAssigned = selectedStudent ? courses.filter((item) => (state.assignments[selectedStudent.id] || []).includes(item.id)) : [];
+  const selectedAttempts = selectedStudent ? state.attempts.filter((attempt) => attempt.userId === selectedStudent.id) : [];
+  const selectedCompleted = selectedStudent ? selectedAssigned.reduce((sum, item) => sum + userProgress(selectedStudent.id, item.id).completedLessons.length, 0) : 0;
+  const selectedLessons = selectedAssigned.reduce((sum, item) => sum + item.lessons.length, 0) || 0;
+  const selectedProgress = selectedLessons ? Math.round((selectedCompleted / selectedLessons) * 100) : 0;
+  const selectedTime = selectedStudent ? selectedAssigned.reduce((sum, item) => sum + courseStudySeconds(selectedStudent.id, item.id), 0) : 0;
+  const selectedLatest = selectedAttempts.at(-1);
+  const assignedCourseCount = students.reduce((sum, student) => sum + (state.assignments[student.id] || []).length, 0);
+  const activeStudents = students.filter((student) => courses.some((item) => userProgress(student.id, item.id).completedLessons.length > 0)).length;
+  const passedTests = state.attempts.filter((attempt) => attempt.passed).length;
+  const failedTests = state.attempts.filter((attempt) => !attempt.passed).length;
+  const averageScore = state.attempts.length ? Math.round((state.attempts.reduce((sum, attempt) => sum + attempt.correct, 0) / (state.attempts.length * 10)) * 100) : 0;
+  const totalLearningSeconds = students.reduce((sum, student) => sum + courses.reduce((inner, item) => inner + courseStudySeconds(student.id, item.id), 0), 0);
+  const rows = students.filter((student) => {
+    const assignedTitles = courses.filter((item) => (state.assignments[student.id] || []).includes(item.id)).map((item) => item.title).join(' ');
+    const haystack = `${student.name} ${student.email} ${assignedTitles}`.toLowerCase();
+    const matchesSearch = haystack.includes(adminStudentSearch.toLowerCase());
+    const hasPending = pendingRequests.some((request) => request.userId === student.id);
+    const isActive = courses.some((item) => userProgress(student.id, item.id).completedLessons.length > 0);
+    const matchesFilter = adminStatusFilter === 'all' || (adminStatusFilter === 'active' && isActive) || (adminStatusFilter === 'inactive' && !isActive) || (adminStatusFilter === 'pending' && hasPending);
+    return matchesSearch && matchesFilter;
+  });
+  const chartRows = courses.map((item) => {
+    const assignedStudents = students.filter((student) => (state.assignments[student.id] || []).includes(item.id));
+    const completedLessons = assignedStudents.reduce((sum, student) => sum + userProgress(student.id, item.id).completedLessons.length, 0);
+    const totalLessons = Math.max(assignedStudents.length * item.lessons.length, 1);
+    const progress = Math.round((completedLessons / totalLessons) * 100);
+    return {item, progress};
+  });
+
   renderShell(user, `
-    <section class="admin-grid">
-      <div class="admin-panel">
-        <p class="eyebrow">Admin panel</p>
-        <h1>Users and course assignments</h1>
-        <p>Add students, assign courses from the backend, and review each student’s lesson time and test attempts.</p>
-        <form id="add-user-form" class="stack-form">
-          <label>Name<input name="name" required /></label>
-          <label>Email<input name="email" type="email" required /></label>
-          <label>Password<input name="password" required /></label>
-          <button class="button primary" type="submit">Add student</button>
-        </form>
-      </div>
-      <div class="admin-panel">
-        <h2>Course assignment backend</h2>
-        <div class="assignment-table">
-          <div class="assignment-head"><span>Student</span><span>Course</span><span>Status</span><span>Report</span></div>
-          ${students.flatMap((student) => courses.map((item) => {
-            const assigned = (state.assignments[student.id] || []).includes(item.id);
-            return `
-              <div class="assignment-row">
-                <span>${escapeHtml(student.name)}</span>
-                <span>${item.title}</span>
-                <label class="switch-line"><input type="checkbox" data-assign="${student.id}" data-assign-course="${item.id}" ${assigned ? 'checked' : ''}/> ${assigned ? 'Assigned' : 'Not assigned'}</label>
-                <button class="button secondary" data-view-student="${student.id}">Open profile</button>
-              </div>
-            `;
-          })).join('')}
+    <section class="admin-dashboard">
+      <div class="admin-topbar">
+        <a class="admin-brand" href="#" data-route="admin"><img src="/nextskills-logo.png" alt="NextSkills" /></a>
+        <nav class="admin-nav-links" aria-label="Admin navigation">
+          <a href="#admin-overview">Dashboard</a>
+          <a href="#admin-students">Students</a>
+          <a href="#admin-courses">Courses</a>
+          <a href="#admin-requests">Requests</a>
+          <a href="#admin-reports">Reports</a>
+        </nav>
+        <div class="admin-top-actions">
+          <button class="notification admin-bell" aria-label="Requests"><span>🔔</span>${pendingRequests.length ? `<strong>${pendingRequests.length}</strong>` : ''}</button>
+          <button class="avatar" aria-label="Admin profile">${escapeHtml((user.name[0] || 'A').toUpperCase())}</button>
         </div>
       </div>
-      <div class="admin-panel admin-panel-wide">
-        <h2>Students</h2>
-        <div class="student-list">
-          ${students.map((student) => {
-            const assignedCount = (state.assignments[student.id] || []).length;
-            const assignedLessons = courses.filter((item) => (state.assignments[student.id] || []).includes(item.id)).reduce((sum, item) => sum + item.lessons.length, 0);
-            const completed = courses.reduce((sum, item) => sum + userProgress(student.id, item.id).completedLessons.length, 0);
-            return `
-              <article class="student-row">
-                <div>
+
+      <section id="admin-overview" class="admin-hero-card">
+        <div>
+          <p class="eyebrow">Backend control center</p>
+          <h1>Admin Dashboard</h1>
+          <p>Manage students, course access, progress, and learning activity from one place.</p>
+        </div>
+        <div class="admin-hero-mark"><span>NS</span></div>
+      </section>
+
+      <section class="admin-stat-grid" aria-label="Admin quick stats">
+        <article><strong>${students.length}</strong><span>Total Students</span></article>
+        <article><strong>${activeStudents}</strong><span>Active Students</span></article>
+        <article><strong>${assignedCourseCount}</strong><span>Courses Assigned</span></article>
+        <article><strong>${pendingRequests.length}</strong><span>Pending Unlock Requests</span></article>
+      </section>
+
+      <section id="admin-students" class="admin-main-grid">
+        <div class="admin-card admin-student-card">
+          <div class="admin-section-head">
+            <div><h2>Students</h2><p>Search, filter, and open detailed learning profiles.</p></div>
+            <button class="button primary" data-open-add-student>Add New Student</button>
+          </div>
+          <div class="admin-tools-row">
+            <input id="admin-student-search" value="${escapeHtml(adminStudentSearch)}" placeholder="Search student by name, email, or course" />
+            <select id="admin-status-filter">
+              <option value="all" ${adminStatusFilter === 'all' ? 'selected' : ''}>All</option>
+              <option value="active" ${adminStatusFilter === 'active' ? 'selected' : ''}>Active</option>
+              <option value="inactive" ${adminStatusFilter === 'inactive' ? 'selected' : ''}>Inactive</option>
+              <option value="pending" ${adminStatusFilter === 'pending' ? 'selected' : ''}>Pending Requests</option>
+            </select>
+          </div>
+          <form id="add-user-form" class="admin-add-form" hidden>
+            <label>Name<input name="name" required /></label>
+            <label>Email<input name="email" type="email" required /></label>
+            <label>Password<input name="password" required /></label>
+            <button class="button primary" type="submit">Add student</button>
+          </form>
+          <div class="admin-student-table">
+            <div class="admin-table-head"><span>Student name</span><span>Email</span><span>Assigned courses</span><span>Progress</span><span>Latest score</span><span>Status</span><span>Action</span></div>
+            ${rows.map((student) => {
+              const assigned = courses.filter((item) => (state.assignments[student.id] || []).includes(item.id));
+              const completed = assigned.reduce((sum, item) => sum + userProgress(student.id, item.id).completedLessons.length, 0);
+              const totalLessons = assigned.reduce((sum, item) => sum + item.lessons.length, 0) || 0;
+              const progress = totalLessons ? Math.round((completed / totalLessons) * 100) : 0;
+              const latest = state.attempts.filter((attempt) => attempt.userId === student.id).at(-1);
+              const hasPending = pendingRequests.some((request) => request.userId === student.id);
+              const isActive = progress > 0;
+              return `
+                <article class="admin-table-row ${selectedStudent?.id === student.id ? 'selected' : ''}">
                   <strong>${escapeHtml(student.name)}</strong>
                   <span>${escapeHtml(student.email)}</span>
-                  <small>${completed}/${assignedLessons || 0} assigned lessons complete</small>
-                </div>
-                <div class="student-actions">
-                  <span class="status-pill ${assignedCount ? 'success' : ''}">${assignedCount} course${assignedCount === 1 ? '' : 's'} assigned</span>
-                  <button class="button secondary" data-view-student="${student.id}">View report</button>
-                </div>
-              </article>
-            `;
-          }).join('')}
+                  <span>${assigned.length ? assigned.map((item) => item.title).join(', ') : 'Not assigned'}</span>
+                  <span><b>${progress}%</b><i><em style="width:${progress}%"></em></i></span>
+                  <span>${latest ? `${latest.correct}/10` : '-'}</span>
+                  <span><mark class="${hasPending ? 'pending' : isActive ? 'active' : ''}">${hasPending ? 'Pending' : isActive ? 'Active' : 'Inactive'}</mark></span>
+                  <button class="button secondary" data-select-student="${student.id}">View Profile</button>
+                </article>
+              `;
+            }).join('') || '<article class="admin-empty">No students match this filter.</article>'}
+          </div>
         </div>
-      </div>
+
+        <aside class="admin-card admin-profile-preview">
+          ${selectedStudent ? `
+            <div class="admin-profile-top">
+              <div class="admin-avatar-large">${escapeHtml(selectedStudent.name.split(' ').map((part) => part[0]).slice(0, 2).join('').toUpperCase())}</div>
+              <div><h2>${escapeHtml(selectedStudent.name)}</h2><p>${escapeHtml(selectedStudent.email)}</p><span>${selectedStudent.bio || 'Learning digital skills with NextSkills.'}</span></div>
+            </div>
+            <div class="admin-profile-stats">
+              <article><strong>${new Date(selectedStudent.createdAt).toLocaleDateString()}</strong><span>Joined date</span></article>
+              <article><strong>${selectedAssigned.length}</strong><span>Assigned courses</span></article>
+              <article><strong>${selectedProgress}%</strong><span>Overall progress</span></article>
+              <article><strong>${secondsToClock(selectedTime)}</strong><span>Learning hours</span></article>
+              <article><strong>${selectedAttempts.length}</strong><span>Test attempts</span></article>
+              <article><strong>${selectedLatest ? `${selectedLatest.correct}/10` : '-'}</strong><span>Latest score</span></article>
+            </div>
+            <div class="admin-profile-actions">
+              <button class="button primary" data-jump-assign>Assign Course</button>
+              <button class="button secondary" data-reset-password="${selectedStudent.id}">Reset Password</button>
+              <button class="button secondary" data-view-student="${selectedStudent.id}">View Test Stats</button>
+              <button class="button danger" data-remove-access="${selectedStudent.id}">Remove Access</button>
+            </div>
+          ` : '<p>No student selected yet.</p>'}
+        </aside>
+      </section>
+
+      <section id="admin-courses" class="admin-grid-two">
+        <div class="admin-card">
+          <div class="admin-section-head"><div><h2>Assign Courses</h2><p>Choose courses for the selected student.</p></div><span class="status-pill success">${selectedStudent ? escapeHtml(selectedStudent.name) : 'No student'}</span></div>
+          ${selectedStudent ? `
+            <div class="admin-course-assign-list">
+              ${courses.map((item) => {
+                const assigned = (state.assignments[selectedStudent.id] || []).includes(item.id);
+                return `
+                  <label>
+                    <input type="checkbox" data-assign="${selectedStudent.id}" data-assign-course="${item.id}" ${assigned ? 'checked' : ''}/>
+                    ${courseLogo(item)}
+                    <span><strong>${item.title}</strong><small>${item.subtitle} • ${item.lessons.length} lessons</small></span>
+                    <em>${assigned ? 'Assigned' : 'Available'}</em>
+                  </label>
+                `;
+              }).join('')}
+            </div>
+            <button class="button primary" data-save-assignments>Assign Selected Courses</button>
+          ` : '<p>Select a student first.</p>'}
+        </div>
+
+        <div id="admin-requests" class="admin-card">
+          <div class="admin-section-head"><div><h2>Course Unlock Requests</h2><p>Approve or reject student access requests.</p></div></div>
+          <div class="admin-request-list">
+            ${pendingRequests.length ? pendingRequests.map((request) => {
+              const requestStudent = state.users.find((item) => item.id === request.userId);
+              const requestCourse = getCourse(request.courseId);
+              return `
+                <article>
+                  <div><strong>${escapeHtml(requestStudent?.name || 'Unknown student')}</strong><span>${requestCourse.title}</span><small>${new Date(request.createdAt).toLocaleString()}</small></div>
+                  <mark>Pending</mark>
+                  <button class="button primary" data-approve-request="${request.id}">Approve</button>
+                  <button class="button secondary" data-reject-request="${request.id}">Reject</button>
+                  <button class="button secondary" data-select-student="${request.userId}">View Profile</button>
+                </article>
+              `;
+            }).join('') : '<article class="admin-empty">No pending unlock requests.</article>'}
+          </div>
+        </div>
+      </section>
+
+      <section id="admin-reports" class="admin-card admin-analytics-card">
+        <div class="admin-section-head"><div><h2>Course Progress & Test Stats</h2><p>Quick view of progress, tests, score quality, and learning time.</p></div></div>
+        <div class="admin-report-grid">
+          <div class="admin-chart-card">
+            <h3>Progress by course</h3>
+            ${chartRows.map(({item, progress}) => `<div class="admin-bar-row"><span>${item.title}</span><strong>${progress}%</strong><i><em style="width:${progress}%"></em></i></div>`).join('')}
+          </div>
+          <div class="admin-mini-report">
+            <article><strong>${state.attempts.length}</strong><span>Test attempts</span></article>
+            <article><strong>${passedTests}</strong><span>Passed tests</span></article>
+            <article><strong>${failedTests}</strong><span>Failed tests</span></article>
+            <article><strong>${averageScore}%</strong><span>Average score</span></article>
+            <article><strong>${secondsToClock(totalLearningSeconds)}</strong><span>Time spent learning</span></article>
+          </div>
+        </div>
+      </section>
     </section>
   `);
 
-  document.querySelector('#add-user-form').addEventListener('submit', (event) => {
+  document.querySelector('[data-open-add-student]')?.addEventListener('click', () => {
+    const form = document.querySelector('#add-user-form');
+    if (form) form.hidden = !form.hidden;
+  });
+  document.querySelector('#admin-student-search')?.addEventListener('input', (event) => {
+    adminStudentSearch = event.currentTarget.value;
+    renderAdmin(user);
+  });
+  document.querySelector('#admin-status-filter')?.addEventListener('change', (event) => {
+    adminStatusFilter = event.currentTarget.value;
+    renderAdmin(user);
+  });
+  document.querySelector('#add-user-form')?.addEventListener('submit', (event) => {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
     const email = String(form.get('email')).trim().toLowerCase();
@@ -2636,42 +2804,57 @@ function renderAdmin(user) {
       alert('A user with this email already exists.');
       return;
     }
-    const newUser = {
-      id: `student-${Date.now()}`,
-      name: String(form.get('name')).trim(),
-      email,
-      password: String(form.get('password')),
-      role: 'student',
-      createdAt: new Date().toISOString()
-    };
+    const newUser = {id: `student-${Date.now()}`, name: String(form.get('name')).trim(), email, password: String(form.get('password')), role: 'student', createdAt: new Date().toISOString()};
     state.users.push(newUser);
     state.assignments[newUser.id] = [];
+    activeStudentId = newUser.id;
     saveState();
     renderAdmin(user);
   });
-
+  document.querySelectorAll('[data-select-student]').forEach((button) => button.addEventListener('click', () => {
+    activeStudentId = button.dataset.selectStudent;
+    renderAdmin(user);
+  }));
   document.querySelectorAll('[data-assign]').forEach((input) => {
     input.addEventListener('change', () => {
       const studentId = input.dataset.assign;
       const targetCourseId = input.dataset.assignCourse;
       state.assignments[studentId] = state.assignments[studentId] || [];
-      if (input.checked && !state.assignments[studentId].includes(targetCourseId)) {
-        state.assignments[studentId].push(targetCourseId);
-      }
-      if (!input.checked) {
-        state.assignments[studentId] = state.assignments[studentId].filter((id) => id !== targetCourseId);
-      }
+      if (input.checked && !state.assignments[studentId].includes(targetCourseId)) state.assignments[studentId].push(targetCourseId);
+      if (!input.checked) state.assignments[studentId] = state.assignments[studentId].filter((id) => id !== targetCourseId);
       saveState();
       renderAdmin(user);
     });
   });
-
-  document.querySelectorAll('[data-view-student]').forEach((button) => {
-    button.addEventListener('click', () => {
-      activeStudentId = button.dataset.viewStudent;
-      navigate({view: 'student-report', studentId: activeStudentId});
-    });
-  });
+  document.querySelector('[data-save-assignments]')?.addEventListener('click', () => alert('Selected course access has been saved.'));
+  document.querySelectorAll('[data-approve-request]').forEach((button) => button.addEventListener('click', () => {
+    const request = (state.unlockRequests || []).find((item) => item.id === button.dataset.approveRequest);
+    if (!request) return;
+    state.assignments[request.userId] = state.assignments[request.userId] || [];
+    if (!state.assignments[request.userId].includes(request.courseId)) state.assignments[request.userId].push(request.courseId);
+    request.status = 'approved';
+    saveState();
+    renderAdmin(user);
+  }));
+  document.querySelectorAll('[data-reject-request]').forEach((button) => button.addEventListener('click', () => {
+    const request = (state.unlockRequests || []).find((item) => item.id === button.dataset.rejectRequest);
+    if (!request) return;
+    request.status = 'rejected';
+    saveState();
+    renderAdmin(user);
+  }));
+  document.querySelectorAll('[data-view-student]').forEach((button) => button.addEventListener('click', () => {
+    activeStudentId = button.dataset.viewStudent;
+    navigate({view: 'student-report', studentId: activeStudentId});
+  }));
+  document.querySelector('[data-jump-assign]')?.addEventListener('click', () => document.querySelector('#admin-courses')?.scrollIntoView({behavior: 'smooth'}));
+  document.querySelectorAll('[data-reset-password]').forEach((button) => button.addEventListener('click', () => alert('Temporary reset password: Learn123')));
+  document.querySelectorAll('[data-remove-access]').forEach((button) => button.addEventListener('click', () => {
+    if (!confirm('Remove all course access for this student?')) return;
+    state.assignments[button.dataset.removeAccess] = [];
+    saveState();
+    renderAdmin(user);
+  }));
 }
 
 function renderStudentReport(adminUser) {
