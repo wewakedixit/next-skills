@@ -1789,10 +1789,11 @@ const seoCourseLessons = [
       }
     ],
     practice: [
-      'Choose one website and write its SEO mission in one sentence.',
-      'List 5 searches that ideal customers may type.',
-      'Mark the search intent for each search: learn, compare, buy, or local.',
-      'Pick one page that should answer one of those searches better.'
+      'Project business: SmileCare Dental Clinic, a local clinic in Pune offering dental checkups, teeth cleaning, teeth whitening, braces, root canal treatment, and emergency dental care.',
+      'Write the SEO mission in one sentence: “Help people in Pune find clear, trustworthy dental treatment information and book an appointment with SmileCare.”',
+      'List 5 searches patients may type, such as “dentist near me,” “teeth cleaning cost in Pune,” “root canal treatment Pune,” “braces dentist Pune,” and “emergency dentist Pune.”',
+      'Mark the intent for each search: local, price research, treatment information, comparison, or urgent booking.',
+      'Choose the most important page to improve first: a “Dental Clinic in Pune” service page or a “Book Dental Appointment” page.'
     ],
     mistakes: [
       'Thinking SEO is only keywords.',
@@ -1873,10 +1874,11 @@ const seoCourseLessons = [
       }
     ],
     practice: [
-      'Write 10 questions your customers ask before buying.',
-      'Group them into 3 topic clusters.',
-      'Choose one main page for each cluster.',
-      'Mark whether each searcher wants to learn, compare, buy, or find a local provider.'
+      'For SmileCare Dental Clinic, write 12 patient questions, such as “Is teeth cleaning painful?”, “How much does root canal cost?”, and “How long do braces take?”',
+      'Group the questions into 4 clusters: dental checkup, teeth cleaning/whitening, braces, and root canal/emergency care.',
+      'Choose one main page for each cluster, such as “Teeth Cleaning in Pune” or “Root Canal Treatment in Pune.”',
+      'Mark the intent for each cluster: learn, compare cost, choose a clinic, or book quickly.',
+      'Create a simple content map showing which keyword cluster belongs to which SmileCare page.'
     ],
     mistakes: [
       'Choosing only high-volume keywords with unclear intent.',
@@ -1957,10 +1959,11 @@ const seoCourseLessons = [
       }
     ],
     practice: [
-      'Pick one page and rewrite its title tag.',
-      'Write one meta description under 160 characters.',
-      'Add 5 helpful H2 headings.',
-      'Check whether the first paragraph clearly answers the searcher’s need.'
+      'Pick SmileCare’s “Teeth Cleaning in Pune” page as the practice page.',
+      'Write a title tag: “Teeth Cleaning in Pune | SmileCare Dental Clinic.”',
+      'Write a meta description under 160 characters explaining the benefit, location, and appointment option.',
+      'Add 5 helpful H2 headings: What is teeth cleaning, benefits, cost, process, after-care, and FAQs.',
+      'Write the first paragraph so a nervous patient quickly understands what teeth cleaning is, who needs it, and how to book.'
     ],
     mistakes: [
       'Using the same title on many pages.',
@@ -2040,10 +2043,11 @@ const seoCourseLessons = [
       }
     ],
     practice: [
-      'Find 3 pages that should link to your most important page.',
-      'Write natural anchor text for each link.',
-      'Review 5 images and improve their alt text.',
-      'Add 3 trust signals to one service or product page.'
+      'Choose SmileCare’s “Root Canal Treatment in Pune” page as the main page for this lesson.',
+      'Find 3 internal links to add: from the dental checkup page, tooth pain blog, and emergency dentist page.',
+      'Write natural anchor text, such as “root canal treatment options” and “book a root canal consultation.”',
+      'Write alt text for 5 clinic images, such as dentist checking patient teeth, SmileCare reception, and sterilized dental tools.',
+      'Add 3 trust signals to the root canal page: dentist experience, real patient reviews, safety/sterilization process, or clinic address and phone number.'
     ],
     mistakes: [
       'Linking every keyword to the same page.',
@@ -2123,10 +2127,11 @@ const seoCourseLessons = [
       }
     ],
     practice: [
-      'Check one important URL in Search Console URL Inspection.',
-      'Open the same page on mobile and write down any friction.',
-      'List 3 technical questions to ask a developer.',
-      'Write one issue note with URL, problem, and expected fix.'
+      'Use SmileCare’s “Book Appointment” page as the technical SEO practice URL.',
+      'Check whether the page opens properly on mobile, whether the form is easy to use, and whether the call button works.',
+      'Write 3 developer questions: Can Google index this page? Is the page fast on mobile? Are appointment form errors easy to understand?',
+      'Draft one technical issue note: URL, problem, why it matters for patients, and expected fix.',
+      'Create a small technical checklist for SmileCare: HTTPS, mobile friendly, fast images, sitemap submitted, important pages indexable, and no broken appointment links.'
     ],
     mistakes: [
       'Treating every warning as equally urgent.',
@@ -2206,10 +2211,11 @@ const seoCourseLessons = [
       }
     ],
     practice: [
-      'List 10 websites or communities that genuinely relate to your business.',
-      'Write one useful asset idea people may share.',
-      'Check whether business name, address, and phone are consistent online.',
-      'Draft one ethical outreach message.'
+      'List 10 real places where SmileCare could build reputation: local health directories, Pune community websites, school health event pages, dental association pages, and local business listings.',
+      'Create one link-worthy asset idea: “Free Dental Checkup Checklist for Families in Pune.”',
+      'Check whether SmileCare’s name, address, phone number, and website are consistent across Google Business Profile and local directories.',
+      'Draft one ethical outreach message to a local school or community group offering a useful dental awareness session.',
+      'Write one review request message that asks real patients for honest feedback without pressuring them.'
     ],
     mistakes: [
       'Buying links that exist only to manipulate rankings.',
@@ -2289,10 +2295,11 @@ const seoCourseLessons = [
       }
     ],
     practice: [
-      'List 5 red flags in an SEO proposal.',
-      'Review one page for keyword stuffing.',
-      'Check whether any page is copied or nearly duplicated.',
-      'Write a safer alternative for one risky tactic.'
+      'Imagine SmileCare receives an SEO offer promising “500 backlinks in 3 days and guaranteed rank 1.” List why this is risky.',
+      'Review the SmileCare “Braces in Pune” page and check whether any phrase is repeated unnaturally.',
+      'Check whether SmileCare has copied city pages like “Dentist in Pune,” “Dentist in Mumbai,” and “Dentist in Delhi” with only city names changed.',
+      'Write a safer alternative: create genuinely useful pages only for locations SmileCare actually serves.',
+      'Create a “Do not approve” checklist for SmileCare: fake reviews, hidden text, copied content, bulk paid links, and doorway pages.'
     ],
     mistakes: [
       'Trusting guaranteed ranking promises.',
@@ -2372,10 +2379,11 @@ const seoCourseLessons = [
       }
     ],
     practice: [
-      'Choose one page and add a short direct answer near the top.',
-      'Add 3 original details competitors cannot easily copy.',
-      'Use AI to list possible user questions, then rewrite answers in your own expert voice.',
-      'Check whether every claim can be trusted or verified.'
+      'Choose SmileCare’s “Teeth Whitening in Pune” page for AI SEO practice.',
+      'Add a short direct answer near the top: what teeth whitening is, who it suits, how long it takes, and when to consult the dentist.',
+      'Add 3 original SmileCare details: dentist advice, real clinic process, safety steps, before/after care guidance, or common patient concerns.',
+      'Use an AI tool to list 10 patient questions about teeth whitening, then rewrite the answers in a dentist-friendly, simple tone.',
+      'Fact-check every claim and remove anything that sounds like a guaranteed medical result.'
     ],
     mistakes: [
       'Publishing AI text without fact-checking.',
@@ -2456,10 +2464,11 @@ const seoCourseLessons = [
       }
     ],
     practice: [
-      'Audit one Google Business Profile for accuracy.',
-      'Write 5 review request message ideas that feel polite and honest.',
-      'List service areas the business truly serves.',
-      'Draft one local FAQ answer.'
+      'Audit SmileCare’s Google Business Profile details: clinic name, category, phone number, website, hours, address, services, and appointment link.',
+      'Write 5 honest review request messages for patients after a successful visit.',
+      'List the real areas SmileCare serves, such as nearby Pune neighborhoods, without adding fake locations.',
+      'Draft one local FAQ: “How do I choose a good dentist near me in Pune?”',
+      'Plan 5 Google Business Profile photos: clinic front, reception, treatment room, dentist team, and sterilization area.'
     ],
     mistakes: [
       'Using fake addresses.',
@@ -2539,10 +2548,11 @@ const seoCourseLessons = [
       }
     ],
     practice: [
-      'Create a weekly SEO checklist with 7 tasks.',
-      'Choose 5 KPIs for one website.',
-      'Pick one page to improve based on a report.',
-      'Write 3 next actions after reviewing data.'
+      'Create a weekly SEO checklist for SmileCare: check Search Console, review top pages, check appointment clicks, review Google Business Profile, respond to reviews, update one page, and record changes.',
+      'Choose 5 KPIs: organic clicks, impressions, appointment form submissions, phone clicks, and Google Business Profile actions.',
+      'Pick one page to improve from the report, such as “Root Canal Treatment in Pune” if impressions are high but clicks are low.',
+      'Write 3 next actions after reviewing data: improve title/meta, add FAQs, add internal links, update trust signals, or fix a technical issue.',
+      'Create a monthly summary format for SmileCare: wins, problems, completed work, next priorities, and business impact.'
     ],
     mistakes: [
       'Reporting only rankings and ignoring leads or useful actions.',
