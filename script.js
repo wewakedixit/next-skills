@@ -3334,7 +3334,419 @@ function digitalMarketingTopicContext(title, group) {
   return base;
 }
 
+function createPracticalSeoLesson(lecture, group, index) {
+  const title = lecture.title;
+  const lower = title.toLowerCase();
+  const sampleSite = 'GreenLeaf Dental Clinic';
+  const sampleUrl = 'greenleafdental.example';
+  const topic = (() => {
+    if (/introduction|overview/.test(lower)) return {
+      theme: 'SEO foundations',
+      promise: 'understand how SEO helps useful pages get discovered by the right searchers',
+      page: 'the whole clinic website',
+      deliverable: 'SEO purpose map',
+      metric: 'organic clicks and qualified appointment enquiries',
+      core: [
+        'SEO means improving pages so search engines can crawl, understand, and show them to people who need them.',
+        'SEO is not a magic ranking switch. It is a patient process of making pages clearer, more helpful, easier to access, and easier to trust.',
+        'A beginner should think in three layers: technical access, useful content, and searcher satisfaction.',
+        'Every SEO task should connect to a business result, not only a ranking position.'
+      ],
+      terms: [
+        ['SEO', 'Search engine optimization: improving a website so it can earn visibility in unpaid search results.'],
+        ['Organic result', 'An unpaid search result shown because the search engine believes it may help the searcher.'],
+        ['Crawling', 'When Googlebot discovers and fetches pages.'],
+        ['Indexing', 'When Google stores and understands a page so it may be eligible to appear in Search.'],
+        ['Ranking', 'The order in which search results appear for a query.']
+      ]
+    };
+    if (/metrics|performance/.test(lower)) return {
+      theme: 'SEO measurement',
+      promise: 'choose the right SEO numbers and avoid misleading reports',
+      page: 'the appointment and service pages',
+      deliverable: 'SEO measurement scorecard',
+      metric: 'impressions, clicks, click-through rate, average position, enquiries, and revenue quality',
+      core: [
+        'Clicks show visits from search, but they do not prove business value by themselves.',
+        'Impressions show visibility. A page can have many impressions and few clicks when the title or snippet is weak.',
+        'Average position is useful as a direction signal, not as the only success score.',
+        'Good SEO reporting explains what changed, why it may have changed, and what action comes next.'
+      ],
+      terms: [
+        ['Impression', 'A search appearance counted when a result is shown to a user.'],
+        ['Click', 'A visit from a search result.'],
+        ['CTR', 'Click-through rate: clicks divided by impressions.'],
+        ['Average position', 'The average ranking position reported for queries or pages.'],
+        ['Conversion', 'A useful business action such as an appointment request.']
+      ]
+    };
+    if (/homepage/.test(lower)) return {
+      theme: 'Homepage SEO',
+      promise: 'turn a homepage into a clear entry point for searchers and visitors',
+      page: 'the homepage',
+      deliverable: 'homepage SEO improvement brief',
+      metric: 'branded clicks, service-page clicks, and appointment button clicks',
+      core: [
+        'The homepage should quickly explain who the business helps, where it operates, and what the visitor can do next.',
+        'A homepage often ranks for brand and broad local searches, but specific services usually need dedicated pages.',
+        'The first screen should contain a clear value proposition, main service links, trust signals, and a next step.',
+        'Homepage SEO fails when the page is beautiful but vague.'
+      ],
+      terms: [
+        ['Value proposition', 'A short promise explaining why a visitor should choose the business.'],
+        ['Primary CTA', 'The main action you want visitors to take.'],
+        ['Service hub', 'A page or section that links to important service pages.'],
+        ['Trust signal', 'Evidence such as reviews, awards, credentials, or years of experience.'],
+        ['Brand query', 'A search that includes the business or brand name.']
+      ]
+    };
+    if (/search console/.test(lower)) return {
+      theme: 'Search Console setup',
+      promise: 'connect a website to Google Search Console and use it as an SEO control room',
+      page: 'Search Console property for the site',
+      deliverable: 'Search Console setup checklist',
+      metric: 'verified property, submitted sitemap, indexed pages, and search performance trends',
+      core: [
+        'Search Console helps you measure Google Search traffic, check indexing, submit sitemaps, and monitor issues.',
+        'Verification proves you control the website property.',
+        'A Domain property gives broader coverage, while URL-prefix properties can be easier for beginners.',
+        'Search Console is for diagnosis and monitoring; it does not guarantee rankings.'
+      ],
+      terms: [
+        ['Property', 'The website or website section added to Search Console.'],
+        ['Verification', 'The process of proving you own or manage the website.'],
+        ['Sitemap', 'A file that lists important URLs for search engines.'],
+        ['URL Inspection', 'A Search Console tool for checking one URL.'],
+        ['Coverage', 'The set of pages Google has discovered and their indexing status.']
+      ]
+    };
+    if (/speed|performance|mobile friendly|mobile/.test(lower)) return {
+      theme: 'Page experience and mobile readiness',
+      promise: 'make SEO pages easier to use on phones and faster for real visitors',
+      page: 'the emergency dentist and booking pages',
+      deliverable: 'mobile and speed action list',
+      metric: 'Core Web Vitals status, mobile usability, bounce indicators, and conversions',
+      core: [
+        'Most searchers on local service sites use phones, so mobile clarity matters as much as desktop design.',
+        'Core Web Vitals measure real-world loading performance, interactivity, and visual stability.',
+        'Speed work should protect the business goal: help people read, trust, and act without friction.',
+        'The best beginner fixes are often image compression, simpler layouts, cleaner scripts, and clearer tap targets.'
+      ],
+      terms: [
+        ['Core Web Vitals', 'Google metrics for loading performance, interactivity, and visual stability.'],
+        ['LCP', 'Largest Contentful Paint: how quickly the main content appears.'],
+        ['INP', 'Interaction to Next Paint: how responsive the page feels after interaction.'],
+        ['CLS', 'Cumulative Layout Shift: how much visible content unexpectedly moves.'],
+        ['Mobile usability', 'How easy a page is to use on a phone screen.']
+      ]
+    };
+    if (/keyword|competition|target keywords|brainstorm|narrow/.test(lower)) return {
+      theme: 'Keyword research',
+      promise: 'choose search phrases based on intent, relevance, and realistic opportunity',
+      page: 'service pages such as dental implants, teeth whitening, and emergency dentist',
+      deliverable: 'keyword map',
+      metric: 'relevant impressions, qualified clicks, and enquiries from mapped pages',
+      core: [
+        'A keyword is not just a word. It is a clue about what the searcher wants.',
+        'Beginners should group keywords by intent: learn, compare, buy/book, local, and brand.',
+        'A page should have one main search purpose, plus related supporting phrases.',
+        'Keyword difficulty is not only tool score; it is also page quality, competition strength, location, trust, and searcher expectations.'
+      ],
+      terms: [
+        ['Keyword', 'A phrase people search when looking for information, products, services, or locations.'],
+        ['Search intent', 'The reason behind the search.'],
+        ['Seed keyword', 'A starting keyword used to discover more related ideas.'],
+        ['Long-tail keyword', 'A more specific phrase, often with clearer intent.'],
+        ['Keyword map', 'A plan that assigns target keywords to specific pages.']
+      ]
+    };
+    if (/title|meta/.test(lower)) return {
+      theme: 'Search result copy',
+      promise: 'write titles and meta descriptions that accurately represent the page and earn better clicks',
+      page: 'the teeth whitening page',
+      deliverable: 'title and snippet rewrite sheet',
+      metric: 'CTR, impressions, and qualified organic clicks',
+      core: [
+        'A title tag should clearly describe the page and help searchers choose the right result.',
+        'Google may use different sources to create title links, so the visible page heading should match the page purpose too.',
+        'A meta description is a short page summary. Google may use it when it helps explain the result.',
+        'Good search result copy is honest, specific, and connected to the page content.'
+      ],
+      terms: [
+        ['Title tag', 'HTML title text that may influence the title link shown in search results.'],
+        ['Title link', 'The clickable headline Google shows for a search result.'],
+        ['Meta description', 'A short page summary that may be used for the search result snippet.'],
+        ['Snippet', 'The descriptive text shown below a search result title.'],
+        ['CTR', 'Click-through rate: the percentage of impressions that became clicks.']
+      ]
+    };
+    if (/image/.test(lower)) return {
+      theme: 'Image SEO',
+      promise: 'help images support both users and search visibility',
+      page: 'before-and-after treatment images and clinic photos',
+      deliverable: 'image optimization checklist',
+      metric: 'image search impressions, page engagement, and faster loading',
+      core: [
+        'Images should be useful, sharp, relevant to nearby text, and not just decoration.',
+        'File names and alt text should describe the image naturally when description helps users.',
+        'Large uncompressed images can slow pages and hurt the visitor experience.',
+        'Image SEO works best when the surrounding page is also clear and useful.'
+      ],
+      terms: [
+        ['Alt text', 'Text that describes an image for accessibility and context.'],
+        ['File name', 'The name of an image file, which can give context when descriptive.'],
+        ['Image compression', 'Reducing image file size while keeping acceptable quality.'],
+        ['Lazy loading', 'Loading images when they are needed rather than all at once.'],
+        ['Structured data', 'Markup that helps search engines understand page content.']
+      ]
+    };
+    if (/heading|outgoing|internal|copy optimization/.test(lower)) return {
+      theme: 'On-page copy and links',
+      promise: 'structure page content so humans and search engines understand it faster',
+      page: 'the dental implants page',
+      deliverable: 'on-page optimization checklist',
+      metric: 'query coverage, engagement, and enquiries',
+      core: [
+        'Headings should organize the page, not merely make text look big.',
+        'Helpful internal links guide visitors to related pages and help search engines discover page relationships.',
+        'Outgoing links can support trust when they point to useful, relevant references.',
+        'On-page copy should answer the questions a real searcher has before they book or buy.'
+      ],
+      terms: [
+        ['H1', 'The main visible heading of a page.'],
+        ['Subheading', 'A smaller heading that organizes a section.'],
+        ['Anchor text', 'The clickable words in a link.'],
+        ['Internal link', 'A link from one page on the same website to another.'],
+        ['Topical relevance', 'How closely the content matches the subject and search intent.']
+      ]
+    };
+    if (/backlink|links|authority|poster boy|relationships|social shares/.test(lower)) return {
+      theme: 'Links and authority',
+      promise: 'earn trustworthy mentions without falling into spammy link tactics',
+      page: 'the clinic website and local reputation assets',
+      deliverable: 'ethical link earning plan',
+      metric: 'quality mentions, referral traffic, branded searches, and organic growth',
+      core: [
+        'Links can help discovery and authority, but manipulative link schemes can create risk.',
+        'The safest link building starts with real value: helpful content, local relationships, PR, partnerships, and useful resources.',
+        'A good backlink is contextually relevant, earned for a reason, and likely to be useful for visitors.',
+        'Social shares are not a substitute for SEO, but shareable content can help more people discover and reference your work.'
+      ],
+      terms: [
+        ['Backlink', 'A link from another website to your site.'],
+        ['Link spam', 'Links created mainly to manipulate search rankings.'],
+        ['Digital PR', 'Earning online coverage through stories, expertise, data, or useful resources.'],
+        ['Referral traffic', 'Visits from links on other websites.'],
+        ['Authority', 'A broad idea of trust and reputation, not a single public score from Google.']
+      ]
+    };
+    if (/local/.test(lower)) return {
+      theme: 'Local SEO',
+      promise: 'help a local business become easier to find by nearby customers',
+      page: 'location page and local service pages',
+      deliverable: 'local SEO action plan',
+      metric: 'calls, direction requests, local organic clicks, and appointment enquiries',
+      core: [
+        'Local SEO connects service, location, trust, and convenience.',
+        'A local page should clearly show what the business does, where it serves, how to contact it, and why people trust it.',
+        'Consistent business information helps users and platforms avoid confusion.',
+        'LocalBusiness structured data can help search engines understand business details, but it does not replace a useful local page.'
+      ],
+      terms: [
+        ['Local intent', 'A search where the person wants something near a place or service area.'],
+        ['NAP', 'Name, address, and phone number.'],
+        ['Service area', 'The location range where a business serves customers.'],
+        ['LocalBusiness schema', 'Structured data that describes local business information.'],
+        ['Review signal', 'Customer feedback that can influence trust and decisions.']
+      ]
+    };
+    return {
+      theme: 'Practical SEO task',
+      promise: 'turn an SEO concept into a clear page improvement',
+      page: 'one important business page',
+      deliverable: 'SEO action sheet',
+      metric: 'qualified clicks and useful conversions',
+      core: [
+        'SEO work should start with a page, a searcher, and a reason.',
+        'Every improvement should make the page easier to understand, easier to access, or more useful.',
+        'A beginner should document the before state, the change, and the result.',
+        'The best SEO habit is steady improvement based on evidence.'
+      ],
+      terms: [
+        ['SEO task', 'A practical improvement that supports search visibility or user usefulness.'],
+        ['Page goal', 'The business action a page should support.'],
+        ['Search intent', 'The reason behind a search.'],
+        ['Optimization', 'Improving a page or site so it better serves users and search engines.'],
+        ['Result review', 'Checking data after a change to learn what happened.']
+      ]
+    };
+  })();
+
+  const examples = [
+    {
+      title: `${sampleSite}: beginner example`,
+      before: `${sampleSite} has a page that says “Quality dental care” but does not explain the service, location, price range, trust proof, or next step.`,
+      after: `The student rewrites the page around ${topic.theme.toLowerCase()}: clear heading, helpful answer sections, relevant internal links, and a visible “Book consultation” action.`,
+      lesson: `SEO improves when the page becomes more useful and easier to understand for the exact searcher.`
+    },
+    {
+      title: 'Wrong approach vs right approach',
+      before: `Wrong approach: add repeated keywords everywhere and hope Google ranks the page.`,
+      after: `Right approach: understand the search intent, improve the page structure, answer real questions, and measure ${topic.metric}.`,
+      lesson: 'Modern SEO is about usefulness, clarity, access, and trust.'
+    },
+    {
+      title: 'Student portfolio example',
+      before: 'The student only says “I optimized a page.”',
+      after: `The student documents the page, search intent, changes made, checklist completed, and expected metric. This becomes a portfolio-ready SEO case study.`,
+      lesson: 'SEO work is easier to prove when decisions are written clearly.'
+    }
+  ];
+
+  return {
+    title,
+    duration: '60 minutes',
+    goal: `Understand ${topic.theme.toLowerCase()} deeply enough to create a practical ${topic.deliverable} for ${sampleSite}.`,
+    outcomes: [
+      `Explain what ${topic.theme.toLowerCase()} means and why it matters.`,
+      `Identify where this topic applies on ${sampleUrl}.`,
+      `Create a ${topic.deliverable} for ${topic.page}.`,
+      `Choose the right metric to review after implementation.`
+    ],
+    sourceLinks: [
+      ['Google Search Central', 'SEO Starter Guide', 'https://developers.google.com/search/docs/fundamentals/seo-starter-guide'],
+      ['Google Search Central', 'Title links', 'https://developers.google.com/search/docs/appearance/title-link'],
+      ['Google Search Central', 'Meta descriptions and snippets', 'https://developers.google.com/search/docs/appearance/snippet'],
+      ['Google Search Central', 'Core Web Vitals', 'https://developers.google.com/search/docs/appearance/core-web-vitals'],
+      ['Google Search Central', 'Image SEO', 'https://developers.google.com/search/docs/appearance/google-images'],
+      ['Google Search Central', 'Spam policies', 'https://developers.google.com/search/docs/essentials/spam-policies'],
+      ['Google Search Central', 'Sitemaps', 'https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap'],
+      ['Google Search Central', 'LocalBusiness structured data', 'https://developers.google.com/search/docs/appearance/structured-data/local-business']
+    ],
+    learningPath: {
+      sampleBrand: sampleSite,
+      brief: [
+        `This lesson is about ${topic.theme.toLowerCase()}. The goal is not to memorize SEO jargon; the goal is to understand what should change on a real website and why.`,
+        `We will use ${sampleSite}, a local dental clinic, as the example site. The clinic wants more qualified appointments from people searching for dental services nearby.`,
+        `By the end of this lesson, the student should have a clear ${topic.deliverable}, not just notes.`
+      ],
+      scenario: [
+        `${sampleSite} has a website at ${sampleUrl}. It offers general dentistry, dental implants, teeth whitening, emergency appointments, and children’s dentistry.`,
+        `The owner says, “We want more patients from Google, but we do not know what to fix first.” Your job is to look at ${topic.page} and decide the best practical SEO improvement.`,
+        `The lesson theme is ${topic.theme.toLowerCase()}, so every decision should connect to ${topic.promise}.`
+      ],
+      coreIdeas: topic.core,
+      workflow: [
+        `Define the page and searcher: choose ${topic.page} and write who is searching.`,
+        'Identify the intent: decide whether the searcher wants information, comparison, booking, local directions, or urgent help.',
+        'Audit the current page: check title, heading, content clarity, trust proof, links, mobile experience, and next action.',
+        `Create the improvement: write the practical changes needed for ${topic.deliverable}.`,
+        `Measure the result: track ${topic.metric} after the change has had enough time to collect data.`,
+        'Write the learning: explain what improved, what did not, and what the next SEO action should be.'
+      ],
+      worksheet: [
+        `Page/asset: Which page from ${sampleUrl} are you improving?`,
+        'Searcher: Who is searching and what do they need right now?',
+        'Intent: Are they learning, comparing, booking, or looking locally?',
+        `Current issue: What is weak about this page for ${topic.theme.toLowerCase()}?`,
+        'Improvement: What exactly will you change?',
+        `Metric: Which number will show whether ${topic.promise}?`,
+        'Risk check: Could this change confuse users, hide important information, or look spammy?',
+        'Next action: What will you review one week or one month later?'
+      ],
+      examples,
+      practiceLab: [
+        `Open or imagine the ${topic.page} for ${sampleSite}.`,
+        `Write a one-paragraph explanation of what ${topic.theme.toLowerCase()} means for this page.`,
+        'List three weaknesses that could stop the page from helping searchers.',
+        'Write three specific improvements using clear, non-technical language.',
+        `Create the ${topic.deliverable}.`,
+        `Choose one metric from ${topic.metric} and explain why it matches the task.`
+      ],
+      checkpoints: [
+        'The page has one clear search purpose.',
+        'The main heading and content match the searcher’s intent.',
+        'The page gives enough detail for a beginner visitor to make a decision.',
+        'The next action is visible and natural.',
+        'The page avoids keyword stuffing, fake promises, and manipulative shortcuts.',
+        `The chosen metric matches the goal: ${topic.metric}.`,
+        'The improvement can be explained to a client in everyday language.'
+      ],
+      docTitle: `${title} - Practical SEO worksheet`
+    },
+    sections: {
+      what: [`${topic.theme} helps ${topic.promise}.`],
+      why: ['It turns SEO from guesswork into a page-level improvement process.'],
+      where: [`Use it on ${topic.page}.`],
+      how: ['Follow the lesson workflow and complete the downloadable worksheet.']
+    },
+    glossary: topic.terms,
+    examples: [],
+    practice: [],
+    mistakes: [
+      'Trying to rank every page for every keyword.',
+      'Making changes only for search engines while ignoring human visitors.',
+      'Measuring rankings without checking whether the traffic creates useful business actions.'
+    ],
+    quiz: [
+      {
+        question: `What is the main purpose of “${title}”?`,
+        options: [`To help students understand ${topic.theme.toLowerCase()} and create a practical SEO improvement.`, 'To repeat keywords as many times as possible.', 'To hide content from visitors.'],
+        answer: 0
+      },
+      {
+        question: `Which sample site is used in this lesson?`,
+        options: [sampleSite, 'A random fashion blog', 'A private bank dashboard'],
+        answer: 0
+      },
+      {
+        question: `What should the student create from this lesson?`,
+        options: [`A ${topic.deliverable}.`, 'A copied competitor page.', 'A list of fake reviews.'],
+        answer: 0
+      },
+      {
+        question: 'Why do we identify search intent before changing a page?',
+        options: ['Because the page should answer the real reason behind the search.', 'Because intent replaces all page content.', 'Because it removes the need to measure results.'],
+        answer: 0
+      },
+      {
+        question: `Which metric is most relevant to this lesson?`,
+        options: [topic.metric, 'How many times the student refreshes the browser.', 'The number of colors used in the design only.'],
+        answer: 0
+      },
+      {
+        question: 'What is a safe SEO habit for beginners?',
+        options: ['Document the page, issue, change, and result.', 'Buy links from unknown sellers.', 'Stuff the same phrase into every sentence.'],
+        answer: 0
+      },
+      {
+        question: `For ${sampleSite}, what makes an SEO improvement useful?`,
+        options: ['It helps searchers understand, trust, and take the right next step.', 'It makes the page longer without purpose.', 'It hides important information.'],
+        answer: 0
+      },
+      {
+        question: 'What should happen after an SEO change is published?',
+        options: ['Review the right metric after enough time has passed.', 'Declare success immediately without data.', 'Delete the page from the website.'],
+        answer: 0
+      },
+      {
+        question: 'Which action is risky and should be avoided?',
+        options: ['Using manipulative shortcuts that violate spam policies.', 'Making headings clearer.', 'Improving helpful content.'],
+        answer: 0
+      },
+      {
+        question: 'What does the downloadable worksheet help the student do?',
+        options: ['Turn the lesson into a clear page-level SEO action plan.', 'Skip the practice lab.', 'Avoid explaining decisions.'],
+        answer: 0
+      }
+    ]
+  };
+}
+
 function createDigitalMarketingLesson(lecture, group, index) {
+  if (group.id === 'dm-practical-seo') {
+    return createPracticalSeoLesson(lecture, group, index);
+  }
   const title = lecture.title;
   const context = digitalMarketingTopicContext(title, group);
   const sampleBrand = 'Bloom & Brew Cafe';
@@ -3818,6 +4230,20 @@ function courseLogo(item) {
 }
 
 function courseSourceLinks(targetCourse) {
+  if (targetCourse.id === 'dm-practical-seo') {
+    return [
+      ['Google Search Central', 'SEO Starter Guide', 'https://developers.google.com/search/docs/fundamentals/seo-starter-guide'],
+      ['Google Search Central', 'Title links in Search', 'https://developers.google.com/search/docs/appearance/title-link'],
+      ['Google Search Central', 'Meta descriptions and snippets', 'https://developers.google.com/search/docs/appearance/snippet'],
+      ['Google Search Central', 'Core Web Vitals', 'https://developers.google.com/search/docs/appearance/core-web-vitals'],
+      ['Google Search Central', 'Image SEO best practices', 'https://developers.google.com/search/docs/appearance/google-images'],
+      ['Google Search Central', 'Spam policies', 'https://developers.google.com/search/docs/essentials/spam-policies'],
+      ['Google Search Central', 'Build and submit a sitemap', 'https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap'],
+      ['Google Search Central', 'LocalBusiness structured data', 'https://developers.google.com/search/docs/appearance/structured-data/local-business'],
+      ['Search Console Help', 'Core Web Vitals report', 'https://support.google.com/webmasters/answer/9205520'],
+      ['Search Console Help', 'Sitemaps report', 'https://support.google.com/webmasters/answer/7451001']
+    ];
+  }
   if (targetCourse.id.startsWith('dm-')) {
     return [];
   }
@@ -5008,6 +5434,61 @@ function listItems(items) {
   return `<ul>${items.map((item) => `<li>${item}</li>`).join('')}</ul>`;
 }
 
+function lessonDocHtml(lesson) {
+  const path = lesson.learningPath || {};
+  const section = (heading, body) => `<h2>${escapeHtml(heading)}</h2>${body}`;
+  const list = (items = []) => `<ul>${items.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}</ul>`;
+  const examples = (path.examples || []).map((example) => `
+    <h3>${escapeHtml(example.title)}</h3>
+    <p><strong>Before:</strong> ${escapeHtml(example.before)}</p>
+    <p><strong>After:</strong> ${escapeHtml(example.after)}</p>
+    <p><strong>Lesson:</strong> ${escapeHtml(example.lesson)}</p>
+  `).join('');
+  const terms = (lesson.glossary || []).map(([term, definition]) => `<tr><td>${escapeHtml(term)}</td><td>${escapeHtml(definition)}</td></tr>`).join('');
+  const worksheet = (path.worksheet || []).map((item) => `<p><strong>${escapeHtml(item)}</strong></p><p>____________________________________________________________</p>`).join('');
+  return `
+    <!doctype html>
+    <html>
+      <head>
+        <meta charset="utf-8" />
+        <title>${escapeHtml(path.docTitle || lesson.title)}</title>
+        <style>
+          body { font-family: Arial, sans-serif; color: #111; line-height: 1.55; }
+          h1 { font-size: 28px; margin-bottom: 6px; }
+          h2 { margin-top: 28px; border-bottom: 1px solid #ddd; padding-bottom: 6px; }
+          h3 { margin-top: 18px; }
+          table { border-collapse: collapse; width: 100%; }
+          td { border: 1px solid #ddd; padding: 8px; vertical-align: top; }
+          .meta { color: #555; }
+        </style>
+      </head>
+      <body>
+        <h1>${escapeHtml(lesson.title)}</h1>
+        <p class="meta">${escapeHtml(path.docTitle || 'NextSkills lesson document')}</p>
+        <p>${escapeHtml(lesson.goal)}</p>
+        ${section('Lesson Map', list(path.brief))}
+        ${section('Core Ideas', list(path.coreIdeas))}
+        ${section('Working Method', list(path.workflow))}
+        ${section('Worksheet', worksheet)}
+        ${section('Examples', examples)}
+        ${section('Practice Lab', list(path.practiceLab))}
+        ${section('Decision Checklist', list(path.checkpoints))}
+        ${section('Terminology', `<table>${terms}</table>`)}
+      </body>
+    </html>
+  `;
+}
+
+function downloadLessonDoc(lesson) {
+  const blob = new Blob([lessonDocHtml(lesson)], {type: 'application/msword'});
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `${lesson.title.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '')}-worksheet.doc`;
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
 function renderDigitalMarketingLesson(lesson) {
   const path = lesson.learningPath;
   if (!path) return '';
@@ -5027,9 +5508,17 @@ function renderDigitalMarketingLesson(lesson) {
     <section class="dm-scenario-card">
       <div>
         <span>Sample Brand</span>
-        <h4>Bloom & Brew Cafe</h4>
+        <h4>${escapeHtml(path.sampleBrand || 'Bloom & Brew Cafe')}</h4>
       </div>
       ${path.scenario.map((item) => `<p>${item}</p>`).join('')}
+    </section>
+
+    <section class="dm-download-card">
+      <div>
+        <strong>Download lesson document</strong>
+        <span>Includes terminology, examples, worksheet, practice lab, decision checklist, and working method.</span>
+      </div>
+      <button class="button secondary" data-download-lesson-doc>Download .doc</button>
     </section>
 
     <section class="dm-workshop-section">
@@ -5270,6 +5759,7 @@ function renderLesson(user) {
     });
   });
   document.querySelectorAll('[data-start-test]').forEach((button) => button.addEventListener('click', () => startTest(user, lessonIndex)));
+  document.querySelector('[data-download-lesson-doc]')?.addEventListener('click', () => downloadLessonDoc(lesson));
   document.querySelector('[data-next-lesson]')?.addEventListener('click', () => {
     if (canOpenNext) navigate({view: 'course', courseId: course.id, lesson: nextLessonIndex});
   });

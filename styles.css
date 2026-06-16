@@ -3527,6 +3527,33 @@ footer {
   font-size: 24px;
 }
 
+.dm-download-card {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: center;
+  padding: 18px;
+  border: 1px solid #dedee3;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.dm-download-card div {
+  display: grid;
+  gap: 5px;
+}
+
+.dm-download-card strong {
+  color: #000;
+  font-size: 17px;
+}
+
+.dm-download-card span {
+  color: #62666d;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
 .dm-idea-grid,
 .dm-check-grid {
   display: grid;
