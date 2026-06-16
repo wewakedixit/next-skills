@@ -3855,11 +3855,6 @@ function renderLogin() {
             ${authMode === 'student' ? `<p class="auth-switch">New student? <button type="button" data-auth-mode="signup">Signup request</button></p>` : ''}
           </form>
         `}
-        <div class="demo-credentials compact">
-          <strong>Demo logins</strong>
-          <span>Admin: admin@nextskills.local / admin123</span>
-          <span>Student: student@nextskills.local / student123</span>
-        </div>
       </section>
     </section>
   `);
