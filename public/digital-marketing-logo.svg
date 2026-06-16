@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Digital marketing course logo</title>
+  <desc id="desc">A minimal growth chart and play symbol in NextSkills colors.</desc>
+  <rect width="64" height="64" rx="14" fill="#f4f6f8"/>
+  <path d="M16 45V28" stroke="#111" stroke-width="5" stroke-linecap="round"/>
+  <path d="M28 45V20" stroke="#2d6bff" stroke-width="5" stroke-linecap="round"/>
+  <path d="M40 45V33" stroke="#27c6b6" stroke-width="5" stroke-linecap="round"/>
+  <path d="M14 48h38" stroke="#111" stroke-width="4" stroke-linecap="round"/>
+  <path d="M43 15l9 6-9 6z" fill="#111"/>
+</svg>

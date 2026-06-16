@@ -3422,6 +3422,46 @@ footer {
   font-size: 17px;
 }
 
+.video-lesson-panel {
+  display: grid;
+  gap: 16px;
+}
+
+.video-lesson-panel video {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 1px solid #dedee3;
+  border-radius: 12px;
+  background: #000;
+}
+
+.video-source-card {
+  display: grid;
+  gap: 8px;
+  padding: 18px;
+  border: 1px solid #dedee3;
+  border-radius: 10px;
+  background: #f7f7f8;
+}
+
+.video-source-card strong {
+  color: #000;
+  font-size: 17px;
+}
+
+.video-source-card span {
+  color: #202124;
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.video-source-card em {
+  color: #62666d;
+  font-size: 14px;
+  font-style: normal;
+  line-height: 1.55;
+}
+
 .notes-toolbar {
   display: flex;
   flex-wrap: wrap;

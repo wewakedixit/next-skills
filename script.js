@@ -2823,6 +2823,400 @@ const seoCourseVisuals = lessonVisuals.slice(0, seoCourseLessons.length).map((vi
   ][index]
 }));
 
+const digitalMarketingVideoGroups = [
+  {
+    id: 'dm-foundations-market-research',
+    title: 'Digital Marketing Foundations and Market Research',
+    subtitle: 'Understand digital marketing basics, useful tools, and market research before running campaigns.',
+    focus: 'digital marketing strategy and customer research',
+    lectures: `1|Course Overview|1 Course Overview.mp4
+2|4 Best Free Digital Marketing Tools to Go Viral|2 4 Best Free Digital Marketing Tools to Go Viral.mp4
+6|Digital Marketing Demystified in 5 Mins!|6 Digital Marketing Demystified in 5 Mins!.mp4
+7|Market Research Intro|7 Market Research Intro.mp4
+8|How to Find a Hungry-to-Buy Audience with 3 Simple Questions|8 How to Find a Hungry-to-Buy Audience with 3 Simple Questions.mp4
+9|How to Get Responses to Your Survey|9 How to Get Responses to Your Survey.mp4
+10|How to Analyse Your Survey Results|10 How to Analyse Your Survey Results.mp4
+11|How to Get Valuable Feedback Without Sending a Survey|11 How to Get Valuable Feedback Without Sending a Survey.mp4`
+  },
+  {
+    id: 'dm-website-wordpress-setup',
+    title: 'Website and WordPress Setup',
+    subtitle: 'Build a simple business website foundation with domain email, SSL, and beginner-friendly website setup.',
+    focus: 'website setup and business web presence',
+    lectures: `13|Why Use Wordpress vs Wix, Weebly etc|13 Why Use Wordpress vs Wix, Weebly etc.mp4
+15|How to Make a Website in 10 Mins - Simple & Easy!|15 How to Make a Website in 10 Mins - Simple & Easy!.mp4
+16|How to Set Up Your Business Email in 5 Mins|16 How to Set Up Your Business Email in 5 Mins.mp4
+17|How to Add Your Domain Email to Gmail|17 How to Add Your Domain Email to Gmail.mp4
+18|How to Activate Your Free SSL Certificate in 1 Click!|18 How to Activate Your Free SSL Certificate in 1 Click!.mp4`
+  },
+  {
+    id: 'dm-email-marketing',
+    title: 'Email Marketing',
+    subtitle: 'Create email lists, opt-ins, subject lines, campaigns, and simple email analytics.',
+    focus: 'email list building and campaigns',
+    lectures: `21|Why Market Your Business with Email|21 Why Market Your Business with Email.mp4
+22|How to Create a Mailchimp Account for FREE|22 How to Create a Mailchimp Account for FREE.mp4
+24|How to Add Opt-Ins & Pop Ups to Your Website for Free|24 How to Add Opt-Ins & Pop Ups to Your Website for Free.mp4
+25|How to Write Email Subject Lines That Get Opened|25 How to Write Email Subject Lines That Get Opened.mp4
+26|How to Create a Email Campaign with Mailchimp|26 How to Create a Email Campaign with Mailchimp.mp4
+27|Email Marketing Analytics|27 Email Marketing Analytics.mp4`
+  },
+  {
+    id: 'dm-copywriting-ai-writing',
+    title: 'Copywriting and AI Writing',
+    subtitle: 'Write better headlines, benefits, calls to action, customer-focused copy, and AI-assisted drafts.',
+    focus: 'copywriting and AI-assisted content',
+    lectures: `29|How to Write Faster with Artificial Intelligence|29 How to Write Faster with Artificial Intelligence.mp4
+30|What is Copywriting|30 What is Copywriting.mp4
+31|The “AIDA” Formula|31 The “AIDA” Formula.mp4
+32|11 Tips for Writing Magnetic Headlines|32 11 Tips for Writing Magnetic Headlines.mp4
+33|How to Flip Features Into Benefits|33 How to Flip Features Into Benefits.mp4
+34|5 Tips to Create an Irresistible Call to Action (CTA)|34 5 Tips to Create an Irresistible Call to Action (CTA).mp4
+35|How to Write Like Your Customers Talk|35 How to Write Like Your Customers Talk.mp4`
+  },
+  {
+    id: 'dm-practical-seo',
+    title: 'Practical SEO',
+    subtitle: 'Learn SEO basics, keyword research, page optimization, backlinks, local SEO, and Search Console setup.',
+    focus: 'practical search engine optimization',
+    lectures: `37|Introduction to SEO|37 Introduction to SEO.mp4
+38|An Overview of SEO|38 An Overview of SEO.mp4
+39|5 SEO Metrics to Measure SEO Performance|39 5 SEO Metrics to Measure SEO Performance.mp4
+40|How to SEO Optimise Your Homepage|40 How to SEO Optimise Your Homepage.mp4
+41|How to Add Your Website to Google Search Console|41 How to Add Your Website to Google Search Console.mp4
+42|How to Improve Website Performance & Speed|42 How to Improve Website Performance & Speed.mp4
+43|How to Take the Google Mobile Friendly Test|43 How to Take the Google Mobile Friendly Test.mp4
+44|How to Do Keyword Research Steps & Strategy|44 How to Do Keyword Research Steps & Strategy.mp4
+45|How to Quickly Brainstorm 1000's of Keyword Ideas|45 How to Quickly Brainstorm 1000's of Keyword Ideas.mp4
+46|How to Narrow Down Your Keyword List (Updated)|46 How to Narrow Down Your Keyword List (Updated).mp4
+47|How to Assess Keyword Competition & Choose Target Keywords|47 How to Assess Keyword Competition & Choose Target Keywords.mp4
+48|How to Write Title Tags Search Engines Love|48 How to Write Title Tags Search Engines Love.mp4
+49|How to Skyrocket Clickthrough Rate with Meta Descriptions|49 How to Skyrocket Clickthrough Rate with Meta Descriptions.mp4
+50|How to Appear in the Google Image Search Results|50 How to Appear in the Google Image Search Results.mp4
+51|Copy Optimization Headings Tags, Outgoing & Internal Links etc|51 Copy Optimization Headings Tags, Outgoing & Internal Links etc.mp4
+52|The Types of Backlinks That Really Matter and How to Get Them|52 The Types of Backlinks That Really Matter and How to Get Them.mp4
+53|How to Maximise Links for Your SEO Campaigns|53 How to Maximise Links for Your SEO Campaigns.mp4
+54|How to Create Content That Generates Links & Social Shares on Autopilot|54 How to Create Content That Generates Links & Social Shares on Autopilot.mp4
+55|How to Leverage Authority Websites and Top of the Search Results|55 How to Leverage Authority Websites and Top of the Search Results.mp4
+56|The Poster Boy Formula - Build Traffic, Backlinks & Valuable Relationships|56 The Poster Boy Formula - Build Traffic, Backlinks & Valuable Relationships.mp4
+57|Student Q&A #1|57 Student Q&A #1.mp4
+58|Student Q&A #2|58 Student Q&A #2.mp4
+59|Local SEO How to Rank Your Local Business in Google|59 Local SEO How to Rank Your Local Business in Google.mp4
+60|Assignment - SEO|60 Assignment - SEO.mp4`
+  },
+  {
+    id: 'dm-youtube-marketing',
+    title: 'YouTube Marketing',
+    subtitle: 'Create a YouTube channel, plan videos, improve thumbnails, use YouTube SEO, and read analytics.',
+    focus: 'YouTube channel growth and video marketing',
+    lectures: `61|YouTube Marketing Overview|61 YouTube Marketing Overview.mp4
+62|How to Create a YouTube Channel (Personal or Brand)|62 How to Create a YouTube Channel (Personal or Brand).mp4
+64|How to Increase YouTube Subscribers by 400_|64 How to Increase YouTube Subscribers by 400_.mp4
+65|YouTube Marketing - 3 Simple Strategies|65 YouTube Marketing - 3 Simple Strategies.mp4
+67|How To Record and Edit Your First YouTube Video|67 How To Record and Edit Your First YouTube Video.mp4
+68|How to Find Video Ideas with Competitor Analysis|68 How to Find Video Ideas with Competitor Analysis.mp4
+69|How To Find Video Ideas With Keyword Research|69 How To Find Video Ideas With Keyword Research.mp4
+70|How To Rank Videos Higher With YouTube SEO|70 How To Rank Videos Higher With YouTube SEO.mp4
+71|How to Add Custom Thumbnails To Get More Views|71 How to Add Custom Thumbnails To Get More Views.mp4
+72|How to Make Eye-Catching Thumbnails for FREE|72 How to Make Eye-Catching Thumbnails for FREE.mp4
+73|How to Make a YouTube Banner for Free|73 How to Make a YouTube Banner for Free.mp4
+74|How To Add YouTube Cards To Get More Views|74 How To Add YouTube Cards To Get More Views.mp4
+75|How to Add YouTube End Screens to Get More Views|75 How to Add YouTube End Screens to Get More Views.mp4
+76|How to Use YouTube Comments to Get More Views|76 How to Use YouTube Comments to Get More Views.mp4
+77|How To Monetize Your YouTube Channel|77 How To Monetize Your YouTube Channel.mp4
+78|How to Use YouTube Analytics to Get More Views|78 How to Use YouTube Analytics to Get More Views.mp4`
+  },
+  {
+    id: 'dm-facebook-organic-marketing',
+    title: 'Facebook Organic Marketing',
+    subtitle: 'Set up and grow Facebook pages using posts, groups, live video, reviews, comments, and insights.',
+    focus: 'organic Facebook page growth',
+    lectures: `80|Why Market Your Business on Facebook|80 Why Market Your Business on Facebook.mp4
+81|Facebook Page Setup|81 Facebook Page Setup.mp4
+82|Facebook Icon & Cover Image|82 Facebook Icon & Cover Image.mp4
+83|Facebook - What to Post|83 Facebook - What to Post.mp4
+84|8 Tactics To Get Your First Page Likes|84 8 Tactics To Get Your First Page Likes.mp4
+85|Secret Way to Boost Page Likes|85 Secret Way to Boost Page Likes.mp4
+86|Facebook Competitions  Contests|86 Facebook Competitions  Contests.mp4
+87|Facebook Groups|87 Facebook Groups.mp4
+88|Facebook Live|88 Facebook Live.mp4
+89|Manage Multiple Facebook Pages|89 Manage Multiple Facebook Pages.mp4
+90|Facebook Comments & Reviews|90 Facebook Comments & Reviews.mp4
+92|Facebook Insights|92 Facebook Insights.mp4`
+  },
+  {
+    id: 'dm-twitter-quora-marketing',
+    title: 'Twitter and Quora Marketing',
+    subtitle: 'Use Twitter/X and Quora for profile optimization, content ideas, community reach, traffic, and analytics.',
+    focus: 'Twitter/X and Quora audience building',
+    lectures: `95|Twitter Marketing - What You Will Learn|95 Twitter Marketing - What You Will Learn.mp4
+96|Twitter Profile Setup|96 Twitter Profile Setup.mp4
+97|Twitter Accounts to Follow|97 Twitter Accounts to Follow.mp4
+98|Twitter Profile Optimisation|98 Twitter Profile Optimisation.mp4
+99|Twitter Features|99 Twitter Features.mp4
+100|Twitter - What to Post|100 Twitter - What to Post.mp4
+101|Twitter Followers|101 Twitter Followers.mp4
+102|Twitter Hashtags|102 Twitter Hashtags.mp4
+103|Twitter Polls|103 Twitter Polls.mp4
+104|Pinned Tweets|104 Pinned Tweets.mp4
+105|Twitter Customer Acquisition|105 Twitter Customer Acquisition.mp4
+106|Twitter @Mention Influencers|106 Twitter @Mention Influencers.mp4
+107|Twitter on Your Website|107 Twitter on Your Website.mp4
+108|Twitter Analytics|108 Twitter Analytics.mp4
+110|Why Market Your Business on Quora|110 Why Market Your Business on Quora.mp4
+111|Quora Marketing Strategy|111 Quora Marketing Strategy.mp4
+112|Quora Account Setup|112 Quora Account Setup.mp4
+113|Quora Account Optimisation|113 Quora Account Optimisation.mp4
+114|Build a List of Questions to Answer|114 Build a List of Questions to Answer.mp4
+116|Format Your Answers for Maximum Clicks|116 Format Your Answers for Maximum Clicks.mp4
+117|Quora Promotion|117 Quora Promotion.mp4
+118|Find Blog Post Ideas with Quora|118 Find Blog Post Ideas with Quora.mp4
+119|Quora Business Page Setup|119 Quora Business Page Setup.mp4
+120|Quora Analytics|120 Quora Analytics.mp4`
+  },
+  {
+    id: 'dm-google-ads-practical',
+    title: 'Google Ads Practical Course',
+    subtitle: 'Set up Google Ads campaigns with audience targeting, budgets, keywords, and attention-grabbing ads.',
+    focus: 'Google Ads campaign setup',
+    lectures: `122|Why Market Your Business with Google Ads|122 Why Market Your Business with Google Ads.mp4
+123|How Google Ads Works|123 How Google Ads Works.mp4
+124|Analyze Your PPC Competition|124 Analyze Your PPC Competition.mp4
+125|Google Ads Account Setup|125 Google Ads Account Setup.mp4
+126|Select the Right Campaign Type|126 Select the Right Campaign Type.mp4
+127|Target Your Audience|127 Target Your Audience.mp4
+128|Determine Bids & Budgets|128 Determine Bids & Budgets.mp4
+129|Advanced Campaign Settings|129 Advanced Campaign Settings.mp4
+130|Choose Profitable Keywords|130 Choose Profitable Keywords.mp4
+131|Write Ads That Grab Attention|131 Write Ads That Grab Attention.mp4`
+  },
+  {
+    id: 'dm-google-analytics-course',
+    title: 'Google Analytics Course',
+    subtitle: 'Set up analytics, goals, ecommerce tracking, reports, dashboards, events, alerts, and campaign tagging.',
+    focus: 'Google Analytics setup and reporting',
+    lectures: `133|Introduction|133 Introduction.mp4
+135|Google Analytics Overview|135 Google Analytics Overview.mp4
+137|How to Set Up Google Analytics & Install the Tracking Code On Your Website|137 How to Set Up Google Analytics & Install the Tracking Code On Your Website.mp4
+138|Update How to Setup & Install Google Analytics 4 + Workaround|138 Update How to Setup & Install Google Analytics 4 + Workaround.mp4
+139|How Google Analytics Works|139 How Google Analytics Works.mp4
+140|How to Add Backup Views|140 How to Add Backup Views.mp4
+141|How to Add Filters to Reporting Views|141 How to Add Filters to Reporting Views.mp4
+142|How to Set Up Goals in Google Analytics|142 How to Set Up Goals in Google Analytics.mp4
+143|How to Set Up Ecommerce Tracking in Google Analytics|143 How to Set Up Ecommerce Tracking in Google Analytics.mp4
+144|Main Tools for Analysis|144 Main Tools for Analysis.mp4
+145|How to Analyse Real Time Reports|145 How to Analyse Real Time Reports.mp4
+146|How to Analyze Audience Reports|146 How to Analyze Audience Reports.mp4
+147|How to Analyze Acquisition Reports|147 How to Analyze Acquisition Reports.mp4
+148|How to Analyze Behaviour Reports|148 How to Analyze Behaviour Reports.mp4
+149|How to Analyse with Segments|149 How to Analyse with Segments.mp4
+150|How to Track Marketing Campaigns with Campaign Tagging|150 How to Track Marketing Campaigns with Campaign Tagging.mp4
+152|How to Use Benchmarking Reports to Grow a Business|152 How to Use Benchmarking Reports to Grow a Business.mp4
+153|How to Set Up Custom Dashboards for In-Depth Analysis|153 How to Set Up Custom Dashboards for In-Depth Analysis.mp4
+154|How to Set Up Event Tracking in Google Analytics|154 How to Set Up Event Tracking in Google Analytics.mp4
+156|How to Set Up Custom Alerts For Traffic SpikesDrops|156 How to Set Up Custom Alerts For Traffic SpikesDrops.mp4
+157|How to Remove Spam Traffic from Google Analytics|157 How to Remove Spam Traffic from Google Analytics.mp4
+158|Use Machine Learning to Understand Your Data (Analytics Intelligence)|158 Use Machine Learning to Understand Your Data (Analytics Intelligence).mp4
+159|How to Manage Multiple Google Analytics Accounts|159 How to Manage Multiple Google Analytics Accounts.mp4
+160|How to Link Google Adwords to Google Analytics|160 How to Link Google Adwords to Google Analytics.mp4`
+  },
+  {
+    id: 'dm-instagram-pinterest-linkedin',
+    title: 'Instagram, Pinterest and LinkedIn Marketing',
+    subtitle: 'Grow organic reach using Instagram, Pinterest, and LinkedIn profiles, content, hashtags, boards, and company pages.',
+    focus: 'organic social media marketing',
+    lectures: `162|Instagram Business Account Setup|162 Instagram Business Account Setup.mp4
+163|Follow These Instagram Accounts|163 Follow These Instagram Accounts.mp4
+164|Instagram Profile Image|164 Instagram Profile Image.mp4
+165|Instagram Bio|165 Instagram Bio.mp4
+166|Instagram Content Creation|166 Instagram Content Creation.mp4
+167|Instagram Reposting|167 Instagram Reposting.mp4
+168|Instagram Followers Hack|168 Instagram Followers Hack.mp4
+169|Instagram Hashtags|169 Instagram Hashtags.mp4
+170|Instagram Stories|170 Instagram Stories.mp4
+171|Instagram @Mention Influencers|171 Instagram @Mention Influencers.mp4
+172|Instagram Spam|172 Instagram Spam.mp4
+173|Instagram Analytics|173 Instagram Analytics.mp4
+174|Shopping on Instagram (New Feature)|174 Shopping on Instagram (New Feature).mp4
+176|Why Market Your Business on Pinterest|176 Why Market Your Business on Pinterest.mp4
+177|Pinterest Account Setup|177 Pinterest Account Setup.mp4
+178|Pinterest Accounts to Follow|178 Pinterest Accounts to Follow.mp4
+179|Pinterest Account Optimisation|179 Pinterest Account Optimisation.mp4
+180|Pinterest Account Verification|180 Pinterest Account Verification.mp4
+181|Pinterest Boards|181 Pinterest Boards.mp4
+182|Pinterest Followers|182 Pinterest Followers.mp4
+183|Pinterest Chrome Extension (Free)|183 Pinterest Chrome Extension (Free).mp4
+184|Pinterest Graphics|184 Pinterest Graphics.mp4
+186|Linkedin Account Setup & Optimisation|186 Linkedin Account Setup & Optimisation.mp4
+187|Linkedin Connections Hack|187 Linkedin Connections Hack.mp4
+188|Linkedin InMail Hack|188 Linkedin InMail Hack.mp4
+189|Linkedin Viral Posts|189 Linkedin Viral Posts.mp4
+190|Linkedin Blog Traffic|190 Linkedin Blog Traffic.mp4
+191|Linkedin Groups|191 Linkedin Groups.mp4
+192|Linkedin Company Page Setup|192 Linkedin Company Page Setup.mp4
+193|Linkedin Ad Credits ($50 Free)|193 Linkedin Ad Credits ($50 Free).mp4`
+  },
+  {
+    id: 'dm-meta-app-advertising',
+    title: 'Facebook, Instagram and App Advertising',
+    subtitle: 'Plan, build, target, optimize, and report on Meta ads, Instagram ads, app ads, pixels, audiences, and business manager.',
+    focus: 'Meta advertising and app promotion',
+    lectures: `195|7 Keys to Facebook Advertising Success|195 7 Keys to Facebook Advertising Success.mp4
+196|Facebook Success Stories|196 Facebook Success Stories.mp4
+197|How to Set Up An Advertising Account|197 How to Set Up An Advertising Account.mp4
+198|Boost Posts vs Ads Create Tool vs Power Editor - Updated|198 Boost Posts vs Ads Create Tool vs Power Editor - Updated.mp4
+199|Key Ad Policies (Facebook & Instagram)|199 Key Ad Policies (Facebook & Instagram).mp4
+200|Facebook Ad Structure|200 Facebook Ad Structure.mp4
+201|Create Your First Ad - Choose a Campaign Objective|201 Create Your First Ad - Choose a Campaign Objective.mp4
+202|Targeting by Location & Demographics|202 Targeting by Location & Demographics.mp4
+203|Targeting By Interests|203 Targeting By Interests.mp4
+204|Targeting By Behaviours & Connection|204 Targeting By Behaviours & Connection.mp4
+205|Ad Placements|205 Ad Placements.mp4
+206|Budgets|206 Budgets.mp4
+207|Ad Creative|207 Ad Creative.mp4
+208|Tips to Write a Winning Ad|208 Tips to Write a Winning Ad.mp4
+209|Place Ad Order|209 Place Ad Order.mp4
+210|Key Advertising Terms|210 Key Advertising Terms.mp4
+211|Ad Reporting|211 Ad Reporting.mp4
+212|How to View Your Billing Summary|212 How to View Your Billing Summary.mp4
+213|Facebook Pixel|213 Facebook Pixel.mp4
+215|Website Custom Audiences|215 Website Custom Audiences.mp4
+216|Email List Custom Audience|216 Email List Custom Audience.mp4
+217|Page Engagement Custom Audiences|217 Page Engagement Custom Audiences.mp4
+218|Video Views Custom Audience|218 Video Views Custom Audience.mp4
+219|Lookalike Audiences|219 Lookalike Audiences.mp4
+220|Page Likes With Custom Audiences|220 Page Likes With Custom Audiences.mp4
+221|Video Ads|221 Video Ads.mp4
+222|Lead Ads|222 Lead Ads.mp4
+223|Instagram Ads|223 Instagram Ads.mp4
+224|Dynamic Ads For Ecommerce|224 Dynamic Ads For Ecommerce.mp4
+225|Collection Ads for Ecommerce|225 Collection Ads for Ecommerce.mp4
+226|Canvas Ads|226 Canvas Ads.mp4
+227|Offer Claim Ads|227 Offer Claim Ads.mp4
+228|Local Awareness Ads - Updated|228 Local Awareness Ads - Updated.mp4
+229|Event Response Ads|229 Event Response Ads.mp4
+230|Power Editor|230 Power Editor.mp4
+231|Easy Split Testing with Power Editor|231 Easy Split Testing with Power Editor.mp4
+232|Bulk Manage with Power Editor|232 Bulk Manage with Power Editor.mp4
+233|Business Manager|233 Business Manager.mp4
+235|Business Manager - Roles & Permissions|235 Business Manager - Roles & Permissions.mp4
+236|Custom Conversions and Standard Events|236 Custom Conversions and Standard Events.mp4
+237|Facebook Marketing Partners (FMP's)|237 Facebook Marketing Partners (FMP's).mp4
+238|How to Start a Facebook Ads Business|238 How to Start a Facebook Ads Business.mp4
+240|App Store Market Research|240 App Store Market Research.mp4
+242|Facebook Ads  App Install & Enggagement Ads|242 Facebook Ads  App Install & Enggagement Ads.mp4
+243|Google Ads  App Install & Engagement Ads|243 Google Ads  App Install & Engagement Ads.mp4
+245|You've Done It! 12 Key Takeaways from This Course|245 You've Done It! 12 Key Takeaways from This Course.mp4`
+  }
+];
+
+function createVideoLesson(lecture, group, index) {
+  const title = lecture.title;
+  const focus = group.focus;
+  return {
+    title,
+    duration: 'Video lesson',
+    videoFile: lecture.file,
+    videoLectureNumber: lecture.number,
+    goal: `Learn ${title.toLowerCase()} as part of ${focus}.`,
+    outcomes: [
+      `Understand the purpose of ${title.toLowerCase()}.`,
+      `Know where this topic fits inside ${focus}.`,
+      'Identify one practical action to apply after watching the video.',
+      'Record notes and next steps for your own business or client project.'
+    ],
+    sections: {
+      what: [
+        `This lesson is based on the video lecture “${title}.”`,
+        `It belongs to the ${group.title} course and focuses on ${focus}.`,
+        'The main idea is to turn the video topic into a practical marketing action, not just watch it passively.'
+      ],
+      why: [
+        'Digital marketing works better when every lesson becomes a small implementation step.',
+        `This topic supports the larger skill of ${focus}.`,
+        'A beginner should watch the video, pause when needed, write notes, and apply the idea to one real business example.'
+      ],
+      where: [
+        'Use this lesson while planning campaigns, improving content, setting up tools, or reviewing marketing performance.',
+        'Apply the idea to your own website, social profile, email list, ad account, analytics account, or client project.',
+        'Save important notes in the Notes tab so you can review them before the assessment.'
+      ],
+      how: [
+        'Watch the full video lesson.',
+        'Write down the 3 most useful points from the video.',
+        'Choose one business example and apply the lesson to that example.',
+        'Complete the hands-on practice before taking the test.',
+        'Use the assessment to confirm that you understand the core idea.'
+      ]
+    },
+    glossary: [
+      ['Digital marketing', 'Using online channels to reach, educate, convert, and retain customers.'],
+      ['Campaign', 'A planned marketing effort with a goal, audience, message, channel, and result measurement.'],
+      ['Audience', 'The group of people a campaign, page, video, or message is trying to reach.'],
+      ['Conversion', 'A valuable action, such as a lead, sale, signup, call, booking, or app install.'],
+      ['Analytics', 'Data used to understand what happened and what to improve next.']
+    ],
+    examples: [
+      {
+        title: 'Local service business',
+        problem: 'A local business wants more enquiries but does not know which online action to take first.',
+        walkthrough: `Use this lesson on “${title}” to choose one small improvement, such as better research, clearer copy, stronger targeting, or cleaner tracking.`,
+        takeaway: 'Each video lesson should create one practical improvement.'
+      },
+      {
+        title: 'Student portfolio project',
+        problem: 'A learner wants to prove they understand digital marketing.',
+        walkthrough: `They watch the lesson, write notes, and apply the concept to a sample business so the learning becomes portfolio-ready.`,
+        takeaway: 'Practice turns video learning into a visible skill.'
+      }
+    ],
+    practice: [
+      `Watch lecture ${lecture.number}: “${title}.”`,
+      'Write 3 key points from the video in your own words.',
+      `Apply the lesson to one sample business and write one action connected to ${focus}.`,
+      'Save one question you still have in the Notes tab.',
+      'Before taking the test, explain the lesson idea to yourself in clear everyday words.'
+    ],
+    mistakes: [
+      'Watching the video without taking notes.',
+      'Trying to apply every tactic at once instead of choosing one action.',
+      'Skipping measurement or follow-up after implementation.'
+    ],
+    quiz: [
+      {
+        question: `What is the best way to study the lesson “${title}”?`,
+        options: ['Watch it, take notes, and apply one action.', 'Skip the video and guess.', 'Only memorize the title.'],
+        answer: 0
+      },
+      {
+        question: `Where does this lesson fit?`,
+        options: [`It supports ${focus}.`, 'It is unrelated to marketing.', 'It is only for graphic design.'],
+        answer: 0
+      },
+      {
+        question: 'What should you do before taking the test?',
+        options: ['Write the key points and complete the practice task.', 'Close the lesson immediately.', 'Ignore the notes section.'],
+        answer: 0
+      }
+    ]
+  };
+}
+
+function parseVideoLectures(group) {
+  return group.lectures.trim().split('\n').map((line, index) => {
+    const [number, title, file] = line.split('|');
+    return createVideoLesson({number: Number(number), title, file}, group, index);
+  });
+}
+
+const digitalMarketingVideoCourses = digitalMarketingVideoGroups.map((group) => ({
+  id: group.id,
+  title: group.title,
+  subtitle: group.subtitle,
+  lessons: parseVideoLectures(group),
+  visuals: []
+}));
+
 const courses = [
   {
     id: 'learn-google-search-console',
@@ -2844,7 +3238,8 @@ const courses = [
     subtitle: 'Learn on-page, off-page, technical, black-hat safety, local, reporting, and AI SEO in easy English.',
     lessons: seoCourseLessons,
     visuals: seoCourseVisuals
-  }
+  },
+  ...digitalMarketingVideoCourses
 ];
 
 let course = courses[0];
@@ -3121,11 +3516,14 @@ function courseProgressPercent(userId, targetCourse) {
 }
 
 function courseLogo(item) {
-  const src = item.id === 'google-search-ads' ? '/google-ads-logo.svg' : item.id === 'seo-course' ? '/seo-logo.svg' : '/search-console-logo.svg';
+  const src = item.id === 'google-search-ads' ? '/google-ads-logo.svg' : item.id === 'seo-course' ? '/seo-logo.svg' : item.id.startsWith('dm-') ? '/digital-marketing-logo.svg' : '/search-console-logo.svg';
   return `<div class="course-icon"><img src="${src}" alt="${escapeHtml(item.title)} logo" /></div>`;
 }
 
 function courseSourceLinks(targetCourse) {
+  if (targetCourse.id.startsWith('dm-')) {
+    return [];
+  }
   if (targetCourse.id === 'seo-course') {
     return [
       ['Google Search Central', 'SEO Starter Guide', 'https://developers.google.com/search/docs/fundamentals/seo-starter-guide'],
@@ -3326,9 +3724,9 @@ function ensureTenQuestions(lesson) {
   lesson.outcomes.forEach((outcome) => {
     if (questions.length >= 10) return;
     const wrong = shuffle([
-      'Change Google rankings instantly without improving pages.',
-      'Ignore Search Console reports after setup.',
-      'Use paid ads instead of checking organic search data.'
+      'Change results instantly without doing the work.',
+      'Ignore notes and skip the practice task.',
+      'Memorize words without understanding the action.'
     ]).slice(0, 2);
     questions.push({
       question: 'Which statement is a real learning outcome from this lesson?',
@@ -3338,10 +3736,10 @@ function ensureTenQuestions(lesson) {
   });
 
   const conceptPrompts = [
-    ['What is the best beginner mindset for this lesson?', 'Use the report as clues for practical next actions.'],
-    ['What should you do before making big website changes?', 'Understand the data and identify the likely cause.'],
-    ['What should a non-technical user focus on?', 'Plain-English decisions, important pages, and useful improvements.'],
-    ['What is a good output after reviewing this lesson?', 'A short action list connected to real pages.']
+    ['What is the best beginner mindset for this lesson?', 'Use the lesson as clues for practical next actions.'],
+    ['What should you do before making big changes?', 'Understand the situation and identify the likely cause.'],
+    ['What should a non-technical user focus on?', 'Clear decisions, important actions, and useful improvements.'],
+    ['What is a good output after reviewing this lesson?', 'A short action list connected to a real project.']
   ];
 
   conceptPrompts.forEach(([question, answer]) => {
@@ -4318,20 +4716,39 @@ function listItems(items) {
   return `<ul>${items.map((item) => `<li>${item}</li>`).join('')}</ul>`;
 }
 
+function renderLessonVideoPanel(lesson) {
+  if (!lesson.videoFile && !lesson.videoUrl) return '';
+  return `
+    <section class="lesson-section video-lesson-panel">
+      <h4>Video lesson</h4>
+      ${lesson.videoUrl ? `
+        <video controls preload="metadata" src="${lesson.videoUrl}"></video>
+      ` : `
+        <div class="video-source-card">
+          <strong>Source video mapped</strong>
+          <span>Lecture ${lesson.videoLectureNumber}: ${escapeHtml(lesson.videoFile)}</span>
+          <em>The original MP4 is available locally. Upload it to a video hosting/CDN service and connect the hosted URL to play it here on the live platform.</em>
+        </div>
+      `}
+    </section>
+  `;
+}
+
 function renderCourseDetailTab(user, lesson, lessonIndex) {
   if (courseDetailTab === 'resources') {
+    const sources = courseSourceLinks(course);
     return `
       <section class="course-source-panel">
-        <h4>Official sources used for this course</h4>
-        <p>These links point to Google’s official documentation and help pages used while preparing this lesson content.</p>
+        <h4>${sources.length ? 'Official sources used for this course' : 'Course source files'}</h4>
+        <p>${sources.length ? 'These links point to Google’s official documentation and help pages used while preparing this lesson content.' : 'This course was created from your recovered MP4 source files. Upload the videos to a video hosting service, then add hosted video URLs to make them playable on the live platform.'}</p>
         <div class="source-link-list">
-          ${courseSourceLinks(course).map(([source, title, url]) => `
+          ${sources.length ? sources.map(([source, title, url]) => `
             <a href="${url}" target="_blank" rel="noopener noreferrer">
               <span>${source}</span>
               <strong>${title}</strong>
               <em>${url}</em>
             </a>
-          `).join('')}
+          `).join('') : `<article class="video-source-card"><strong>${course.title}</strong><span>${course.lessons.length} mapped MP4 lessons</span><em>Videos are mapped by original filename and ready for CDN/video-host URLs.</em></article>`}
         </div>
       </section>
     `;
@@ -4388,6 +4805,7 @@ function renderCourseDetailTab(user, lesson, lessonIndex) {
       <h4>Learning Objectives:</h4>
       ${listItems(lesson.outcomes)}
     </section>
+    ${renderLessonVideoPanel(lesson)}
     <section class="lesson-section"><h4>What this means</h4>${lesson.sections.what.map((item) => `<p>${item}</p>`).join('')}</section>
     <section class="lesson-section"><h4>Why this matters</h4>${lesson.sections.why.map((item) => `<p>${item}</p>`).join('')}</section>
     <section class="lesson-section"><h4>Where you use it</h4>${lesson.sections.where.map((item) => `<p>${item}</p>`).join('')}</section>
