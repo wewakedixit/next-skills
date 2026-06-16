@@ -3422,20 +3422,7 @@ footer {
   font-size: 17px;
 }
 
-.video-lesson-panel {
-  display: grid;
-  gap: 16px;
-}
-
-.video-lesson-panel video {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  border: 1px solid #dedee3;
-  border-radius: 12px;
-  background: #000;
-}
-
-.video-source-card {
+.source-summary-card {
   display: grid;
   gap: 8px;
   padding: 18px;
@@ -3444,22 +3431,202 @@ footer {
   background: #f7f7f8;
 }
 
-.video-source-card strong {
+.source-summary-card strong {
   color: #000;
   font-size: 17px;
 }
 
-.video-source-card span {
+.source-summary-card span {
   color: #202124;
   font-size: 15px;
   line-height: 1.45;
 }
 
-.video-source-card em {
+.source-summary-card em {
   color: #62666d;
   font-size: 14px;
   font-style: normal;
   line-height: 1.55;
+}
+
+.dm-lesson-hero {
+  display: grid;
+  gap: 20px;
+  padding: 24px;
+  border: 1px solid #dedee3;
+  border-radius: 12px;
+  background: #f7f7f8;
+}
+
+.dm-lesson-hero p {
+  margin: 0;
+  color: #202124;
+  font-size: 20px;
+  line-height: 1.55;
+}
+
+.dm-lesson-hero div {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.dm-lesson-hero span,
+.dm-check-grid article {
+  padding: 12px 14px;
+  border: 1px solid #dedee3;
+  border-radius: 10px;
+  background: #fff;
+  color: #3f444b;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.dm-workshop-section,
+.dm-scenario-card,
+.dm-worksheet {
+  display: grid;
+  gap: 18px;
+  padding: 30px 0;
+  border-bottom: 1px solid #dedee3;
+}
+
+.dm-section-label {
+  color: #000;
+  font-size: 13px;
+  font-weight: 850;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.dm-workshop-section > p,
+.dm-scenario-card p,
+.dm-worksheet p {
+  margin: 0;
+  color: #5c6067;
+  font-size: 17px;
+  line-height: 1.68;
+}
+
+.dm-scenario-card {
+  padding: 24px;
+  border: 1px solid #dedee3;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.dm-scenario-card span {
+  color: #62666d;
+  font-size: 13px;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.dm-scenario-card h4 {
+  margin: 4px 0 0;
+  font-size: 24px;
+}
+
+.dm-idea-grid,
+.dm-check-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.dm-idea-grid article {
+  display: grid;
+  gap: 12px;
+  padding: 18px;
+  border: 1px solid #dedee3;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.dm-idea-grid strong {
+  color: #000;
+  font-size: 13px;
+  letter-spacing: .08em;
+}
+
+.dm-idea-grid p {
+  margin: 0;
+  color: #4f545b;
+  font-size: 15px;
+  line-height: 1.58;
+}
+
+.dm-step-list {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: dm-steps;
+}
+
+.dm-step-list li {
+  position: relative;
+  min-height: 46px;
+  padding: 12px 16px 12px 56px;
+  border: 1px solid #dedee3;
+  border-radius: 10px;
+  background: #fff;
+  color: #3f444b;
+}
+
+.dm-step-list li::before {
+  position: absolute;
+  left: 14px;
+  top: 12px;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #000;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 850;
+  content: counter(dm-steps);
+  counter-increment: dm-steps;
+}
+
+.dm-worksheet {
+  padding: 24px;
+  border: 1px solid #dedee3;
+  border-radius: 12px;
+  background: #f7f7f8;
+}
+
+.dm-worksheet-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.dm-worksheet label {
+  display: grid;
+  gap: 10px;
+  color: #202124;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+.dm-worksheet textarea {
+  width: 100%;
+  min-height: 78px;
+  padding: 12px;
+  border: 1px solid #dedee3;
+  border-radius: 8px;
+  background: #fff;
+  color: #202124;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.45;
+  resize: vertical;
 }
 
 .notes-toolbar {

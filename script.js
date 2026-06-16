@@ -3110,92 +3110,389 @@ const digitalMarketingVideoGroups = [
   }
 ];
 
-function createVideoLesson(lecture, group, index) {
+function digitalMarketingTopicContext(title, group) {
+  const lower = title.toLowerCase();
+  const base = {
+    channel: group.title,
+    skill: group.focus,
+    userAction: 'plan one practical marketing improvement',
+    metric: 'a clear business result',
+    tool: 'your marketing worksheet',
+    audience: 'the people most likely to buy, enquire, subscribe, or take the next step',
+    artifact: 'a short action plan',
+    mistake: 'copying tactics without connecting them to a business goal',
+    terms: [
+      ['Audience', 'The group of people the marketing message is designed for.'],
+      ['Offer', 'The product, service, promise, or next step you want the audience to care about.'],
+      ['Conversion', 'A useful action such as an enquiry, sale, signup, booking, download, or call.'],
+      ['Channel', 'A place where marketing happens, such as search, email, YouTube, social media, or ads.'],
+      ['Metric', 'A number used to judge progress, such as clicks, leads, views, open rate, cost, or revenue.']
+    ],
+    quizAngle: 'marketing action'
+  };
+
+  if (/(market research|survey|feedback|audience|responses)/.test(lower)) {
+    return {
+      ...base,
+      skill: 'market research',
+      userAction: 'discover what customers want before creating campaigns',
+      metric: 'quality of customer insight',
+      tool: 'survey, interview, review mining, and competitor research',
+      artifact: 'a customer insight sheet',
+      mistake: 'asking leading questions that push people toward the answer you want',
+      terms: [
+        ['Market research', 'Learning what customers want, fear, compare, and ask before you market to them.'],
+        ['Survey', 'A set of questions used to collect structured feedback from a target audience.'],
+        ['Interview', 'A one-to-one conversation used to understand deeper reasons behind customer choices.'],
+        ['Pain point', 'A problem, frustration, or desire that makes someone look for a solution.'],
+        ['Insight', 'A useful pattern in customer feedback that can guide your message or offer.']
+      ],
+      quizAngle: 'customer research'
+    };
+  }
+
+  if (/(wordpress|website|domain|email|ssl|wix|weebly)/.test(lower)) {
+    return {
+      ...base,
+      skill: 'website setup',
+      userAction: 'make a website trustworthy, usable, and ready for marketing',
+      metric: 'successful visits, enquiries, and form submissions',
+      tool: 'website pages, domain email, SSL, and basic tracking checks',
+      artifact: 'a launch-ready website checklist',
+      mistake: 'launching pages before checking trust signals, mobile layout, and contact paths',
+      terms: [
+        ['Website platform', 'The system used to build and manage pages, such as WordPress or a website builder.'],
+        ['Domain', 'The web address people type to visit your site.'],
+        ['SSL', 'The security certificate that enables HTTPS and helps visitors trust the site.'],
+        ['Business email', 'An email address using your own domain, such as hello@example.com.'],
+        ['Call to action', 'The button or instruction that tells visitors what to do next.']
+      ],
+      quizAngle: 'website readiness'
+    };
+  }
+
+  if (/(email|mailchimp|subject|opt-in|campaign)/.test(lower)) {
+    return {
+      ...base,
+      skill: 'email marketing',
+      userAction: 'turn interested people into subscribers and customers through useful emails',
+      metric: 'open rate, click rate, replies, and conversions',
+      tool: 'email list, signup form, subject line, campaign, and analytics report',
+      artifact: 'a simple email campaign plan',
+      mistake: 'sending sales messages before earning attention and trust',
+      terms: [
+        ['Email list', 'A group of people who gave permission to receive emails from you.'],
+        ['Opt-in', 'A signup point where someone joins your list.'],
+        ['Subject line', 'The email headline that helps people decide whether to open it.'],
+        ['Campaign', 'A planned email sent to a list for a specific purpose.'],
+        ['Click rate', 'The percentage of email recipients who clicked a link.']
+      ],
+      quizAngle: 'email campaign'
+    };
+  }
+
+  if (/(copy|headline|aida|benefit|cta|customers talk|artificial intelligence|write)/.test(lower)) {
+    return {
+      ...base,
+      skill: 'copywriting',
+      userAction: 'write messages that make the offer clear and believable',
+      metric: 'clicks, replies, enquiries, and conversion rate',
+      tool: 'headline, benefit statement, proof point, objection answer, and call to action',
+      artifact: 'a reusable copy block',
+      mistake: 'listing features without explaining why they matter to the customer',
+      terms: [
+        ['Copywriting', 'Writing words that help people understand, trust, and act on an offer.'],
+        ['Benefit', 'The useful result a customer gets from a feature.'],
+        ['AIDA', 'Attention, Interest, Desire, Action: a simple structure for persuasive copy.'],
+        ['CTA', 'Call to action: the specific next step you ask someone to take.'],
+        ['Voice of customer', 'Real words customers use to describe their needs, worries, and goals.']
+      ],
+      quizAngle: 'persuasive message'
+    };
+  }
+
+  if (/(seo|keyword|title tag|meta|backlink|links|mobile|search console|rank|homepage|local)/.test(lower)) {
+    return {
+      ...base,
+      skill: 'SEO',
+      userAction: 'help the right page become easier to find and more useful in search',
+      metric: 'qualified organic clicks, rankings, impressions, and enquiries',
+      tool: 'keyword map, page title, meta description, internal links, content improvements, and Search Console',
+      artifact: 'an SEO page improvement plan',
+      mistake: 'chasing keywords without matching search intent and page quality',
+      terms: [
+        ['Keyword', 'A word or phrase people search when they need information, products, or services.'],
+        ['Search intent', 'The reason behind a search, such as learning, comparing, buying, or finding a local option.'],
+        ['Title tag', 'The page title search engines and browsers can use to identify the page.'],
+        ['Backlink', 'A link from another website to your page.'],
+        ['Internal link', 'A link from one page on your own website to another page on the same website.']
+      ],
+      quizAngle: 'SEO improvement'
+    };
+  }
+
+  if (/(youtube|video|thumbnail|subscribers|banner|cards|end screens|monetize)/.test(lower)) {
+    return {
+      ...base,
+      skill: 'YouTube marketing',
+      userAction: 'create videos that attract the right viewers and guide them to the next step',
+      metric: 'views, watch time, subscribers, clicks, and leads',
+      tool: 'video idea, title, thumbnail, description, cards, end screen, and analytics',
+      artifact: 'a YouTube video plan',
+      mistake: 'making videos without a clear audience, promise, thumbnail, or next step',
+      terms: [
+        ['Watch time', 'The total time people spend watching your videos.'],
+        ['Thumbnail', 'The image people see before choosing whether to watch a video.'],
+        ['YouTube SEO', 'Improving titles, descriptions, topics, and engagement so videos are easier to discover.'],
+        ['End screen', 'A final screen that can suggest another video, channel, or link.'],
+        ['Subscriber', 'A viewer who chooses to follow your channel for future videos.']
+      ],
+      quizAngle: 'video growth'
+    };
+  }
+
+  if (/(facebook|instagram|pinterest|linkedin|twitter|quora|social|groups|stories|hashtags|followers|inmail|boards|live)/.test(lower)) {
+    return {
+      ...base,
+      skill: 'organic social media marketing',
+      userAction: 'publish useful content and conversations that build trust before asking for action',
+      metric: 'engagement, profile visits, saves, followers, clicks, and enquiries',
+      tool: 'profile, content calendar, post format, community replies, and analytics',
+      artifact: 'a social content plan',
+      mistake: 'posting randomly without a clear audience, content pillar, or conversion path',
+      terms: [
+        ['Content pillar', 'A repeatable topic area your audience cares about.'],
+        ['Engagement', 'Actions such as likes, comments, shares, saves, replies, and clicks.'],
+        ['Hashtag', 'A label that can help categorize or discover social content.'],
+        ['Profile optimization', 'Improving profile text, links, images, and proof so visitors understand the brand quickly.'],
+        ['Community', 'People who repeatedly interact with your content, answers, or brand presence.']
+      ],
+      quizAngle: 'organic social growth'
+    };
+  }
+
+  if (/(google ads|ppc|bids|budgets|campaign type|profitable keywords|attention|target your audience)/.test(lower)) {
+    return {
+      ...base,
+      skill: 'Google Ads',
+      userAction: 'build paid search campaigns where keywords, ads, budget, and landing page match the goal',
+      metric: 'cost per conversion, conversion rate, clicks, and return on ad spend',
+      tool: 'campaign objective, keyword list, match type, ad copy, bid, budget, and landing page',
+      artifact: 'a search ad campaign brief',
+      mistake: 'spending budget before defining the offer, target search terms, and conversion action',
+      terms: [
+        ['PPC', 'Pay per click: an ad model where advertisers commonly pay when someone clicks.'],
+        ['Keyword', 'A search phrase that can trigger an ad.'],
+        ['Bid', 'The amount or strategy used to compete for ad placement.'],
+        ['Landing page', 'The page visitors reach after clicking an ad.'],
+        ['Conversion tracking', 'Measuring useful actions that happen after an ad click.']
+      ],
+      quizAngle: 'paid search campaign'
+    };
+  }
+
+  if (/(analytics|tracking|goals|ecommerce|reports|segments|dashboards|event|alerts|spam|adwords)/.test(lower)) {
+    return {
+      ...base,
+      skill: 'analytics and reporting',
+      userAction: 'turn website and campaign data into better decisions',
+      metric: 'accurate events, conversions, traffic sources, and behavior trends',
+      tool: 'analytics setup, reports, events, dashboards, filters, and campaign tags',
+      artifact: 'a measurement plan',
+      mistake: 'collecting data without defining what success means',
+      terms: [
+        ['Analytics', 'Data that helps you understand users, traffic, behavior, and results.'],
+        ['Event', 'A tracked interaction such as a click, form submit, download, or video play.'],
+        ['Goal', 'A business outcome you want to measure.'],
+        ['Segment', 'A filtered group of users or sessions used for deeper analysis.'],
+        ['Dashboard', 'A focused set of reports used to monitor key metrics.']
+      ],
+      quizAngle: 'measurement decision'
+    };
+  }
+
+  if (/(ad|ads|pixel|audience|lookalike|lead|dynamic|business manager|app install|placements|billing|policy|creative|split testing)/.test(lower)) {
+    return {
+      ...base,
+      skill: 'Meta and app advertising',
+      userAction: 'plan paid social ads with clear targeting, creative, tracking, and budget control',
+      metric: 'cost per result, leads, purchases, app installs, and return on spend',
+      tool: 'campaign objective, audience, placement, creative, pixel, budget, and report',
+      artifact: 'a paid social campaign plan',
+      mistake: 'changing ads too quickly before enough useful data has collected',
+      terms: [
+        ['Campaign objective', 'The result you ask the ad platform to optimize for.'],
+        ['Pixel', 'A tracking tool that helps measure website actions after ad clicks or views.'],
+        ['Custom audience', 'A group built from existing data such as visitors, buyers, video viewers, or email lists.'],
+        ['Lookalike audience', 'A new audience modeled from people similar to an existing valuable audience.'],
+        ['Creative', 'The image, video, headline, and text used in an ad.']
+      ],
+      quizAngle: 'paid social advertising'
+    };
+  }
+
+  return base;
+}
+
+function createDigitalMarketingLesson(lecture, group, index) {
   const title = lecture.title;
-  const focus = group.focus;
+  const context = digitalMarketingTopicContext(title, group);
+  const sampleBrand = 'Bloom & Brew Cafe';
   return {
     title,
-    duration: 'Video lesson',
-    videoFile: lecture.file,
-    videoLectureNumber: lecture.number,
-    goal: `Learn ${title.toLowerCase()} as part of ${focus}.`,
+    duration: '50 minutes',
+    goal: `Build a practical understanding of ${title.toLowerCase()} and turn it into a usable ${context.artifact}.`,
     outcomes: [
-      `Understand the purpose of ${title.toLowerCase()}.`,
-      `Know where this topic fits inside ${focus}.`,
-      'Identify one practical action to apply after watching the video.',
-      'Record notes and next steps for your own business or client project.'
+      `Explain how ${title.toLowerCase()} supports ${context.skill}.`,
+      `Choose the right next action for ${context.quizAngle}.`,
+      `Create a beginner-friendly ${context.artifact}.`,
+      `Decide which ${context.metric} should be checked after implementation.`
     ],
-    sections: {
-      what: [
-        `This lesson is based on the video lecture “${title}.”`,
-        `It belongs to the ${group.title} course and focuses on ${focus}.`,
-        'The main idea is to turn the video topic into a practical marketing action, not just watch it passively.'
+    learningPath: {
+      brief: [
+        `${title} is not just a topic to memorize. It is a working skill inside ${group.title}.`,
+        `In this lesson, students learn how to use the idea for a real business, make a small decision, and produce a clear deliverable.`,
+        `The sample brand used throughout this lesson is ${sampleBrand}, a local cafe that sells coffee, snacks, gift hampers, and weekend brewing workshops.`
       ],
-      why: [
-        'Digital marketing works better when every lesson becomes a small implementation step.',
-        `This topic supports the larger skill of ${focus}.`,
-        'A beginner should watch the video, pause when needed, write notes, and apply the idea to one real business example.'
+      scenario: [
+        `${sampleBrand} wants more people to discover the brand online and take a useful next step, such as visiting the cafe, ordering a hamper, joining the email list, or booking a workshop.`,
+        `The owner has limited time and budget, so every marketing action must answer three questions: who is this for, what should they do next, and how will we know it worked?`,
+        `Use ${title.toLowerCase()} to make one small improvement that can be checked within a week or month.`
       ],
-      where: [
-        'Use this lesson while planning campaigns, improving content, setting up tools, or reviewing marketing performance.',
-        'Apply the idea to your own website, social profile, email list, ad account, analytics account, or client project.',
-        'Save important notes in the Notes tab so you can review them before the assessment.'
+      coreIdeas: [
+        `Start with the business goal before choosing a tactic. A tactic is only useful when it supports a real outcome.`,
+        `Connect the lesson to one audience, one offer, one message, one channel, and one measurement point.`,
+        `Keep the first version simple. Beginners learn faster when they can publish, measure, and improve instead of waiting for a perfect plan.`,
+        `Write decisions down. A written ${context.artifact} prevents random marketing and makes progress easier to review.`
       ],
-      how: [
-        'Watch the full video lesson.',
-        'Write down the 3 most useful points from the video.',
-        'Choose one business example and apply the lesson to that example.',
-        'Complete the hands-on practice before taking the test.',
-        'Use the assessment to confirm that you understand the core idea.'
+      workflow: [
+        `Define the goal: choose whether this lesson should create awareness, traffic, leads, sales, bookings, or retention.`,
+        `Define the audience: write one sentence about the person this action is meant to help.`,
+        `Define the message: explain the useful promise in plain words, without hype.`,
+        `Choose the channel or asset: use ${context.tool} based on where the audience will see or act on the message.`,
+        `Create the first version: keep it small enough to finish today.`,
+        `Check the result: review ${context.metric} and decide what to improve next.`
+      ],
+      worksheet: [
+        `Goal: What business result should ${title.toLowerCase()} support?`,
+        `Audience: Who is this for, and what problem or desire do they have?`,
+        `Message: What should the person understand in the first few seconds?`,
+        `Action: What should the person do next?`,
+        `Proof: What trust signal, example, review, result, or detail makes the message believable?`,
+        `Metric: Which number will show whether this worked?`
+      ],
+      examples: [
+        {
+          title: `${sampleBrand} example`,
+          before: `The cafe says, “We sell great coffee.” That message is too general and gives no clear next step.`,
+          after: `Using this lesson, the cafe changes the message to one specific promise: “Book a Saturday brewing class and learn to make cafe-style coffee at home.”`,
+          lesson: `Specific audience + specific offer + specific action is easier to market than a broad statement.`
+        },
+        {
+          title: 'Client project example',
+          before: 'A freelancer starts by copying competitor tactics because they look popular.',
+          after: `The freelancer uses the worksheet to connect ${title.toLowerCase()} to a goal, audience, message, action, and metric first.`,
+          lesson: 'Good marketing starts with a reason, not with imitation.'
+        }
+      ],
+      practiceLab: [
+        `Create a one-page ${context.artifact} for ${sampleBrand}.`,
+        'Write the target audience in one sentence.',
+        'Write the offer or message in one sentence.',
+        'Choose one channel where this lesson should be applied.',
+        `Choose one metric connected to ${context.metric}.`,
+        'Write one improvement you would test after reviewing the result.'
+      ],
+      checkpoints: [
+        'The goal is clear enough that another person can understand it quickly.',
+        'The audience is specific, not “everyone.”',
+        'The next step is obvious.',
+        'The message explains a useful result, not only a feature.',
+        'The metric matches the goal.',
+        `Avoid this common mistake: ${context.mistake}.`
       ]
     },
-    glossary: [
-      ['Digital marketing', 'Using online channels to reach, educate, convert, and retain customers.'],
-      ['Campaign', 'A planned marketing effort with a goal, audience, message, channel, and result measurement.'],
-      ['Audience', 'The group of people a campaign, page, video, or message is trying to reach.'],
-      ['Conversion', 'A valuable action, such as a lead, sale, signup, call, booking, or app install.'],
-      ['Analytics', 'Data used to understand what happened and what to improve next.']
-    ],
-    examples: [
-      {
-        title: 'Local service business',
-        problem: 'A local business wants more enquiries but does not know which online action to take first.',
-        walkthrough: `Use this lesson on “${title}” to choose one small improvement, such as better research, clearer copy, stronger targeting, or cleaner tracking.`,
-        takeaway: 'Each video lesson should create one practical improvement.'
-      },
-      {
-        title: 'Student portfolio project',
-        problem: 'A learner wants to prove they understand digital marketing.',
-        walkthrough: `They watch the lesson, write notes, and apply the concept to a sample business so the learning becomes portfolio-ready.`,
-        takeaway: 'Practice turns video learning into a visible skill.'
-      }
-    ],
-    practice: [
-      `Watch lecture ${lecture.number}: “${title}.”`,
-      'Write 3 key points from the video in your own words.',
-      `Apply the lesson to one sample business and write one action connected to ${focus}.`,
-      'Save one question you still have in the Notes tab.',
-      'Before taking the test, explain the lesson idea to yourself in clear everyday words.'
-    ],
+    sections: {
+      what: [
+        `${title} is part of ${context.skill}.`,
+        `It helps students ${context.userAction}.`,
+        `The expected output is ${context.artifact}.`
+      ],
+      why: [
+        'Marketing becomes easier when students connect every tactic to a goal, audience, message, and result.',
+        `This lesson matters because it improves ${context.quizAngle}.`,
+        'A small practical decision is more useful than memorizing a definition.'
+      ],
+      where: [
+        `Use it while working on ${context.tool}.`,
+        'Apply it to a website, social profile, email, ad, content plan, or analytics review.',
+        'Save your worksheet notes before taking the assessment.'
+      ],
+      how: [
+        'Read the scenario.',
+        'Complete the worksheet.',
+        'Create the practice deliverable.',
+        'Review the checkpoints.',
+        'Take the assessment.'
+      ]
+    },
+    glossary: context.terms,
+    examples: [],
+    practice: [],
     mistakes: [
-      'Watching the video without taking notes.',
-      'Trying to apply every tactic at once instead of choosing one action.',
-      'Skipping measurement or follow-up after implementation.'
+      context.mistake,
+      'Choosing a tactic before choosing the audience and goal.',
+      'Measuring a number that does not match the business result.'
     ],
     quiz: [
       {
-        question: `What is the best way to study the lesson “${title}”?`,
-        options: ['Watch it, take notes, and apply one action.', 'Skip the video and guess.', 'Only memorize the title.'],
+        question: `What is the main purpose of this lesson: “${title}”?`,
+        options: [`To help students ${context.userAction}.`, 'To memorize tool names without using them.', 'To copy random tactics from competitors.'],
         answer: 0
       },
       {
-        question: `Where does this lesson fit?`,
-        options: [`It supports ${focus}.`, 'It is unrelated to marketing.', 'It is only for graphic design.'],
+        question: `Which output should a student create from this lesson?`,
+        options: [`A practical ${context.artifact}.`, 'A list of unrelated screenshots.', 'A private password document.'],
         answer: 0
       },
       {
-        question: 'What should you do before taking the test?',
-        options: ['Write the key points and complete the practice task.', 'Close the lesson immediately.', 'Ignore the notes section.'],
+        question: `For ${sampleBrand}, what should come before choosing a tactic?`,
+        options: ['Goal, audience, message, action, and metric.', 'Font color only.', 'The longest possible caption.'],
+        answer: 0
+      },
+      {
+        question: `Which metric is most connected to this lesson?`,
+        options: [context.metric, 'The number of random tools opened.', 'The number of times the page is refreshed.'],
+        answer: 0
+      },
+      {
+        question: 'Why is a specific audience important?',
+        options: ['It helps the message feel relevant and useful.', 'It makes the campaign hidden from everyone.', 'It removes the need to measure results.'],
+        answer: 0
+      },
+      {
+        question: 'What makes a good next step in marketing?',
+        options: ['It is clear, useful, and connected to the goal.', 'It is confusing so people spend more time guessing.', 'It asks for ten actions at once.'],
+        answer: 0
+      },
+      {
+        question: `Which mistake should students avoid in ${context.quizAngle}?`,
+        options: [context.mistake, 'Writing down the target audience.', 'Checking whether the action worked.'],
+        answer: 0
+      },
+      {
+        question: 'What should students do after publishing or applying the lesson task?',
+        options: [`Review ${context.metric} and decide the next improvement.`, 'Never look at the result.', 'Delete the worksheet immediately.'],
+        answer: 0
+      },
+      {
+        question: 'In the lesson worksheet, why do we add proof?',
+        options: ['To make the message more believable.', 'To make the message longer without purpose.', 'To avoid explaining the offer.'],
+        answer: 0
+      },
+      {
+        question: `Which tool or asset is most relevant here?`,
+        options: [context.tool, 'A random folder with no plan.', 'A design file with no audience or offer.'],
         answer: 0
       }
     ]
@@ -3204,8 +3501,8 @@ function createVideoLesson(lecture, group, index) {
 
 function parseVideoLectures(group) {
   return group.lectures.trim().split('\n').map((line, index) => {
-    const [number, title, file] = line.split('|');
-    return createVideoLesson({number: Number(number), title, file}, group, index);
+    const [number, title] = line.split('|');
+    return createDigitalMarketingLesson({number: Number(number), title}, group, index);
   });
 }
 
@@ -4711,20 +5008,89 @@ function listItems(items) {
   return `<ul>${items.map((item) => `<li>${item}</li>`).join('')}</ul>`;
 }
 
-function renderLessonVideoPanel(lesson) {
-  if (!lesson.videoFile && !lesson.videoUrl) return '';
+function renderDigitalMarketingLesson(lesson) {
+  const path = lesson.learningPath;
+  if (!path) return '';
   return `
-    <section class="lesson-section video-lesson-panel">
-      <h4>Video lesson</h4>
-      ${lesson.videoUrl ? `
-        <video controls preload="metadata" src="${lesson.videoUrl}"></video>
-      ` : `
-        <div class="video-source-card">
-          <strong>Source video mapped</strong>
-          <span>Lecture ${lesson.videoLectureNumber}: ${escapeHtml(lesson.videoFile)}</span>
-          <em>The original MP4 is available locally. Upload it to a video hosting/CDN service and connect the hosted URL to play it here on the live platform.</em>
-        </div>
-      `}
+    <section class="dm-lesson-hero">
+      <p>${lesson.goal}</p>
+      <div>
+        ${lesson.outcomes.map((outcome) => `<span>${outcome}</span>`).join('')}
+      </div>
+    </section>
+
+    <section class="dm-workshop-section">
+      <div class="dm-section-label">Lesson Map</div>
+      ${path.brief.map((item) => `<p>${item}</p>`).join('')}
+    </section>
+
+    <section class="dm-scenario-card">
+      <div>
+        <span>Sample Brand</span>
+        <h4>Bloom & Brew Cafe</h4>
+      </div>
+      ${path.scenario.map((item) => `<p>${item}</p>`).join('')}
+    </section>
+
+    <section class="dm-workshop-section">
+      <div class="dm-section-label">Core Ideas</div>
+      <div class="dm-idea-grid">
+        ${path.coreIdeas.map((item, index) => `<article><strong>${String(index + 1).padStart(2, '0')}</strong><p>${item}</p></article>`).join('')}
+      </div>
+    </section>
+
+    <section class="dm-workshop-section">
+      <div class="dm-section-label">Working Method</div>
+      <ol class="dm-step-list">
+        ${path.workflow.map((item) => `<li>${item}</li>`).join('')}
+      </ol>
+    </section>
+
+    <section class="dm-worksheet">
+      <div>
+        <div class="dm-section-label">Student Worksheet</div>
+        <p>Use this as the lesson deliverable. Write short answers. The goal is clarity, not a long document.</p>
+      </div>
+      <div class="dm-worksheet-grid">
+        ${path.worksheet.map((item) => `<label>${item}<textarea rows="2" placeholder="Write your answer..."></textarea></label>`).join('')}
+      </div>
+    </section>
+
+    <section class="dm-workshop-section">
+      <div class="dm-section-label">Examples</div>
+      <div class="lesson-example-grid">
+        ${path.examples.map((example) => `
+          <article class="lesson-example">
+            <h5>${example.title}</h5>
+            <p><strong>Before:</strong> ${example.before}</p>
+            <p><strong>After:</strong> ${example.after}</p>
+            <p><strong>Lesson:</strong> ${example.lesson}</p>
+          </article>
+        `).join('')}
+      </div>
+    </section>
+
+    <section class="dm-workshop-section">
+      <div class="dm-section-label">Practice Lab</div>
+      <div class="practice">${listItems(path.practiceLab)}</div>
+    </section>
+
+    <section class="dm-workshop-section">
+      <div class="dm-section-label">Decision Checklist</div>
+      <div class="dm-check-grid">
+        ${path.checkpoints.map((item) => `<article>${item}</article>`).join('')}
+      </div>
+    </section>
+
+    <section class="lesson-section">
+      <h4>Terminology</h4>
+      <div class="lesson-term-grid">${lesson.glossary.map(([term, definition]) => `<article><h5>${term}</h5><p>${definition}</p></article>`).join('')}</div>
+    </section>
+
+    <section class="lesson-section">
+      <h4>Lesson test</h4>
+      <p>You have 5 minutes. Questions and options are randomized. You may get up to 3 answers wrong. If 4 or more are wrong, you must retake the test.</p>
+      <button class="button primary" data-start-test>Start 5-minute test</button>
     </section>
   `;
 }
@@ -4732,10 +5098,21 @@ function renderLessonVideoPanel(lesson) {
 function renderCourseDetailTab(user, lesson, lessonIndex) {
   if (courseDetailTab === 'resources') {
     const sources = courseSourceLinks(course);
+    if (!sources.length && course.id.startsWith('dm-')) {
+      return `
+        <section class="course-source-panel">
+          <h4>Course resources</h4>
+          <p>This course is now an original NextSkills text-based course. Use the lesson worksheet, notes, examples, and practice labs as the main learning resources.</p>
+          <div class="source-link-list">
+            <article class="source-summary-card"><strong>${course.title}</strong><span>${course.lessons.length} original text lessons</span><em>This course can be completed with the written lessons, worksheets, notes, and assessments.</em></article>
+          </div>
+        </section>
+      `;
+    }
     return `
       <section class="course-source-panel">
-        <h4>${sources.length ? 'Official sources used for this course' : 'Course source files'}</h4>
-        <p>${sources.length ? 'These links point to Google’s official documentation and help pages used while preparing this lesson content.' : 'This course was created from your recovered MP4 source files. Upload the videos to a video hosting service, then add hosted video URLs to make them playable on the live platform.'}</p>
+        <h4>${sources.length ? 'Official sources used for this course' : 'Course resources'}</h4>
+        <p>${sources.length ? 'These links point to Google’s official documentation and help pages used while preparing this lesson content.' : 'No extra source links are attached to this course yet.'}</p>
         <div class="source-link-list">
           ${sources.length ? sources.map(([source, title, url]) => `
             <a href="${url}" target="_blank" rel="noopener noreferrer">
@@ -4743,7 +5120,7 @@ function renderCourseDetailTab(user, lesson, lessonIndex) {
               <strong>${title}</strong>
               <em>${url}</em>
             </a>
-          `).join('') : `<article class="video-source-card"><strong>${course.title}</strong><span>${course.lessons.length} mapped MP4 lessons</span><em>Videos are mapped by original filename and ready for CDN/video-host URLs.</em></article>`}
+          `).join('') : `<article class="source-summary-card"><strong>${course.title}</strong><span>${course.lessons.length} lessons</span><em>Use the lesson content, notes, and practice tasks as the main resources.</em></article>`}
         </div>
       </section>
     `;
@@ -4794,13 +5171,16 @@ function renderCourseDetailTab(user, lesson, lessonIndex) {
     `;
   }
 
+  if (course.id.startsWith('dm-') && lesson.learningPath) {
+    return renderDigitalMarketingLesson(lesson);
+  }
+
   return `
     <section class="lesson-intro">
       <p>${lesson.goal}</p>
       <h4>Learning Objectives:</h4>
       ${listItems(lesson.outcomes)}
     </section>
-    ${renderLessonVideoPanel(lesson)}
     <section class="lesson-section"><h4>What this means</h4>${lesson.sections.what.map((item) => `<p>${item}</p>`).join('')}</section>
     <section class="lesson-section"><h4>Why this matters</h4>${lesson.sections.why.map((item) => `<p>${item}</p>`).join('')}</section>
     <section class="lesson-section"><h4>Where you use it</h4>${lesson.sections.where.map((item) => `<p>${item}</p>`).join('')}</section>
