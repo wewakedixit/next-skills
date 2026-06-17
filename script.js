@@ -4056,6 +4056,79 @@ function normalizeUsers(users) {
   });
 }
 
+function uniqueBy(items, keyFn) {
+  const map = new Map();
+  (items || []).forEach((item) => {
+    if (!item) return;
+    const key = keyFn(item);
+    if (!key) return;
+    map.set(key, item);
+  });
+  return Array.from(map.values());
+}
+
+function mergePlatformStates(baseState, incomingState) {
+  const base = mergeState(baseState || {});
+  const incoming = mergeState(incomingState || {});
+  const users = uniqueBy([...base.users, ...incoming.users], (user) => user.id || user.email?.toLowerCase());
+  const merged = {
+    ...base,
+    ...incoming,
+    users: normalizeUsers(users),
+    assignments: {...base.assignments},
+    progress: {...base.progress},
+    attempts: uniqueBy([...(base.attempts || []), ...(incoming.attempts || [])], (attempt) => attempt.id),
+    lessonTime: {...base.lessonTime},
+    lessonNotes: {...base.lessonNotes},
+    unlockRequests: uniqueBy([...(base.unlockRequests || []), ...(incoming.unlockRequests || [])], (request) => request.id),
+    signupRequests: uniqueBy([...(base.signupRequests || []), ...(incoming.signupRequests || [])], (request) => request.id),
+    notificationReads: {...base.notificationReads, ...incoming.notificationReads}
+  };
+
+  [base.assignments, incoming.assignments].forEach((assignmentSet) => {
+    Object.entries(assignmentSet || {}).forEach(([userId, assignedCourses]) => {
+      merged.assignments[userId] = Array.from(new Set([...(merged.assignments[userId] || []), ...(assignedCourses || [])]));
+    });
+  });
+
+  [base.progress, incoming.progress].forEach((progressSet) => {
+    Object.entries(progressSet || {}).forEach(([userId, userCourses]) => {
+      merged.progress[userId] = merged.progress[userId] || {};
+      Object.entries(userCourses || {}).forEach(([courseId, record]) => {
+        const existing = merged.progress[userId][courseId] || {completedLessons: []};
+        merged.progress[userId][courseId] = {
+          ...existing,
+          ...record,
+          completedLessons: Array.from(new Set([...(existing.completedLessons || []), ...(record.completedLessons || [])])).sort((a, b) => a - b)
+        };
+      });
+    });
+  });
+
+  [base.lessonTime, incoming.lessonTime].forEach((timeSet) => {
+    Object.entries(timeSet || {}).forEach(([userId, userCourses]) => {
+      merged.lessonTime[userId] = merged.lessonTime[userId] || {};
+      Object.entries(userCourses || {}).forEach(([courseId, lessonTimes]) => {
+        merged.lessonTime[userId][courseId] = merged.lessonTime[userId][courseId] || {};
+        Object.entries(lessonTimes || {}).forEach(([lessonIndex, seconds]) => {
+          merged.lessonTime[userId][courseId][lessonIndex] = Math.max(Number(merged.lessonTime[userId][courseId][lessonIndex] || 0), Number(seconds || 0));
+        });
+      });
+    });
+  });
+
+  [base.lessonNotes, incoming.lessonNotes].forEach((notesSet) => {
+    Object.entries(notesSet || {}).forEach(([userId, userCourses]) => {
+      merged.lessonNotes[userId] = merged.lessonNotes[userId] || {};
+      Object.entries(userCourses || {}).forEach(([courseId, lessonNotes]) => {
+        merged.lessonNotes[userId][courseId] = {...(merged.lessonNotes[userId][courseId] || {}), ...(lessonNotes || {})};
+      });
+    });
+  });
+
+  return mergeState(merged);
+}
+
 function studentAccountStatus(student) {
   return student.accountStatus === 'inactive' ? 'inactive' : 'active';
 }
@@ -4125,7 +4198,7 @@ async function bootstrapApp() {
       const payload = await response.json();
       remoteStateEnabled = true;
       if (payload.state) {
-        state = mergeState(payload.state);
+        state = mergePlatformStates(payload.state, state);
       } else {
         state = mergeState(state);
       }
