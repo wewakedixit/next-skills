@@ -5168,6 +5168,22 @@ function renderStudentReport(adminUser) {
   const failedTests = attempts.filter((attempt) => !attempt.passed).length;
   const averageScore = attempts.length ? Math.round((attempts.reduce((sum, attempt) => sum + attempt.correct, 0) / (attempts.length * 10)) * 100) : 0;
   const status = studentAccountStatus(student);
+  const courseActivityRows = assignedCourses.map((item) => {
+    const progressRecord = userProgress(student.id, item.id);
+    const courseAttempts = attempts.filter((attempt) => attempt.courseId === item.id);
+    const latestCourseAttempt = courseAttempts.at(-1);
+    const completedCount = progressRecord.completedLessons.length;
+    const itemProgress = Math.round((completedCount / item.lessons.length) * 100);
+    const timeSpent = courseStudySeconds(student.id, item.id);
+    return {
+      course: item,
+      completedCount,
+      itemProgress,
+      timeSpent,
+      attempts: courseAttempts.length,
+      latestCourseAttempt
+    };
+  });
   const bioItems = [
     ['Phone', student.phone || 'Not added'],
     ['College / University', student.college || 'Not added'],
@@ -5235,10 +5251,7 @@ function renderStudentReport(adminUser) {
         <div class="admin-card">
           <div class="admin-section-head"><div><h2>Course Completion Status</h2><p>Assigned course progress overview.</p></div></div>
           <div class="admin-chart-card">
-            ${assignedCourses.length ? assignedCourses.map((item) => {
-              const itemProgress = courseProgressPercent(student.id, item);
-              return `<div class="admin-bar-row"><span>${item.title}</span><strong>${itemProgress}%</strong><i><em style="width:${itemProgress}%"></em></i></div>`;
-            }).join('') : '<article class="admin-empty">No courses assigned.</article>'}
+            ${courseActivityRows.length ? courseActivityRows.map((row) => `<div class="admin-bar-row"><span>${row.course.title}</span><strong>${row.itemProgress}%</strong><i><em style="width:${row.itemProgress}%"></em></i></div>`).join('') : '<article class="admin-empty">No courses assigned. Assign a course first to start tracking progress.</article>'}
           </div>
         </div>
 
@@ -5250,6 +5263,29 @@ function renderStudentReport(adminUser) {
             <article><strong>${averageScore}%</strong><span>Average score</span></article>
             <article><strong>${completed}/${totalAssignedLessons}</strong><span>Lessons complete</span></article>
           </div>
+        </div>
+      </section>
+
+      <section class="admin-card">
+        <div class="admin-section-head"><div><h2>Learning Activity</h2><p>Course-wise progress, time spent, and latest assessment status.</p></div></div>
+        <div class="student-learning-table">
+          ${courseActivityRows.length ? `
+            <div class="student-learning-head"><span>Course</span><span>Progress</span><span>Time spent</span><span>Latest test</span></div>
+            ${courseActivityRows.map((row) => `
+              <article>
+                <div>
+                  <strong>${escapeHtml(row.course.title)}</strong>
+                  <span>${row.completedCount}/${row.course.lessons.length} lessons completed • ${row.attempts} test attempt${row.attempts === 1 ? '' : 's'}</span>
+                </div>
+                <div>
+                  <b>${row.itemProgress}%</b>
+                  <i><em style="width:${row.itemProgress}%"></em></i>
+                </div>
+                <span>${secondsToClock(row.timeSpent)}</span>
+                <span>${row.latestCourseAttempt ? `${row.latestCourseAttempt.correct}/10 • ${row.latestCourseAttempt.passed ? 'Pass' : 'Retake'}` : 'No test yet'}</span>
+              </article>
+            `).join('')}
+          ` : '<article class="admin-empty">No learning activity yet because no courses are assigned to this student.</article>'}
         </div>
       </section>
 

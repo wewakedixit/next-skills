@@ -2766,6 +2766,63 @@ footer {
   color: #000;
 }
 
+.student-learning-table {
+  display: grid;
+  gap: 10px;
+}
+
+.student-learning-head,
+.student-learning-table article {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(160px, .7fr) 110px 130px;
+  gap: 14px;
+  align-items: center;
+}
+
+.student-learning-head {
+  padding: 0 14px;
+  color: #8a8f98;
+  font-size: 11px;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.student-learning-table article {
+  padding: 16px;
+  border: 1px solid #ececef;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.student-learning-table strong,
+.student-learning-table b {
+  color: #000;
+  font-size: 14px;
+}
+
+.student-learning-table span {
+  display: block;
+  color: #62666d;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.student-learning-table i {
+  display: block;
+  height: 7px;
+  margin-top: 7px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #ececef;
+}
+
+.student-learning-table em {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: #000;
+}
+
 .admin-report-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(340px, 0.9fr);
@@ -4393,6 +4450,8 @@ footer {
   .admin-report-grid,
   .admin-table-head,
   .admin-table-row,
+  .student-learning-head,
+  .student-learning-table article,
   .admin-request-list article {
     grid-template-columns: 1fr;
   }
