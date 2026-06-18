@@ -111,8 +111,9 @@ export default async function handler(request, response) {
         return sendJson(response, 400, {error: 'Missing state payload.'});
       }
 
-      const current = await sql`SELECT data FROM nextskills_platform_state WHERE id = ${stateId}`;
-      const mergedState = mergeStates(current.rows[0]?.data || {}, state);
+      const shouldReplace = body?.replace === true;
+      const current = shouldReplace ? {rows: []} : await sql`SELECT data FROM nextskills_platform_state WHERE id = ${stateId}`;
+      const mergedState = shouldReplace ? state : mergeStates(current.rows[0]?.data || {}, state);
 
       await sql`
         INSERT INTO nextskills_platform_state (id, data, updated_at)
