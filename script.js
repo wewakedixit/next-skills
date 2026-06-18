@@ -4129,6 +4129,67 @@ function mergePlatformStates(baseState, incomingState) {
   return mergeState(merged);
 }
 
+function importLegacyStudentState(legacyState, targetStudent) {
+  const legacy = mergeState(legacyState || {});
+  const legacyStudent = legacy.users.find((user) => {
+    return user.id === targetStudent.id || String(user.email || '').toLowerCase() === String(targetStudent.email || '').toLowerCase();
+  }) || legacy.users.find((user) => user.role === 'student');
+  if (!legacyStudent) {
+    throw new Error('No student profile found in the imported data.');
+  }
+  const legacyId = legacyStudent.id;
+  const validCourseIds = new Set(courses.map((item) => item.id));
+  const mapCourseId = (courseId) => validCourseIds.has(courseId) ? courseId : 'learn-google-search-console';
+
+  state.assignments[targetStudent.id] = Array.from(new Set([
+    ...(state.assignments[targetStudent.id] || []),
+    ...(legacy.assignments[legacyId] || []).map(mapCourseId)
+  ]));
+
+  Object.entries(legacy.progress[legacyId] || {}).forEach(([courseId, record]) => {
+    const mappedCourseId = mapCourseId(courseId);
+    state.progress[targetStudent.id] = state.progress[targetStudent.id] || {};
+    const current = state.progress[targetStudent.id][mappedCourseId] || {completedLessons: []};
+    state.progress[targetStudent.id][mappedCourseId] = {
+      ...current,
+      ...record,
+      completedLessons: Array.from(new Set([...(current.completedLessons || []), ...(record.completedLessons || [])])).sort((a, b) => a - b)
+    };
+  });
+
+  Object.entries(legacy.lessonTime[legacyId] || {}).forEach(([courseId, lessonTimes]) => {
+    const mappedCourseId = mapCourseId(courseId);
+    state.lessonTime[targetStudent.id] = state.lessonTime[targetStudent.id] || {};
+    state.lessonTime[targetStudent.id][mappedCourseId] = state.lessonTime[targetStudent.id][mappedCourseId] || {};
+    Object.entries(lessonTimes || {}).forEach(([lessonIndex, seconds]) => {
+      state.lessonTime[targetStudent.id][mappedCourseId][lessonIndex] = Math.max(Number(state.lessonTime[targetStudent.id][mappedCourseId][lessonIndex] || 0), Number(seconds || 0));
+    });
+  });
+
+  Object.entries((legacy.lessonNotes || {})[legacyId] || {}).forEach(([courseId, lessonNotes]) => {
+    const mappedCourseId = mapCourseId(courseId);
+    state.lessonNotes[targetStudent.id] = state.lessonNotes[targetStudent.id] || {};
+    state.lessonNotes[targetStudent.id][mappedCourseId] = {...(state.lessonNotes[targetStudent.id][mappedCourseId] || {}), ...(lessonNotes || {})};
+  });
+
+  const existingAttemptIds = new Set((state.attempts || []).map((attempt) => attempt.id));
+  (legacy.attempts || [])
+    .filter((attempt) => attempt.userId === legacyId)
+    .forEach((attempt) => {
+      const importedAttempt = {
+        ...attempt,
+        id: existingAttemptIds.has(attempt.id) ? `${attempt.id}-imported-${Date.now()}` : attempt.id,
+        userId: targetStudent.id,
+        courseId: mapCourseId(attempt.courseId)
+      };
+      state.attempts.push(importedAttempt);
+      existingAttemptIds.add(importedAttempt.id);
+    });
+
+  saveState();
+  return legacyStudent;
+}
+
 function studentAccountStatus(student) {
   return student.accountStatus === 'inactive' ? 'inactive' : 'active';
 }
@@ -5300,6 +5361,15 @@ function renderStudentReport(adminUser) {
         <article><strong>${latestAttempt ? `${latestAttempt.correct}/10` : '-'}</strong><span>Latest Score</span></article>
       </section>
 
+      <section class="admin-card legacy-import-card">
+        <div class="admin-section-head"><div><h2>Import Legacy Progress</h2><p>Paste exported data from the old gsc-beginner-course site for this student.</p></div></div>
+        <textarea id="legacy-import-json" rows="6" placeholder="Paste exported localStorage JSON here..."></textarea>
+        <div class="legacy-import-actions">
+          <button class="button primary" data-import-legacy-progress>Import Progress</button>
+          <span id="legacy-import-message"></span>
+        </div>
+      </section>
+
       <section class="admin-grid-two student-detail-grid">
         <div class="admin-card">
           <div class="admin-section-head"><div><h2>Complete Bio</h2><p>Details submitted by the student from My Profile.</p></div></div>
@@ -5388,6 +5458,22 @@ function renderStudentReport(adminUser) {
     student.accountStatus = studentAccountStatus(student) === 'active' ? 'inactive' : 'active';
     saveState();
     renderStudentReport(adminUser);
+  });
+  document.querySelector('[data-import-legacy-progress]')?.addEventListener('click', () => {
+    const field = document.querySelector('#legacy-import-json');
+    const message = document.querySelector('#legacy-import-message');
+    if (!field || !message) return;
+    try {
+      const raw = field.value.trim();
+      const parsed = JSON.parse(raw);
+      const importedStudent = importLegacyStudentState(parsed, student);
+      message.className = 'success-message';
+      message.textContent = `Imported progress from ${importedStudent.email || importedStudent.name}.`;
+      setTimeout(() => renderStudentReport(adminUser), 700);
+    } catch (error) {
+      message.className = 'form-error';
+      message.textContent = error.message || 'Could not import this data.';
+    }
   });
 }
 

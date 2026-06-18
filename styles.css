@@ -2748,6 +2748,39 @@ footer {
   padding: 9px;
 }
 
+.legacy-import-card {
+  display: grid;
+  gap: 14px;
+}
+
+.legacy-import-card textarea {
+  width: 100%;
+  min-height: 140px;
+  padding: 14px;
+  border: 1px solid #e0e1e5;
+  border-radius: 14px;
+  background: #f6f6f8;
+  color: #202124;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.45;
+  resize: vertical;
+}
+
+.legacy-import-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.legacy-import-actions span {
+  color: #62666d;
+  font-size: 13px;
+  font-weight: 850;
+}
+
 .student-attempt-list {
   display: grid;
   gap: 12px;
